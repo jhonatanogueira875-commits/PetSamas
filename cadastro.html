@@ -17,6 +17,10 @@
 
     <main class="container">
 
+        <!-- ==================================================
+             TÍTULO
+        =================================================== -->
+
         <h1>Cadastro do Pet</h1>
 
         <p class="subtitulo">
@@ -25,15 +29,13 @@
 
         </p>
 
-        <!--
-        ==================================================
-        FORMULÁRIO
-        Nesta Sprint ainda não salvamos os dados.
-        Apenas simulamos um cadastro bem-sucedido.
-        ==================================================
-        -->
+        <!-- ==================================================
+             FORMULÁRIO
+        =================================================== -->
 
-        <form action="cadastro-sucesso.html">
+        <form id="formCadastro">
+
+            <!-- Nome do Pet -->
 
             <label for="nomePet">
 
@@ -46,6 +48,8 @@
                 id="nomePet"
                 required>
 
+            <!-- Nome do Tutor -->
+
             <label for="nomeTutor">
 
                 👤 Nome do Tutor
@@ -56,6 +60,8 @@
                 type="text"
                 id="nomeTutor"
                 required>
+
+            <!-- Cidade -->
 
             <label for="cidade">
 
@@ -68,6 +74,8 @@
                 id="cidade"
                 required>
 
+            <!-- WhatsApp -->
+
             <label for="telefone">
 
                 📱 WhatsApp
@@ -78,6 +86,8 @@
                 type="tel"
                 id="telefone"
                 required>
+
+            <!-- Foto -->
 
             <label for="foto">
 
@@ -109,6 +119,12 @@
         </a>
 
     </main>
+
+    <!-- ==================================================
+         JavaScript da página de cadastro
+    =================================================== -->
+
+    <script src="js/cadastro.js"></script>
 
 </body>
 
