@@ -6,7 +6,8 @@ Arquivo: cadastro.js
 Responsável por:
 
 ✔ Ler os dados do formulário
-✔ Salvar no navegador (localStorage)
+✔ Salvar vários pets no localStorage
+✔ Criar um ID automático
 ✔ Redirecionar para a tela de sucesso
 ==========================================================
 */
@@ -20,21 +21,35 @@ const formulario = document.getElementById("formCadastro");
 
 
 // ======================================================
-// Aguarda o clique no botão "Cadastrar"
+// Cadastro
 // ======================================================
 
 formulario.addEventListener("submit", function(event){
-
-    // Impede o comportamento padrão do formulário
 
     event.preventDefault();
 
 
     // ==================================================
-    // Captura os dados digitados
+    // Lê os pets já cadastrados
     // ==================================================
 
-    const pet = {
+    let pets = JSON.parse(localStorage.getItem("pets")) || [];
+
+
+    // ==================================================
+    // Cria um ID automático
+    // ==================================================
+
+    const id = Date.now();
+
+
+    // ==================================================
+    // Cria o novo pet
+    // ==================================================
+
+    const novoPet = {
+
+        id: id,
 
         nomePet: document.getElementById("nomePet").value,
 
@@ -48,20 +63,41 @@ formulario.addEventListener("submit", function(event){
 
 
     // ==================================================
-    // Salva no navegador
+    // Adiciona na lista
+    // ==================================================
+
+    pets.push(novoPet);
+
+
+    // ==================================================
+    // Salva novamente
     // ==================================================
 
     localStorage.setItem(
 
-        "petAtual",
+        "pets",
 
-        JSON.stringify(pet)
+        JSON.stringify(pets)
 
     );
 
 
     // ==================================================
-    // Vai para a tela de sucesso
+    // Guarda qual foi o último cadastro
+    // (vamos usar na próxima Sprint)
+    // ==================================================
+
+    localStorage.setItem(
+
+        "ultimoPet",
+
+        id
+
+    );
+
+
+    // ==================================================
+    // Tela de sucesso
     // ==================================================
 
     window.location.href = "cadastro-sucesso.html";

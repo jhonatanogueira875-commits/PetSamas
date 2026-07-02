@@ -5,29 +5,50 @@ Arquivo: pet.js
 
 Responsável por:
 
-✔ Ler o pet salvo no localStorage
-✔ Mostrar as informações na página
+✔ Ler o ID da URL
+✔ Procurar o pet correspondente
+✔ Exibir as informações
 ✔ Criar o link do WhatsApp
 ==========================================================
 */
 
 
 // ======================================================
-// Lê o último pet salvo
+// Lê os parâmetros da URL
 // ======================================================
 
-const pet = JSON.parse(localStorage.getItem("petAtual"));
+const parametros = new URLSearchParams(window.location.search);
+
+const idPet = parametros.get("id");
 
 
 // ======================================================
-// Verifica se existe cadastro
+// Lê todos os pets cadastrados
 // ======================================================
 
-if (!pet) {
+const pets = JSON.parse(localStorage.getItem("pets")) || [];
 
-    alert("Nenhum pet foi cadastrado.");
 
-    window.location.href = "cadastro.html";
+// ======================================================
+// Procura o pet pelo ID
+// ======================================================
+
+const pet = pets.find(function(item){
+
+    return item.id == idPet;
+
+});
+
+
+// ======================================================
+// Caso não encontre
+// ======================================================
+
+if(!pet){
+
+    alert("Pet não encontrado.");
+
+    window.location.href = "index.html";
 
 }
 
@@ -44,7 +65,7 @@ document.getElementById("cidadePet").textContent = pet.cidade;
 
 
 // ======================================================
-// Cria o link do WhatsApp
+// Link do WhatsApp
 // ======================================================
 
 const mensagem = `Olá! Encontrei o pet ${pet.nomePet}.`;
