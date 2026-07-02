@@ -1,113 +1,237 @@
-body {
+/*
+==========================================================
+PetSamas
+Arquivo: style.css
+Descrição:
+Estilos gerais utilizados em todas as páginas do sistema.
+==========================================================
+*/
 
-    margin: 0;
-    padding: 0;
+/* ======================================================
+   CONFIGURAÇÕES GERAIS
+====================================================== */
 
-    background: #ffffff;
+*{
 
-    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
 
-}
+    padding:0;
 
-.container {
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    min-height: 100vh;
-
-    text-align: center;
-
-    padding: 30px;
-
-    box-sizing: border-box;
+    box-sizing:border-box;
 
 }
 
-img {
+body{
 
-    width: 130px;
+    font-family:Arial, Helvetica, sans-serif;
 
-    margin-bottom: 20px;
+    background:#f2f2f2;
 
-}
-
-h1 {
-
-    margin: 0;
-
-    font-size: 48px;
+    color:#222;
 
 }
 
-h2 {
+/* ======================================================
+   CONTAINER
+====================================================== */
 
-    margin-top: 30px;
+.container{
 
-    margin-bottom: 20px;
+    width:90%;
+    max-width:500px;
 
-    font-size: 28px;
+    margin:40px auto;
 
-}
+    background:white;
 
-h3 {
+    padding:35px;
 
-    margin-bottom: 8px;
+    border-radius:20px;
 
-    font-size: 22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.10);
 
-}
-
-p {
-
-    width: 320px;
-
-    margin: 8px 0;
-
-    color: #555;
-
-    line-height: 1.6;
+    text-align:center;
 
 }
 
-a {
+/* ======================================================
+   LOGO
+====================================================== */
 
-    text-decoration: none;
+#logo{
 
-}
+    width:140px;
 
-button {
-
-    width: 280px;
-
-    margin-top: 20px;
-
-    margin-bottom: 20px;
-
-    padding: 15px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: black;
-
-    color: white;
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    transition: .3s;
+    margin-bottom:20px;
 
 }
 
-button:hover {
+/* ======================================================
+   TÍTULOS
+====================================================== */
 
-    opacity: .9;
+h1{
+
+    font-size:40px;
+
+    margin-bottom:10px;
+
+}
+
+h2{
+
+    margin-top:15px;
+
+    margin-bottom:15px;
+
+}
+
+h3{
+
+    margin-top:25px;
+
+    margin-bottom:10px;
+
+}
+
+/* ======================================================
+   SUBTÍTULO
+====================================================== */
+
+.subtitulo{
+
+    color:#666;
+
+    margin-bottom:30px;
+
+    font-size:18px;
+
+}
+
+/* ======================================================
+   FOTO DO PET
+====================================================== */
+
+#foto1{
+
+    width:220px;
+
+    height:220px;
+
+    object-fit:cover;
+
+    border-radius:20px;
+
+    margin-bottom:25px;
+
+    border:5px solid #eeeeee;
+
+}
+
+/* ======================================================
+   FORMULÁRIO
+====================================================== */
+
+form{
+
+    text-align:left;
+
+}
+
+/* Labels */
+
+label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+
+}
+
+/* Campos */
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #cccccc;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+}
+
+/* Campo arquivo */
+
+input[type=file]{
+
+    padding:10px;
+
+}
+
+/* ======================================================
+   BOTÕES
+====================================================== */
+
+button{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-top:20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#25D366;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+button:hover{
+
+    transform:scale(1.02);
+
+}
+
+/* ======================================================
+   LINKS
+====================================================== */
+
+a{
+
+    text-decoration:none;
+
+}
+
+/* ======================================================
+   RODAPÉ
+====================================================== */
+
+footer{
+
+    margin-top:35px;
+
+    color:#666;
+
+    font-size:15px;
 
 }

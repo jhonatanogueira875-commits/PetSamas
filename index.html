@@ -15,29 +15,62 @@
 
 <body>
 
-    <div class="container">
+    <main class="container">
 
-        <img src="assets/images/logo.png" alt="Logo PetSamas">
+        <!-- ==================================================
+             LOGO DO PETSAMAS
+        =================================================== -->
+
+        <img
+            src="assets/images/logo.png"
+            alt="Logo PetSamas"
+            id="logo">
+
+        <!-- ==================================================
+             TÍTULO
+        =================================================== -->
 
         <h1>PetSamas</h1>
 
-        <h2>🐶 Olá! Eu sou o Thor!</h2>
+        <p class="subtitulo">
 
-        <p>Obrigado por me encontrar!</p>
+            Conectando pets aos seus tutores.
 
-        <p>Meu tutor provavelmente está me procurando.</p>
+        </p>
 
-        <p>Se puder, clique no botão abaixo para falar com ele.</p>
+        <!-- ==================================================
+             MENU PRINCIPAL
+        =================================================== -->
 
-        <a href="https://wa.me/5541999999999" target="_blank">
+        <div class="menu">
 
-            <button>💬 Conversar no WhatsApp</button>
+            <!-- Fluxo para quem encontrou um pet -->
 
-        </a>
+            <a href="pet.html?id=000001">
 
-    </div>
+                <button>
 
-    <script src="js/script.js"></script>
+                    🐶 Encontrei um Pet
+
+                </button>
+
+            </a>
+
+            <!-- Fluxo do tutor -->
+
+            <a href="cadastro.html">
+
+                <button>
+
+                    🏠 Sou Tutor
+
+                </button>
+
+            </a>
+
+        </div>
+
+    </main>
 
 </body>
 
