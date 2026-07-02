@@ -8,6 +8,7 @@ Responsável por:
 ✔ Ler o ID da URL
 ✔ Procurar o pet correspondente
 ✔ Exibir as informações
+✔ Exibir a foto do pet
 ✔ Criar o link do WhatsApp
 ==========================================================
 */
@@ -51,6 +52,19 @@ if(!pet){
     window.location.href = "index.html";
 
 }
+
+
+// ======================================================
+// Foto do pet
+// ======================================================
+
+document.getElementById("foto1").src =
+
+    pet.foto && pet.foto !== ""
+
+    ? pet.foto
+
+    : "assets/images/logo.png";
 
 
 // ======================================================

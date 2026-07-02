@@ -7,8 +7,8 @@ Responsável por:
 
 ✔ Novo cadastro
 ✔ Editar cadastro existente
+✔ Salvar foto do pet
 ✔ Salvar no LocalStorage
-✔ Criar ID automático
 ==========================================================
 */
 
@@ -18,6 +18,8 @@ Responsável por:
 // ======================================================
 
 const formulario = document.getElementById("formCadastro");
+
+const campoFoto = document.getElementById("foto");
 
 
 // ======================================================
@@ -37,19 +39,53 @@ let pets = JSON.parse(localStorage.getItem("pets")) || [];
 
 
 // ======================================================
+// Foto atual
+// ======================================================
+
+let fotoBase64 = "";
+
+
+// ======================================================
+// Converte imagem para Base64
+// ======================================================
+
+campoFoto.addEventListener("change", function () {
+
+    const arquivo = campoFoto.files[0];
+
+    if (!arquivo) {
+
+        return;
+
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = function (evento) {
+
+        fotoBase64 = evento.target.result;
+
+    };
+
+    leitor.readAsDataURL(arquivo);
+
+});
+
+
+// ======================================================
 // Se estiver editando,
 // preenche os campos automaticamente
 // ======================================================
 
-if(idEdicao){
+if (idEdicao) {
 
-    const pet = pets.find(function(item){
+    const pet = pets.find(function (item) {
 
         return item.id == idEdicao;
 
     });
 
-    if(pet){
+    if (pet) {
 
         document.getElementById("nomePet").value = pet.nomePet;
 
@@ -58,6 +94,8 @@ if(idEdicao){
         document.getElementById("cidade").value = pet.cidade;
 
         document.getElementById("telefone").value = pet.telefone;
+
+        fotoBase64 = pet.foto || "";
 
     }
 
@@ -68,7 +106,7 @@ if(idEdicao){
 // Salvar formulário
 // ======================================================
 
-formulario.addEventListener("submit", function(event){
+formulario.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
@@ -77,9 +115,9 @@ formulario.addEventListener("submit", function(event){
     // EDITAR PET
     // ==============================================
 
-    if(idEdicao){
+    if (idEdicao) {
 
-        const indice = pets.findIndex(function(item){
+        const indice = pets.findIndex(function (item) {
 
             return item.id == idEdicao;
 
@@ -92,6 +130,8 @@ formulario.addEventListener("submit", function(event){
         pets[indice].cidade = document.getElementById("cidade").value;
 
         pets[indice].telefone = document.getElementById("telefone").value;
+
+        pets[indice].foto = fotoBase64;
 
         localStorage.setItem(
 
@@ -124,7 +164,9 @@ formulario.addEventListener("submit", function(event){
 
         cidade: document.getElementById("cidade").value,
 
-        telefone: document.getElementById("telefone").value
+        telefone: document.getElementById("telefone").value,
+
+        foto: fotoBase64
 
     };
 

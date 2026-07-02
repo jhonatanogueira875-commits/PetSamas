@@ -6,25 +6,28 @@ Arquivo: meus-pets.js
 Responsável por:
 
 ✔ Ler todos os pets cadastrados
-✔ Criar um card para cada pet
-✔ Mostrar os botões de ação
-✔ Abrir o cadastro para edição
+✔ Mostrar foto do pet
+✔ Criar cards
+✔ Ver Perfil
+✔ QR Code
+✔ Editar
+✔ Excluir
 ==========================================================
 */
 
 
-// ==========================
+// ======================================================
 // Busca todos os pets
-// ==========================
+// ======================================================
 
 const pets = JSON.parse(localStorage.getItem("pets")) || [];
 
 const listaPets = document.getElementById("listaPets");
 
 
-// ==========================
+// ======================================================
 // Nenhum pet cadastrado
-// ==========================
+// ======================================================
 
 if (pets.length === 0) {
 
@@ -34,17 +37,26 @@ if (pets.length === 0) {
 
 } else {
 
-    pets.forEach(pet => {
+    pets.forEach(function (pet) {
+
+        const foto = pet.foto && pet.foto !== ""
+            ? pet.foto
+            : "assets/images/logo.png";
 
         listaPets.innerHTML += `
 
             <div class="card-pet">
 
+                <img
+                    src="${foto}"
+                    alt="${pet.nomePet}"
+                    class="foto-card">
+
                 <h2>🐶 ${pet.nomePet}</h2>
 
-                <p><strong>Tutor:</strong> ${pet.nomeTutor}</p>
+                <p><strong>👤 Tutor:</strong> ${pet.nomeTutor}</p>
 
-                <p><strong>Cidade:</strong> ${pet.cidade}</p>
+                <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
 
                 <br>
 
@@ -75,9 +87,9 @@ if (pets.length === 0) {
 }
 
 
-// ==========================
+// ======================================================
 // Editar
-// ==========================
+// ======================================================
 
 function editarPet(id){
 
@@ -86,9 +98,9 @@ function editarPet(id){
 }
 
 
-// ==========================
+// ======================================================
 // Excluir
-// ==========================
+// ======================================================
 
 function excluirPet(id){
 
@@ -100,9 +112,19 @@ function excluirPet(id){
 
     }
 
-    const novaLista = pets.filter(pet => pet.id != id);
+    const novaLista = pets.filter(function(pet){
 
-    localStorage.setItem("pets", JSON.stringify(novaLista));
+        return pet.id != id;
+
+    });
+
+    localStorage.setItem(
+
+        "pets",
+
+        JSON.stringify(novaLista)
+
+    );
 
     location.reload();
 
