@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>PetSamas</title>
+    <title>Meus Pets - PetSamas</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -15,59 +15,26 @@
 
 <body>
 
-    <div class="container">
+    <main class="container">
 
-        <h1>PetSamas</h1>
+        <h1>🐾 Meus Pets</h1>
 
-        <!-- ==========================
-             Fotos do Pet
-        =========================== -->
-
-        <div id="galeriaFotos">
-
-            <img id="foto1" src="assets/images/logo.png" alt="Foto 1 do Pet">
-
-            <img id="foto2" src="assets/images/logo.png" alt="Foto 2 do Pet">
-
-            <img id="foto3" src="assets/images/logo.png" alt="Foto 3 do Pet">
-
-        </div>
-
-        <h2 id="nomePet"></h2>
-
-        <p id="statusPet"></p>
-
-        <p id="mensagemPet"></p>
+        <p>
+            Selecione um pet para visualizar ou gerenciar.
+        </p>
 
         <br>
 
-        <h3>👤 Meu Tutor</h3>
-
-        <p id="nomeTutor"></p>
-
-        <a id="linkWhatsapp" href="#" target="_blank">
-
-            <button>💬 Conversar com meu tutor</button>
-
-        </a>
-
-        <br><br>
-
-        <h3>📍 Cidade</h3>
-
-        <p id="cidadePet"></p>
+        <!-- A lista será preenchida automaticamente pelo JavaScript -->
+        <div id="listaPets"></div>
 
         <br>
 
-        <p><strong>❤️ Muito obrigado por ajudar!</strong></p>
-
-        <br>
-
-        <a href="meus-pets.html">
+        <a href="cadastro.html">
 
             <button>
 
-                ⬅ Voltar para Meus Pets
+                ➕ Cadastrar outro pet
 
             </button>
 
@@ -85,9 +52,9 @@
 
         </a>
 
-    </div>
+    </main>
 
-    <script src="js/pet.js"></script>
+    <script src="js/meus-pets.js"></script>
 
 </body>
 
