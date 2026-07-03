@@ -6,16 +6,16 @@ Arquivo: pet.js
 Responsável por:
 
 ✔ Ler o ID da URL
-✔ Procurar o pet correspondente
+✔ Buscar o pet no Supabase
 ✔ Exibir as informações
-✔ Exibir a foto do pet
+✔ Exibir a foto
 ✔ Criar o link do WhatsApp
 ==========================================================
 */
 
 
 // ======================================================
-// Lê os parâmetros da URL
+// ID DA URL
 // ======================================================
 
 const parametros = new URLSearchParams(window.location.search);
@@ -24,65 +24,64 @@ const idPet = parametros.get("id");
 
 
 // ======================================================
-// Lê todos os pets cadastrados
+// CARREGA O PET
 // ======================================================
 
-const pets = JSON.parse(localStorage.getItem("pets")) || [];
+async function carregarPet() {
+
+    const { data: pet, error } = await banco
+
+        .from("pets")
+
+        .select("*")
+
+        .eq("id", Number(idPet))
+
+        .single();
 
 
-// ======================================================
-// Procura o pet pelo ID
-// ======================================================
+    if (error || !pet) {
 
-const pet = pets.find(function(item){
+        alert("Pet não encontrado.");
 
-    return item.id == idPet;
+        window.location.href = "index.html";
 
-});
+        return;
+
+    }
 
 
-// ======================================================
-// Caso não encontre
-// ======================================================
+    // FOTO
 
-if(!pet){
+    document.getElementById("foto1").src =
 
-    alert("Pet não encontrado.");
+        pet.foto && pet.foto !== ""
 
-    window.location.href = "index.html";
+        ? pet.foto
+
+        : "assets/images/logo.png";
+
+
+    // DADOS
+
+    document.getElementById("nomePet").textContent = pet.nome_pet;
+
+    document.getElementById("nomeTutor").textContent = pet.nome_tutor;
+
+    document.getElementById("cidadePet").textContent = pet.cidade;
+
+
+    // WHATSAPP
+
+    const mensagem = `Olá! Encontrei o pet ${pet.nome_pet}.`;
+
+    document.getElementById("linkWhatsapp").href =
+
+        `https://wa.me/55${pet.telefone}?text=${encodeURIComponent(mensagem)}`;
 
 }
 
 
 // ======================================================
-// Foto do pet
-// ======================================================
 
-document.getElementById("foto1").src =
-
-    pet.foto && pet.foto !== ""
-
-    ? pet.foto
-
-    : "assets/images/logo.png";
-
-
-// ======================================================
-// Preenche a página
-// ======================================================
-
-document.getElementById("nomePet").textContent = pet.nomePet;
-
-document.getElementById("nomeTutor").textContent = pet.nomeTutor;
-
-document.getElementById("cidadePet").textContent = pet.cidade;
-
-
-// ======================================================
-// Link do WhatsApp
-// ======================================================
-
-const mensagem = `Olá! Encontrei o pet ${pet.nomePet}.`;
-
-document.getElementById("linkWhatsapp").href =
-`https://wa.me/55${pet.telefone}?text=${encodeURIComponent(mensagem)}`;
+carregarPet();
