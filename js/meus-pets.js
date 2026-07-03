@@ -5,7 +5,7 @@ Arquivo: meus-pets.js
 
 Responsável por:
 
-✔ Ler todos os pets cadastrados
+✔ Ler todos os pets do Supabase
 ✔ Mostrar foto do pet
 ✔ Criar cards
 ✔ Ver Perfil
@@ -17,31 +17,60 @@ Responsável por:
 
 
 // ======================================================
-// Busca todos os pets
+// ELEMENTO DA PÁGINA
 // ======================================================
-
-const pets = JSON.parse(localStorage.getItem("pets")) || [];
 
 const listaPets = document.getElementById("listaPets");
 
 
 // ======================================================
-// Nenhum pet cadastrado
+// CARREGA TODOS OS PETS
 // ======================================================
 
-if (pets.length === 0) {
+async function carregarPets() {
 
-    listaPets.innerHTML = `
-        <p>Nenhum pet cadastrado.</p>
-    `;
+    listaPets.innerHTML = "<p>Carregando...</p>";
 
-} else {
+    const { data, error } = await banco
 
-    pets.forEach(function (pet) {
+        .from("pets")
+
+        .select("*")
+
+        .order("id", { ascending: false });
+
+
+    if (error) {
+
+        console.error(error);
+
+        listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
+
+        return;
+
+    }
+
+
+    if (data.length === 0) {
+
+        listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
+
+        return;
+
+    }
+
+
+    listaPets.innerHTML = "";
+
+
+    data.forEach(function (pet) {
 
         const foto = pet.foto && pet.foto !== ""
+
             ? pet.foto
+
             : "assets/images/logo.png";
+
 
         listaPets.innerHTML += `
 
@@ -49,12 +78,12 @@ if (pets.length === 0) {
 
                 <img
                     src="${foto}"
-                    alt="${pet.nomePet}"
+                    alt="${pet.nome_pet}"
                     class="foto-card">
 
-                <h2>🐶 ${pet.nomePet}</h2>
+                <h2>🐶 ${pet.nome_pet}</h2>
 
-                <p><strong>👤 Tutor:</strong> ${pet.nomeTutor}</p>
+                <p><strong>👤 Tutor:</strong> ${pet.nome_tutor}</p>
 
                 <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
 
@@ -68,11 +97,11 @@ if (pets.length === 0) {
                     <button>📱 QR Code</button>
                 </a>
 
-                <button onclick="editarPet('${pet.id}')">
+                <button onclick="editarPet(${pet.id})">
                     ✏️ Editar
                 </button>
 
-                <button onclick="excluirPet('${pet.id}')">
+                <button onclick="excluirPet(${pet.id})">
                     🗑 Excluir
                 </button>
 
@@ -88,10 +117,10 @@ if (pets.length === 0) {
 
 
 // ======================================================
-// Editar
+// EDITAR
 // ======================================================
 
-function editarPet(id){
+function editarPet(id) {
 
     window.location.href = `cadastro.html?id=${id}`;
 
@@ -99,33 +128,51 @@ function editarPet(id){
 
 
 // ======================================================
-// Excluir
+// EXCLUIR
 // ======================================================
 
-function excluirPet(id){
+async function excluirPet(id) {
 
-    const confirmar = confirm("Deseja realmente excluir este pet?");
+    const confirmar = confirm(
 
-    if(!confirmar){
+        "Deseja realmente excluir este pet?"
+
+    );
+
+    if (!confirmar) {
 
         return;
 
     }
 
-    const novaLista = pets.filter(function(pet){
 
-        return pet.id != id;
+    const { error } = await banco
 
-    });
+        .from("pets")
 
-    localStorage.setItem(
+        .delete()
 
-        "pets",
+        .eq("id", id);
 
-        JSON.stringify(novaLista)
 
-    );
+    if (error) {
 
-    location.reload();
+        console.error(error);
+
+        alert("Erro ao excluir o pet.");
+
+        return;
+
+    }
+
+
+    carregarPets();
 
 }
+
+
+// ======================================================
+// INICIAR PÁGINA
+// ======================================================
+
+carregarPets();
