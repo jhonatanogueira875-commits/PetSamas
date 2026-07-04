@@ -7,7 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Criar Conta - PetSamas</title>
+    <title>Cadastrar Pet - PetSamas</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -32,11 +32,15 @@
              TÍTULO
         =================================================== -->
 
-        <h1>Criar Conta</h1>
+        <h1 id="tituloPagina">
+
+            🐾 Cadastrar Pet
+
+        </h1>
 
         <p class="subtitulo">
 
-            Crie sua conta para começar a cadastrar seus pets.
+            Preencha os dados do seu pet para gerar seu perfil.
 
         </p>
 
@@ -44,61 +48,82 @@
              FORMULÁRIO
         =================================================== -->
 
-        <form id="formCadastroUsuario">
+        <form id="formCadastro">
 
-            <label for="nome">
+            <!-- Nome do Pet -->
 
-                👤 Nome
+            <label for="nomePet">
+
+                🐶 Nome do Pet
 
             </label>
 
             <input
                 type="text"
-                id="nome"
+                id="nomePet"
+                placeholder="Digite o nome do pet"
+                required>
+
+            <!-- Tutor -->
+
+            <label for="nomeTutor">
+
+                👤 Nome do Tutor
+
+            </label>
+
+            <input
+                type="text"
+                id="nomeTutor"
                 placeholder="Digite seu nome"
                 required>
 
-            <label for="email">
+            <!-- Cidade -->
 
-                📧 E-mail
+            <label for="cidade">
 
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Digite seu e-mail"
-                required>
-
-            <label for="senha">
-
-                🔒 Senha
+                📍 Cidade
 
             </label>
 
             <input
-                type="password"
-                id="senha"
-                placeholder="Crie uma senha"
+                type="text"
+                id="cidade"
+                placeholder="Digite sua cidade"
                 required>
 
-            <label for="confirmarSenha">
+            <!-- Telefone -->
 
-                🔒 Confirmar Senha
+            <label for="telefone">
+
+                📞 WhatsApp
 
             </label>
 
             <input
-                type="password"
-                id="confirmarSenha"
-                placeholder="Digite novamente a senha"
+                type="tel"
+                id="telefone"
+                placeholder="Ex.: (42) 99999-9999"
                 required>
+
+            <!-- Foto -->
+
+            <label for="foto">
+
+                📷 Foto do Pet
+
+            </label>
+
+            <input
+                type="file"
+                id="foto"
+                accept="image/*">
 
             <br><br>
 
             <button type="submit">
 
-                👤 Criar Conta
+                💾 Salvar Pet
 
             </button>
 
@@ -106,19 +131,11 @@
 
         <br>
 
-        <p>
-
-            Já possui uma conta?
-
-        </p>
-
-        <br>
-
-        <a href="login.html">
+        <a href="meus-pets.html">
 
             <button>
 
-                🔐 Entrar
+                🐾 Meus Pets
 
             </button>
 
@@ -134,14 +151,29 @@
 
     </main>
 
-    <!-- Biblioteca Oficial do Supabase -->
+    <!-- ==================================================
+         Biblioteca Oficial do Supabase
+    =================================================== -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Conexão com o Supabase -->
+    <!-- ==================================================
+         Conexão com o Supabase
+    =================================================== -->
+
     <script src="js/supabase.js"></script>
 
-    <!-- JavaScript -->
-    <script src="js/cadastro-usuario.js"></script>
+    <!-- ==================================================
+         Proteção da Área Privada
+    =================================================== -->
+
+    <script src="js/auth.js"></script>
+
+    <!-- ==================================================
+         JavaScript da Página
+    =================================================== -->
+
+    <script src="js/cadastro.js"></script>
 
 </body>
 
