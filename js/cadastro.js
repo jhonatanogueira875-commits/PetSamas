@@ -2,6 +2,12 @@
 ==========================================================
 PetSamas
 Arquivo: cadastro.js
+
+Responsável por:
+
+✔ Cadastro de pets
+✔ Edição de pets
+✔ Upload da foto
 ==========================================================
 */
 
@@ -26,39 +32,58 @@ const idEdicao = parametros.get("id");
 let fotoBase64 = "";
 
 campoFoto.addEventListener("change", function () {
+
     const arquivo = campoFoto.files[0];
+
     if (!arquivo) return;
+
     const leitor = new FileReader();
+
     leitor.onload = function (evento) {
+
         fotoBase64 = evento.target.result;
+
     };
+
     leitor.readAsDataURL(arquivo);
+
 });
 
 // ======================================================
-// CARREGAR PETS (EDIÇÃO)
+// CARREGAR PET (EDIÇÃO)
 // ======================================================
 
 let pets = [];
 
 async function carregarPets() {
+
     const { data, error } = await banco
         .from("pets")
         .select("*");
 
     if (!error) {
+
         pets = data;
+
         if (idEdicao) {
+
             const pet = pets.find(p => p.id == idEdicao);
+
             if (pet) {
+
                 document.getElementById("nomePet").value = pet.nome_pet;
                 document.getElementById("nomeTutor").value = pet.nome_tutor;
                 document.getElementById("cidade").value = pet.cidade;
                 document.getElementById("telefone").value = pet.telefone;
+
                 fotoBase64 = pet.foto || "";
+
             }
+
         }
+
     }
+
 }
 
 carregarPets();
@@ -68,8 +93,11 @@ carregarPets();
 // ======================================================
 
 async function getUser() {
+
     const { data } = await banco.auth.getUser();
+
     return data.user;
+
 }
 
 // ======================================================
@@ -77,53 +105,78 @@ async function getUser() {
 // ======================================================
 
 formulario.addEventListener("submit", async function (event) {
+
     event.preventDefault();
 
     const user = await getUser();
 
     if (!user) {
+
         alert("Usuário não autenticado.");
+
         window.location.href = "login.html";
+
         return;
+
     }
 
-    // ==============================================
-    // EDITAR
-    // ==============================================
+    // ==================================================
+    // EDITAR PET
+    // ==================================================
 
     if (idEdicao) {
+
         const { error } = await banco
             .from("pets")
             .update({
+
                 nome_pet: document.getElementById("nomePet").value,
+
                 nome_tutor: document.getElementById("nomeTutor").value,
+
                 cidade: document.getElementById("cidade").value,
+
                 telefone: document.getElementById("telefone").value,
+
                 foto: fotoBase64
+
             })
             .eq("id", idEdicao);
 
         if (error) {
+
             alert("Erro ao atualizar pet.");
+
             return;
+
         }
 
-        // Redireciona para o Painel
-        window.location.href = "painel.html";
+        alert("Pet atualizado com sucesso!");
+
+        window.location.href = "meus-pets.html";
+
         return;
+
     }
 
-    // ==============================================
-    // NOVO CADASTRO
-    // ==============================================
+    // ==================================================
+    // NOVO PET
+    // ==================================================
 
     const novoPet = {
+
         nome_pet: document.getElementById("nomePet").value,
+
         nome_tutor: document.getElementById("nomeTutor").value,
+
         cidade: document.getElementById("cidade").value,
+
         telefone: document.getElementById("telefone").value,
+
         foto: fotoBase64,
+
         user_id: user.id
+
     };
 
     const { error } = await banco
@@ -131,12 +184,17 @@ formulario.addEventListener("submit", async function (event) {
         .insert([novoPet]);
 
     if (error) {
+
         alert("Erro ao cadastrar pet.");
+
         return;
+
     }
 
     localStorage.removeItem("ultimoPet");
 
-    // Redireciona para o Painel após novo cadastro
-    window.location.href = "painel.html";
+    alert("Pet cadastrado com sucesso!");
+
+    window.location.href = "meus-pets.html";
+
 });

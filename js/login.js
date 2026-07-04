@@ -6,17 +6,16 @@ Arquivo: login.js
 Responsável por:
 
 ✔ Login do usuário
-✔ Autenticação com Supabase Auth
+✔ Verificar se possui pets cadastrados
+✔ Redirecionamento inteligente
 ==========================================================
 */
-
 
 // ======================================================
 // FORMULÁRIO
 // ======================================================
 
 const formulario = document.getElementById("formLogin");
-
 
 // ======================================================
 // LOGIN
@@ -26,24 +25,20 @@ formulario.addEventListener("submit", async function (event) {
 
     event.preventDefault();
 
-
     const email = document.getElementById("email").value.trim();
 
     const senha = document.getElementById("senha").value;
 
-
     // ==================================================
-    // LOGIN NO SUPABASE
+    // LOGIN
     // ==================================================
 
     const { data, error } = await banco.auth.signInWithPassword({
 
-        email: email,
-
+        email,
         password: senha
 
     });
-
 
     if (error) {
 
@@ -53,9 +48,46 @@ formulario.addEventListener("submit", async function (event) {
 
     }
 
+    // ==================================================
+    // USUÁRIO LOGADO
+    // ==================================================
+
+    const user = data.user;
+
+    // ==================================================
+    // VERIFICA SE POSSUI PETS
+    // ==================================================
+
+    const { data: pets, error: erroPets } = await banco
+
+        .from("pets")
+
+        .select("id")
+
+        .eq("user_id", user.id);
+
+    if (erroPets) {
+
+        alert("Erro ao carregar os dados.");
+
+        return;
+
+    }
 
     alert("Login realizado com sucesso!");
 
-    window.location.href = "meus-pets.html";
+    // ==================================================
+    // REDIRECIONAMENTO
+    // ==================================================
+
+    if (pets.length === 0) {
+
+        window.location.href = "cadastro.html";
+
+    } else {
+
+        window.location.href = "meus-pets.html";
+
+    }
 
 });
