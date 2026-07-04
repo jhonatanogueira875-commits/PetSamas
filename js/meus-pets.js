@@ -6,14 +6,9 @@ Arquivo: meus-pets.js
 Responsável por:
 
 ✔ Verificar login
-✔ Buscar pets do Supabase
-✔ Filtrar pets por usuário logado
-✔ Criar cards
-✔ Ver perfil
-✔ QR Code
-✔ Editar
-✔ Excluir
-✔ Backup dos pets
+✔ Buscar pets do usuário
+✔ Exibir cards
+✔ Liberar QR Code após ativação
 ==========================================================
 */
 
@@ -31,8 +26,6 @@ verificarLogin();
 
 const listaPets = document.getElementById("listaPets");
 
-const btnBackup = document.getElementById("btnBackup");
-
 let pets = [];
 
 
@@ -45,6 +38,7 @@ async function getUser() {
     const { data } = await banco.auth.getUser();
 
     return data.user;
+
 }
 
 
@@ -59,7 +53,9 @@ async function carregarPets() {
     if (!user) {
 
         window.location.href = "login.html";
+
         return;
+
     }
 
     const { data, error } = await banco
@@ -69,13 +65,16 @@ async function carregarPets() {
 
     if (error) {
 
-        listaPets.innerHTML = "<p>Erro ao carregar pets.</p>";
+        listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
+
         return;
+
     }
 
-    pets = data;
+    pets = data || [];
 
     renderizarPets();
+
 }
 
 
@@ -89,21 +88,90 @@ function renderizarPets() {
 
     if (pets.length === 0) {
 
-        listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
+        listaPets.innerHTML = `
+
+            <p>Você ainda não possui nenhum pet cadastrado.</p>
+
+            <br>
+
+            <a href="cadastro.html">
+
+                <button>
+
+                    ➕ Cadastrar meu primeiro pet
+
+                </button>
+
+            </a>
+
+        `;
+
         return;
+
     }
 
     pets.forEach(function (pet) {
 
         const foto = pet.foto && pet.foto !== ""
+
             ? pet.foto
+
             : "assets/images/logo.png";
+
+        let botaoQRCode = "";
+
+        if (pet.qr_liberado) {
+
+            botaoQRCode = `
+
+                <a href="qr-code.html?id=${pet.id}">
+
+                    <button>
+
+                        📱 QR Code
+
+                    </button>
+
+                </a>
+
+            `;
+
+        } else {
+
+            const mensagem = encodeURIComponent(
+`Olá!
+
+Acabei de cadastrar meu pet no PetSamas e gostaria de ativar meu QR Code.
+
+🐶 Pet: ${pet.nome_pet}
+
+Obrigado!`
+            );
+
+            botaoQRCode = `
+
+                <a href="https://wa.me/5542984097827?text=${mensagem}" target="_blank">
+
+                    <button>
+
+                        🟡 Ativar QR Code
+
+                    </button>
+
+                </a>
+
+            `;
+
+        }
 
         listaPets.innerHTML += `
 
             <div class="card-pet">
 
-                <img src="${foto}" class="foto-card" alt="${pet.nome_pet}">
+                <img
+                    src="${foto}"
+                    class="foto-card"
+                    alt="${pet.nome_pet}">
 
                 <h2>🐶 ${pet.nome_pet}</h2>
 
@@ -114,19 +182,27 @@ function renderizarPets() {
                 <br>
 
                 <a href="pet.html?id=${pet.id}">
-                    <button>👁 Ver Perfil</button>
+
+                    <button>
+
+                        👁 Ver Perfil
+
+                    </button>
+
                 </a>
 
-                <a href="qr-code.html?id=${pet.id}">
-                    <button>📱 QR Code</button>
-                </a>
+                ${botaoQRCode}
 
                 <button onclick="editarPet(${pet.id})">
+
                     ✏️ Editar
+
                 </button>
 
                 <button onclick="excluirPet(${pet.id})">
+
                     🗑 Excluir
+
                 </button>
 
                 <hr>
@@ -134,7 +210,9 @@ function renderizarPets() {
             </div>
 
         `;
+
     });
+
 }
 
 
@@ -145,6 +223,7 @@ function renderizarPets() {
 function editarPet(id) {
 
     window.location.href = `cadastro.html?id=${id}`;
+
 }
 
 
@@ -165,54 +244,15 @@ async function excluirPet(id) {
 
     if (error) {
 
-        alert("Erro ao excluir pet.");
+        alert("Erro ao excluir o pet.");
+
         return;
+
     }
 
     carregarPets();
+
 }
-
-
-// ======================================================
-// BACKUP
-// ======================================================
-
-btnBackup.addEventListener("click", function () {
-
-    if (pets.length === 0) {
-
-        alert("Nenhum pet cadastrado para fazer backup.");
-        return;
-
-    }
-
-    const dados = JSON.stringify(pets, null, 4);
-
-    const blob = new Blob([dados], {
-
-        type: "application/json"
-
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    const dataAtual = new Date().toISOString().slice(0, 10);
-
-    link.href = url;
-
-    link.download = `backup-petsamas-${dataAtual}.json`;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    URL.revokeObjectURL(url);
-
-});
 
 
 // ======================================================
