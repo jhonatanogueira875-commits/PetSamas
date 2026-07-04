@@ -5,10 +5,11 @@ Arquivo: meus-pets.js
 
 Responsável por:
 
-✔ Ler todos os pets do Supabase
-✔ Mostrar foto do pet
+✔ Verificar login
+✔ Buscar pets do Supabase
+✔ Filtrar pets por usuário logado
 ✔ Criar cards
-✔ Ver Perfil
+✔ Ver perfil
 ✔ QR Code
 ✔ Editar
 ✔ Excluir
@@ -17,69 +18,90 @@ Responsável por:
 
 
 // ======================================================
-// ELEMENTO DA PÁGINA
+// PROTEÇÃO
+// ======================================================
+
+verificarLogin();
+
+
+// ======================================================
+// ELEMENTOS
 // ======================================================
 
 const listaPets = document.getElementById("listaPets");
 
+let pets = [];
+
 
 // ======================================================
-// CARREGA TODOS OS PETS
+// PEGAR USUÁRIO LOGADO
+// ======================================================
+
+async function getUser() {
+
+    const { data } = await banco.auth.getUser();
+
+    return data.user;
+}
+
+
+// ======================================================
+// CARREGAR PETS
 // ======================================================
 
 async function carregarPets() {
 
-    listaPets.innerHTML = "<p>Carregando...</p>";
+    const user = await getUser();
+
+    if (!user) {
+
+        window.location.href = "login.html";
+        return;
+    }
 
     const { data, error } = await banco
-
         .from("pets")
-
         .select("*")
-
-        .order("id", { ascending: false });
+        .eq("user_id", user.id); // 🔥 FILTRO POR USUÁRIO
 
 
     if (error) {
 
-        console.error(error);
-
-        listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
-
+        listaPets.innerHTML = "<p>Erro ao carregar pets.</p>";
         return;
-
     }
 
+    pets = data;
 
-    if (data.length === 0) {
+    renderizarPets();
+}
 
-        listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
 
-        return;
+// ======================================================
+// RENDERIZAÇÃO
+// ======================================================
 
-    }
-
+function renderizarPets() {
 
     listaPets.innerHTML = "";
 
+    if (pets.length === 0) {
 
-    data.forEach(function (pet) {
+        listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
+        return;
+    }
+
+    pets.forEach(function (pet) {
 
         const foto = pet.foto && pet.foto !== ""
-
             ? pet.foto
-
             : "assets/images/logo.png";
-
 
         listaPets.innerHTML += `
 
             <div class="card-pet">
 
-                <img
-                    src="${foto}"
-                    alt="${pet.nome_pet}"
-                    class="foto-card">
+                <img src="${foto}" class="foto-card" alt="${pet.nome_pet}">
 
                 <h2>🐶 ${pet.nome_pet}</h2>
 
@@ -110,9 +132,7 @@ async function carregarPets() {
             </div>
 
         `;
-
     });
-
 }
 
 
@@ -123,7 +143,6 @@ async function carregarPets() {
 function editarPet(id) {
 
     window.location.href = `cadastro.html?id=${id}`;
-
 }
 
 
@@ -133,46 +152,27 @@ function editarPet(id) {
 
 async function excluirPet(id) {
 
-    const confirmar = confirm(
+    const confirmar = confirm("Deseja realmente excluir este pet?");
 
-        "Deseja realmente excluir este pet?"
-
-    );
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
+    if (!confirmar) return;
 
     const { error } = await banco
-
         .from("pets")
-
         .delete()
-
         .eq("id", id);
-
 
     if (error) {
 
-        console.error(error);
-
-        alert("Erro ao excluir o pet.");
-
+        alert("Erro ao excluir pet.");
         return;
-
     }
 
-
     carregarPets();
-
 }
 
 
 // ======================================================
-// INICIAR PÁGINA
+// INICIALIZAÇÃO
 // ======================================================
 
 carregarPets();

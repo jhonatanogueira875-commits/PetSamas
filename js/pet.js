@@ -2,222 +2,79 @@
 ==========================================================
 PetSamas
 Arquivo: pet.js
-
-Responsável por:
-
-✔ Ler o ID da URL
-✔ Buscar o pet no Supabase
-✔ Exibir as informações
-✔ Exibir a foto
-✔ Criar o link do WhatsApp
 ==========================================================
 */
 
 
-// ======================================================
-// ID DA URL
-// ======================================================
-
 const parametros = new URLSearchParams(window.location.search);
-
 const idPet = parametros.get("id");
-
-
-// ======================================================
-// CARREGA O PET
-// ======================================================
 
 async function carregarPet() {
 
     const { data: pet, error } = await banco
-
         .from("pets")
-
         .select("*")
-
-        .eq("id", Number(idPet))
-
+        .eq("id", idPet)
         .single();
 
+    console.log("PET:", pet);
 
     if (error || !pet) {
 
         alert("Pet não encontrado.");
-
         window.location.href = "index.html";
-
         return;
-
     }
 
+    // =========================
+    // FOTO (ROBUSTA)
+    // =========================
 
-    // FOTO
+    const fotoElement = document.getElementById("foto1");
 
-    document.getElementById("foto1").src =
+    if (pet.foto && pet.foto.trim() !== "") {
 
-        pet.foto && pet.foto !== ""
+        fotoElement.src = pet.foto;
 
-        ? pet.foto
+    } else {
 
-        : "assets/images/logo.png";
+        fotoElement.src = "assets/images/logo.png";
+    }
 
-
+    // =========================
     // DADOS
+    // =========================
 
-    document.getElementById("nomePet").textContent = pet.nome_pet;
+    document.getElementById("nomePet").textContent = pet.nome_pet || "";
+    document.getElementById("nomeTutor").textContent = pet.nome_tutor || "";
+    document.getElementById("cidadePet").textContent = pet.cidade || "";
 
-    document.getElementById("nomeTutor").textContent = pet.nome_tutor;
+    // =========================
+    // WHATSAPP (100% SEGURO)
+    // =========================
 
-    document.getElementById("cidadePet").textContent = pet.cidade;
+    let telefone = "";
 
-
-    // WHATSAPP
-
-    const mensagem = `Olá! Encontrei o pet ${pet.nome_pet}.`;
-
-    document.getElementById("linkWhatsapp").href =
-
-        `https://wa.me/55${pet.telefone}?text=${encodeURIComponent(mensagem)}`;
-
-}
-
-
-// ======================================================
-
-carregarPet();/*
-==========================================================
-PetSamas
-Arquivo: qr-code.js
-
-Responsável por:
-
-✔ Ler o ID da URL
-✔ Buscar o pet no Supabase
-✔ Mostrar o nome
-✔ Gerar o QR Code
-✔ Permitir baixar o QR Code
-==========================================================
-*/
-
-
-// ======================================================
-// ID DA URL
-// ======================================================
-
-const parametros = new URLSearchParams(window.location.search);
-
-const idPet = parametros.get("id");
-
-
-// ======================================================
-// CARREGA O PET
-// ======================================================
-
-async function carregarPet() {
-
-    const { data: pet, error } = await banco
-
-        .from("pets")
-
-        .select("*")
-
-        .eq("id", Number(idPet))
-
-        .single();
-
-
-    if (error || !pet) {
-
-        alert("Pet não encontrado.");
-
-        window.location.href = "index.html";
-
-        return;
-
+    if (pet.telefone) {
+        telefone = String(pet.telefone).replace(/\D/g, "");
     }
 
+    console.log("TEL:", telefone);
 
-    // ==================================================
-    // NOME DO PET
-    // ==================================================
+    const botao = document.getElementById("linkWhatsapp");
 
-    document.getElementById("nomePet").textContent = pet.nome_pet;
+    if (telefone.length >= 10) {
 
+        const mensagem = `Olá! Encontrei o pet ${pet.nome_pet || ""}.`;
 
-    // ==================================================
-    // LINK DO PET
-    // ==================================================
+        botao.href =
+            `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
 
-    const baseURL =
+    } else {
 
-        window.location.origin +
-
-        window.location.pathname.replace("qr-code.html", "");
-
-
-    const linkPet =
-
-        baseURL +
-
-        "pet.html?id=" +
-
-        pet.id;
-
-
-    // ==================================================
-    // GERA O QR CODE
-    // ==================================================
-
-    new QRCode(
-
-        document.getElementById("qrcode"),
-
-        {
-
-            text: linkPet,
-
-            width: 250,
-
-            height: 250
-
-        }
-
-    );
-
-
-    // ==================================================
-    // BOTÃO BAIXAR
-    // ==================================================
-
-    document.getElementById("btnBaixar").addEventListener(
-
-        "click",
-
-        function () {
-
-            const imagem = document.querySelector("#qrcode img");
-
-            if (!imagem) {
-
-                return;
-
-            }
-
-            const link = document.createElement("a");
-
-            link.href = imagem.src;
-
-            link.download = "QRCode-" + pet.nome_pet + ".png";
-
-            link.click();
-
-        }
-
-    );
-
+        botao.href = "#";
+        console.warn("Telefone inválido");
+    }
 }
-
-
-// ======================================================
 
 carregarPet();

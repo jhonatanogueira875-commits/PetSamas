@@ -1,15 +1,15 @@
 /*
 ==========================================================
 PetSamas
-Arquivo: qr-code.js
+Arquivo: pet-publico.js
 
 Responsável por:
 
 ✔ Ler o ID da URL
 ✔ Buscar o pet no Supabase
-✔ Mostrar o nome
-✔ Gerar o QR Code
-✔ Apontar para a página pública
+✔ Exibir informações públicas
+✔ Exibir a foto
+✔ Criar o link do WhatsApp
 ==========================================================
 */
 
@@ -27,7 +27,7 @@ const idPet = parametros.get("id");
 // CARREGA O PET
 // ======================================================
 
-async function carregarQRCode() {
+async function carregarPet() {
 
     const { data: pet, error } = await banco
 
@@ -52,57 +52,53 @@ async function carregarQRCode() {
 
 
     // ==================================================
-    // MOSTRA O NOME
+    // FOTO
+    // ==================================================
+
+    document.getElementById("foto1").src =
+
+        pet.foto && pet.foto.trim() !== ""
+
+        ? pet.foto
+
+        : "assets/images/logo.png";
+
+
+    // ==================================================
+    // DADOS
     // ==================================================
 
     document.getElementById("nomePet").textContent = pet.nome_pet;
 
+    document.getElementById("nomeTutor").textContent = pet.nome_tutor;
 
-    // ==================================================
-    // LINK PÚBLICO DO PET
-    // ==================================================
-
-    const linkPet =
-
-        "https://jhonatanogueira875-commits.github.io/PetSamas/pet-publico.html?id="
-
-        + pet.id;
+    document.getElementById("cidadePet").textContent = pet.cidade;
 
 
     // ==================================================
-    // GERA O QR CODE
+    // WHATSAPP
     // ==================================================
 
-    document.getElementById("qrcode").innerHTML = "";
+    const telefone = String(pet.telefone || "").replace(/\D/g, "");
 
-    new QRCode(
+    const mensagem = `Olá! Encontrei o pet ${pet.nome_pet}.`;
 
-        document.getElementById("qrcode"),
+    const botaoWhatsapp = document.getElementById("linkWhatsapp");
 
-        {
+    if (telefone.length >= 10) {
 
-            text: linkPet,
+        botaoWhatsapp.href =
+            `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
 
-            width: 250,
+    } else {
 
-            height: 250
+        botaoWhatsapp.href = "#";
 
-        }
+        botaoWhatsapp.onclick = function (e) {
 
-    );
+            e.preventDefault();
 
-
-    // ==================================================
-    // BOTÃO BAIXAR
-    // ==================================================
-
-    const btn = document.getElementById("btnBaixar");
-
-    if (btn) {
-
-        btn.onclick = function () {
-
-            window.print();
+            alert("Telefone do tutor indisponível.");
 
         };
 
@@ -115,4 +111,4 @@ async function carregarQRCode() {
 // INICIALIZAÇÃO
 // ======================================================
 
-carregarQRCode();
+carregarPet();

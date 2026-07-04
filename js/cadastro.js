@@ -6,9 +6,10 @@ Arquivo: cadastro.js
 Responsável por:
 
 ✔ Novo cadastro
-✔ Editar cadastro
-✔ Salvar foto
+✔ Editar cadastro existente
+✔ Salvar foto do pet
 ✔ Salvar no Supabase
+✔ Associar pet ao usuário logado (user_id)
 ==========================================================
 */
 
@@ -18,16 +19,14 @@ Responsável por:
 // ======================================================
 
 const formulario = document.getElementById("formCadastro");
-
 const campoFoto = document.getElementById("foto");
 
 
 // ======================================================
-// PARÂMETROS DA URL
+// URL PARAM (EDIÇÃO)
 // ======================================================
 
 const parametros = new URLSearchParams(window.location.search);
-
 const idEdicao = parametros.get("id");
 
 
@@ -36,11 +35,6 @@ const idEdicao = parametros.get("id");
 // ======================================================
 
 let fotoBase64 = "";
-
-
-// ======================================================
-// CONVERTER FOTO
-// ======================================================
 
 campoFoto.addEventListener("change", function () {
 
@@ -62,138 +56,128 @@ campoFoto.addEventListener("change", function () {
 
 
 // ======================================================
-// CARREGA PET PARA EDIÇÃO
+// CARREGAR PETS (EDIÇÃO)
 // ======================================================
 
-async function carregarPet() {
+let pets = [];
 
-    if (!idEdicao) return;
+
+async function carregarPets() {
 
     const { data, error } = await banco
-
         .from("pets")
+        .select("*");
 
-        .select("*")
+    if (!error) {
 
-        .eq("id", Number(idEdicao))
+        pets = data;
 
-        .single();
+        if (idEdicao) {
 
+            const pet = pets.find(p => p.id == idEdicao);
 
-    if (error) {
+            if (pet) {
 
-        console.error(error);
+                document.getElementById("nomePet").value = pet.nome_pet;
+                document.getElementById("nomeTutor").value = pet.nome_tutor;
+                document.getElementById("cidade").value = pet.cidade;
+                document.getElementById("telefone").value = pet.telefone;
 
-        alert("Erro ao carregar pet.");
-
-        return;
-
+                fotoBase64 = pet.foto || "";
+            }
+        }
     }
-
-    document.getElementById("nomePet").value = data.nome_pet;
-
-    document.getElementById("nomeTutor").value = data.nome_tutor;
-
-    document.getElementById("cidade").value = data.cidade;
-
-    document.getElementById("telefone").value = data.telefone;
-
-    fotoBase64 = data.foto || "";
-
 }
 
-carregarPet();
+carregarPets();
 
 
 // ======================================================
-// SALVAR
+// PEGAR USUÁRIO LOGADO
+// ======================================================
+
+async function getUser() {
+
+    const { data } = await banco.auth.getUser();
+
+    return data.user;
+}
+
+
+// ======================================================
+// SUBMIT
 // ======================================================
 
 formulario.addEventListener("submit", async function (event) {
 
     event.preventDefault();
 
+    const user = await getUser();
 
-    const pet = {
+    if (!user) {
 
-        nome_pet: document.getElementById("nomePet").value,
+        alert("Usuário não autenticado.");
 
-        nome_tutor: document.getElementById("nomeTutor").value,
+        window.location.href = "login.html";
 
-        cidade: document.getElementById("cidade").value,
+        return;
+    }
 
-        telefone: document.getElementById("telefone").value,
-
-        foto: fotoBase64
-
-    };
-
-
-    // ==================================================
+    // ==============================================
     // EDITAR
-    // ==================================================
+    // ==============================================
 
     if (idEdicao) {
 
         const { error } = await banco
-
             .from("pets")
+            .update({
 
-            .update(pet)
+                nome_pet: document.getElementById("nomePet").value,
+                nome_tutor: document.getElementById("nomeTutor").value,
+                cidade: document.getElementById("cidade").value,
+                telefone: document.getElementById("telefone").value,
+                foto: fotoBase64
 
-            .eq("id", Number(idEdicao));
-
+            })
+            .eq("id", idEdicao);
 
         if (error) {
 
-            console.error(error);
-
             alert("Erro ao atualizar pet.");
-
             return;
-
         }
 
         window.location.href = "meus-pets.html";
-
         return;
-
     }
 
 
-    // ==================================================
+    // ==============================================
     // NOVO CADASTRO
-    // ==================================================
+    // ==============================================
 
-    const { data, error } = await banco
+    const novoPet = {
 
+        nome_pet: document.getElementById("nomePet").value,
+        nome_tutor: document.getElementById("nomeTutor").value,
+        cidade: document.getElementById("cidade").value,
+        telefone: document.getElementById("telefone").value,
+        foto: fotoBase64,
+        user_id: user.id
+    };
+
+    const { error } = await banco
         .from("pets")
-
-        .insert([pet])
-
-        .select()
-
-        .single();
-
+        .insert([novoPet]);
 
     if (error) {
 
-        console.error(error);
-
         alert("Erro ao cadastrar pet.");
-
         return;
-
     }
 
-
-    localStorage.setItem(
-
-        "ultimoPet",
-
-        data.id
-
-    );
+    localStorage.removeItem("ultimoPet");
 
     window.location.href = "cadastro-sucesso.html";
 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Encontrei um Pet - PetSamas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ==========================================
+             FOTO DO PET
+        =========================================== -->
+
+        <img
+            id="foto1"
+            src="assets/images/logo.png"
+            alt="Foto do Pet">
+
+        <!-- ==========================================
+             NOME
+        =========================================== -->
+
+        <h1 id="nomePet">
+
+            Carregando...
+
+        </h1>
+
+        <!-- ==========================================
+             STATUS
+        =========================================== -->
+
+        <p id="statusPet">
+
+            🐾 Este pet pode estar perdido.
+
+        </p>
+
+        <br>
+
+        <!-- ==========================================
+             MENSAGEM
+        =========================================== -->
+
+        <p>
+
+            Se você encontrou este pet, entre em contato com o tutor utilizando o botão abaixo.
+
+        </p>
+
+        <br>
+
+        <!-- ==========================================
+             TUTOR
+        =========================================== -->
+
+        <h3>
+
+            👤 Tutor
+
+        </h3>
+
+        <p id="nomeTutor"></p>
+
+        <br>
+
+        <!-- ==========================================
+             CIDADE
+        =========================================== -->
+
+        <h3>
+
+            📍 Cidade
+
+        </h3>
+
+        <p id="cidadePet"></p>
+
+        <br>
+
+        <!-- ==========================================
+             WHATSAPP
+        =========================================== -->
+
+        <a
+            id="linkWhatsapp"
+            href="#"
+            target="_blank">
+
+            <button>
+
+                💚 Falar com o Tutor
+
+            </button>
+
+        </a>
+
+        <br><br>
+
+        <strong>
+
+            ❤️ Muito obrigado por ajudar este pet.
+
+        </strong>
+
+        <br><br>
+
+        <p style="color:#777;font-size:14px;">
+
+            Protegido por PetSamas
+
+        </p>
+
+    </main>
+
+    <!-- ==================================================
+         Biblioteca Oficial do Supabase
+    =================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ==================================================
+         Conexão
+    =================================================== -->
+
+    <script src="js/supabase.js"></script>
+
+    <!-- ==================================================
+         Página Pública
+    =================================================== -->
+
+    <script src="js/pet-publico.js"></script>
+
+</body>
+
+</html>
