@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ativando PetSamas...</title>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+        <p>Aguarde um momento, estamos ativando o serviço...</p>
+    </div>
+
+    <script>
+        // Pega o ID que vem na URL (ex: ativar.html?id=123)
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        if (id) {
+            // Salva a permissão no navegador do cliente
+            localStorage.setItem(`liberado_${id}`, "true");
+            
+            // Dá um feedback visual rápido
+            alert("Ativação concluída! O QR Code do seu pet já está liberado.");
+            
+            // Redireciona o cliente para a página do QR Code dele
+            window.location.href = `qr-code.html?id=${id}`;
+        } else {
+            alert("Erro: ID do pet não encontrado. Entre em contato com o suporte.");
+        }
+    </script>
+</body>
+</html>
