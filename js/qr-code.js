@@ -1,32 +1,26 @@
 /*
 ==========================================================
-PetSamas - Arquivo: qr-code.js
-Responsável por: Bloqueio de acesso e geração do QR Code
+PetSamas - qr-code.js (VERSÃO BLINDADA)
 ==========================================================
 */
 
 const parametros = new URLSearchParams(window.location.search);
 const idPet = parametros.get("id");
 
-// ======================================================
-// LÓGICA DE BARREIRA (CHECK DE PAGAMENTO)
-// ======================================================
-function verificarAcesso() {
-    const estaLiberado = localStorage.getItem(`liberado_${idPet}`);
-    
-    if (!estaLiberado) {
-        document.getElementById("bloqueioPagamento").style.display = "block";
-        document.getElementById("conteudoLiberado").style.display = "none";
-    } else {
-        document.getElementById("bloqueioPagamento").style.display = "none";
-        document.getElementById("conteudoLiberado").style.display = "block";
-        carregarDadosPet();
-    }
+// 1. Verificação imediata: nem espera o resto da página carregar
+const estaLiberado = localStorage.getItem(`liberado_${idPet}`);
+
+if (!estaLiberado) {
+    // Esconde o conteúdo e mostra o aviso
+    document.getElementById("conteudoLiberado").style.display = "none";
+    document.getElementById("bloqueioPagamento").style.display = "block";
+} else {
+    // Se estiver liberado, exibe e carrega o QR
+    document.getElementById("bloqueioPagamento").style.display = "none";
+    document.getElementById("conteudoLiberado").style.display = "block";
+    carregarDadosPet();
 }
 
-// ======================================================
-// BUSCA E GERAÇÃO DO QR CODE
-// ======================================================
 async function carregarDadosPet() {
     const { data: pet, error } = await banco
         .from("pets")
@@ -56,6 +50,3 @@ async function carregarDadosPet() {
         btn.onclick = () => window.print();
     }
 }
-
-// Inicializa a verificação
-verificarAcesso();
