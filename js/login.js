@@ -1,6 +1,6 @@
 /*
 ==========================================================
-PetSamas - Login.js (Corrigido para GitHub Pages)
+PetSamas - Login.js (Versão Definitiva - Caminhos Absolutos)
 ==========================================================
 */
 
@@ -13,6 +13,7 @@ formulario.addEventListener("submit", async function (event) {
     const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
 
+    // Autenticação no Supabase
     const { data, error } = await banco.auth.signInWithPassword({
         email,
         password: senha
@@ -26,7 +27,7 @@ formulario.addEventListener("submit", async function (event) {
     const user = data.user;
     console.log("Login efetuado com ID:", user.id);
 
-    // Verifica pets
+    // Consulta de pets no banco de dados
     const { data: pets, error: erroPets } = await banco
         .from("pets")
         .select("id")
@@ -38,17 +39,14 @@ formulario.addEventListener("submit", async function (event) {
         return;
     }
 
-    // REDIRECIONAMENTO CORRIGIDO
-    // Usamos caminhos relativos ao diretório atual para funcionar no GitHub Pages
-    // Se o seu login.html está na pasta /PetSamas/, os outros arquivos também estão.
-    
     console.log("Pets encontrados:", pets.length);
 
+    // Redirecionamento forçado pela raiz do repositório /PetSamas/
     if (pets.length === 0) {
         console.log("Redirecionando para cadastro.html...");
-        window.location.href = "./cadastro.html"; 
+        window.location.href = "/PetSamas/cadastro.html";
     } else {
         console.log("Redirecionando para meus-pets.html...");
-        window.location.href = "./meus-pets.html";
+        window.location.href = "/PetSamas/meus-pets.html";
     }
 });
