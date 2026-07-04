@@ -1,118 +1,61 @@
 /*
 ==========================================================
-PetSamas
-Arquivo: qr-code.js
-
-Responsável por:
-
-✔ Ler o ID da URL
-✔ Buscar o pet no Supabase
-✔ Mostrar o nome
-✔ Gerar o QR Code
-✔ Apontar para a página pública
+PetSamas - Arquivo: qr-code.js
+Responsável por: Bloqueio de acesso e geração do QR Code
 ==========================================================
 */
 
-
-// ======================================================
-// LÊ O ID DA URL
-// ======================================================
-
 const parametros = new URLSearchParams(window.location.search);
-
 const idPet = parametros.get("id");
 
+// ======================================================
+// LÓGICA DE BARREIRA (CHECK DE PAGAMENTO)
+// ======================================================
+function verificarAcesso() {
+    const estaLiberado = localStorage.getItem(`liberado_${idPet}`);
+    
+    if (!estaLiberado) {
+        document.getElementById("bloqueioPagamento").style.display = "block";
+        document.getElementById("conteudoLiberado").style.display = "none";
+    } else {
+        document.getElementById("bloqueioPagamento").style.display = "none";
+        document.getElementById("conteudoLiberado").style.display = "block";
+        carregarDadosPet();
+    }
+}
 
 // ======================================================
-// CARREGA O PET
+// BUSCA E GERAÇÃO DO QR CODE
 // ======================================================
-
-async function carregarQRCode() {
-
+async function carregarDadosPet() {
     const { data: pet, error } = await banco
-
         .from("pets")
-
         .select("*")
-
         .eq("id", Number(idPet))
-
         .single();
 
-
     if (error || !pet) {
-
         alert("Pet não encontrado.");
-
         window.location.href = "index.html";
-
         return;
-
     }
-
-
-    // ==================================================
-    // MOSTRA O NOME
-    // ==================================================
 
     document.getElementById("nomePet").textContent = pet.nome_pet;
 
-
-    // ==================================================
-    // LINK PÚBLICO DO PET
-    // ==================================================
-
-    const linkPet =
-
-        "https://jhonatanogueira875-commits.github.io/PetSamas/pet-publico.html?id="
-
-        + pet.id;
-
-
-    // ==================================================
-    // GERA O QR CODE
-    // ==================================================
+    const linkPet = "https://jhonatanogueira875-commits.github.io/PetSamas/pet-publico.html?id=" + pet.id;
 
     document.getElementById("qrcode").innerHTML = "";
-
-    new QRCode(
-
-        document.getElementById("qrcode"),
-
-        {
-
-            text: linkPet,
-
-            width: 250,
-
-            height: 250
-
-        }
-
-    );
-
-
-    // ==================================================
-    // BOTÃO BAIXAR
-    // ==================================================
+    new QRCode(document.getElementById("qrcode"), {
+        text: linkPet,
+        width: 250,
+        height: 250
+    });
 
     const btn = document.getElementById("btnBaixar");
-
     if (btn) {
-
-        btn.onclick = function () {
-
-            window.print();
-
-        };
-
+        btn.onclick = () => window.print();
     }
-
 }
 
-
-// ======================================================
-// INICIALIZAÇÃO
-// ======================================================
-
-carregarQRCode();
+// Inicializa a verificação
+verificarAcesso();

@@ -1,92 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>QR Code do Pet - PetSamas</title>
-
     <link rel="stylesheet" href="css/style.css">
-
 </head>
-
 <body>
 
     <main class="container">
+        
+        <!-- BARREIRA DE PAGAMENTO -->
+        <div id="bloqueioPagamento" style="display: none; text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 10px;">
+            <h2 style="color: #d9534f;">⚠️ Aguardando Ativação</h2>
+            <p>O QR Code do seu pet está pronto, mas precisa ser ativado para uso.</p>
+            <a href="https://wa.me/5542999999999?text=Olá, realizei o pagamento e gostaria de ativar meu QR Code." 
+               style="display: block; background: #25d366; color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">
+               💳 Ativar agora via WhatsApp
+            </a>
+        </div>
 
-        <h1>🐶 Cadastro realizado!</h1>
-
-        <p>
-
-            Este é o QR Code oficial do seu pet.
-
-        </p>
-
-        <h2 id="nomePet">
-
-            Carregando...
-
-        </h2>
-
-        <br>
-
-        <div id="qrcode"></div>
-
-        <br>
-
-        <p>
-
-            📌 Imprima este QR Code ou fixe-o na coleira do seu pet.
-
-        </p>
-
-        <br>
-
-        <button onclick="window.print()">
-
-            🖨️ Imprimir QR Code
-
-        </button>
-
-        <br><br>
-
-        <button id="btnBaixar">
-
-            ⬇️ Baixar QR Code
-
-        </button>
-
-        <br><br>
-
-        <a href="cadastro.html">
-
-            ➕ Cadastrar outro pet
-
-        </a>
-
-        <br><br>
-
-        <a href="index.html">
-
-            🏠 Página Inicial
-
-        </a>
+        <!-- CONTEÚDO PROTEGIDO -->
+        <div id="conteudoLiberado" style="display: none;">
+            <h1>🐶 Cadastro realizado!</h1>
+            <p>Este é o QR Code oficial do seu pet.</p>
+            <h2 id="nomePet">Carregando...</h2>
+            <div id="qrcode"></div>
+            <p>📌 Imprima este QR Code ou fixe-o na coleira do seu pet.</p>
+            <button onclick="window.print()">🖨️ Imprimir QR Code</button>
+            <br><br>
+            <button id="btnBaixar">⬇️ Baixar QR Code</button>
+            <br><br>
+            <a href="cadastro.html">➕ Cadastrar outro pet</a>
+            <br><br>
+            <a href="index.html">🏠 Página Inicial</a>
+        </div>
 
     </main>
 
-    <!-- Biblioteca QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="js/supabase.js"></script>
-
     <script src="js/qr-code.js"></script>
-
 </body>
-
 </html>
