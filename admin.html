@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel Administrativo - PetSamas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ==================================================
+             LOGO
+        =================================================== -->
+
+        <img
+            src="assets/images/logo.jpg"
+            alt="Logo PetSamas"
+            id="logo">
+
+        <!-- ==================================================
+             TÍTULO
+        =================================================== -->
+
+        <h1>
+
+            🛠 Painel Administrativo
+
+        </h1>
+
+        <p class="subtitulo">
+
+            Gerencie os QR Codes cadastrados.
+
+        </p>
+
+        <br>
+
+        <!-- ==================================================
+             LISTA DOS PETS
+        =================================================== -->
+
+        <div id="listaPets">
+
+            Carregando...
+
+        </div>
+
+        <br><br>
+
+        <!-- ==================================================
+             SAIR
+        =================================================== -->
+
+        <button onclick="logout()">
+
+            🚪 Sair
+
+        </button>
+
+        <br><br>
+
+        <a href="index.html">
+
+            ← Página Inicial
+
+        </a>
+
+    </main>
+
+    <!-- ==================================================
+         SUPABASE
+    =================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <!-- ==================================================
+         LOGOUT
+    =================================================== -->
+
+    <script src="js/logout.js"></script>
+
+    <!-- ==================================================
+         ADMIN
+    =================================================== -->
+
+    <script src="js/admin.js"></script>
+
+</body>
+
+</html>
