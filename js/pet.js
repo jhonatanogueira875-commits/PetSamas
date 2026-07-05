@@ -38,7 +38,7 @@ async function carregarPet() {
 
     } else {
 
-        fotoElement.src = "assets/images/logo.png";
+        fotoElement.src = "assets/images/logo.jpg";
     }
 
     // =========================

@@ -61,7 +61,7 @@ async function carregarPet() {
 
         ? pet.foto
 
-        : "assets/images/logo.png";
+        : "assets/images/logo.jpg";
 
 
     // ==================================================

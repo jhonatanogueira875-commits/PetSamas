@@ -116,7 +116,7 @@ function renderizarPets() {
 
             ? pet.foto
 
-            : "assets/images/logo.png";
+            : "assets/images/logo.jpg";
 
         let botaoQRCode = "";
 
