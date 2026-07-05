@@ -7,7 +7,6 @@ Estilos gerais utilizados em todas as páginas do sistema.
 ==========================================================
 */
 
-
 /* ======================================================
    CONFIGURAÇÕES GERAIS
 ====================================================== */
@@ -19,7 +18,6 @@ Estilos gerais utilizados em todas as páginas do sistema.
 
 body{
     font-family:Arial, Helvetica, sans-serif;
-    /* Imagem de fundo e escurecimento */
     background-image: url('../assets/images/pets-3715733_1280.jpg');
     background-size: cover;
     background-position: center;
@@ -31,7 +29,6 @@ body{
     min-height: 100vh;
 }
 
-
 /* ======================================================
    CONTAINER
 ====================================================== */
@@ -39,7 +36,6 @@ body{
     width:92%;
     max-width:500px;
     margin:40px auto;
-    /* Fundo branco levemente transparente para destacar o conteúdo */
     background: rgba(255, 255, 255, 0.95);
     padding:35px;
     border-radius:20px;
@@ -47,16 +43,17 @@ body{
     text-align:center;
 }
 
-
 /* ======================================================
-   LOGO
+   LOGO (Otimizada para a nova identidade)
 ====================================================== */
 #logo{
     width:140px;
     max-width:100%;
     margin-bottom:20px;
+    /* Se a logo for branca, remova a linha abaixo. 
+       Se for preta, pode manter ou remover conforme preferir. */
+    /* filter: invert(1); */ 
 }
-
 
 /* ======================================================
    FOTO DO PERFIL DO PET
@@ -72,7 +69,6 @@ body{
     margin:0 auto 25px auto;
 }
 
-
 /* ======================================================
    FOTO DOS CARDS
 ====================================================== */
@@ -85,7 +81,6 @@ body{
     margin:0 auto 15px auto;
 }
 
-
 /* ======================================================
    IMAGENS EM GERAL
 ====================================================== */
@@ -93,7 +88,6 @@ img{
     max-width:100%;
     height:auto;
 }
-
 
 /* ======================================================
    TÍTULOS
@@ -113,7 +107,6 @@ h3{
     margin-bottom:10px;
 }
 
-
 /* ======================================================
    SUBTÍTULO
 ====================================================== */
@@ -122,7 +115,6 @@ h3{
     margin-bottom:30px;
     font-size:18px;
 }
-
 
 /* ======================================================
    FORMULÁRIO
@@ -150,7 +142,6 @@ input[type=file]{
     padding:10px;
 }
 
-
 /* ======================================================
    BOTÕES
 ====================================================== */
@@ -172,14 +163,12 @@ button:hover{
     transform:scale(1.02);
 }
 
-
 /* ======================================================
    LINKS
 ====================================================== */
 a{
     text-decoration:none;
 }
-
 
 /* ======================================================
    RODAPÉ
@@ -189,7 +178,6 @@ footer{
     color:#666;
     font-size:15px;
 }
-
 
 /* ======================================================
    RESPONSIVIDADE
