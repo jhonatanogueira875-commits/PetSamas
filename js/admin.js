@@ -15,7 +15,7 @@ Responsável por:
 // ADMINISTRADOR
 // ======================================================
 
-const EMAIL_ADMIN = "jhonatanogueira875@gmail.com";
+const EMAIL_ADMIN = "nogueira100988@outlook.com";
 
 // ======================================================
 // ELEMENTO

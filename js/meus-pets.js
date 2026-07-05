@@ -9,9 +9,9 @@ Responsável por:
 ✔ Buscar pets do usuário
 ✔ Exibir cards
 ✔ Liberar QR Code após ativação
+✔ Exibir Painel Administrativo para o administrador
 ==========================================================
 */
-
 
 // ======================================================
 // PROTEÇÃO
@@ -21,10 +21,18 @@ verificarLogin();
 
 
 // ======================================================
+// ADMINISTRADOR
+// ======================================================
+
+const EMAIL_ADMIN = "nogueira100988@outlook.com";
+
+// ======================================================
 // ELEMENTOS
 // ======================================================
 
 const listaPets = document.getElementById("listaPets");
+
+const adminArea = document.getElementById("adminArea");
 
 let pets = [];
 
@@ -38,6 +46,28 @@ async function getUser() {
     const { data } = await banco.auth.getUser();
 
     return data.user;
+
+}
+
+
+// ======================================================
+// VERIFICAR ADMINISTRADOR
+// ======================================================
+
+async function verificarAdministrador() {
+
+    const user = await getUser();
+
+    if (!user) return;
+
+    if (
+        user.email &&
+        user.email.toLowerCase() === EMAIL_ADMIN.toLowerCase()
+    ) {
+
+        adminArea.style.display = "block";
+
+    }
 
 }
 
@@ -259,4 +289,10 @@ async function excluirPet(id) {
 // INICIALIZAÇÃO
 // ======================================================
 
-carregarPets();
+(async function () {
+
+    await verificarAdministrador();
+
+    await carregarPets();
+
+})();
