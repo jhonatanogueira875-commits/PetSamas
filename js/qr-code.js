@@ -1,20 +1,19 @@
 /*
 ==========================================================
-PetSamas - qr-code.js (VERSÃO BLINDADA E INTEGRADA)
+PetSamas - qr-code.js (VERSÃO 100% SUPABASE)
 ==========================================================
 */
 
 const parametros = new URLSearchParams(window.location.search);
 const idPet = parametros.get("id");
 
-// Executa a verificação diretamente no banco de dados ao carregar
 window.onload = async () => {
     if (!idPet) {
         window.location.href = "/PetSamas/meus-pets.html";
         return;
     }
 
-    // Busca o status direto no banco
+    // BUSCA DIRETA NO BANCO DE DADOS
     const { data: pet, error } = await banco
         .from("pets")
         .select("id, nome_pet, qr_liberado")
@@ -27,15 +26,16 @@ window.onload = async () => {
         return;
     }
 
-    // Validação real: checa o banco de dados, não o localStorage
+    // LÓGICA DE EXIBIÇÃO BASEADA NO BANCO
     if (pet.qr_liberado === true) {
-        // Libera a visualização
         document.getElementById("bloqueioPagamento").style.display = "none";
         document.getElementById("conteudoLiberado").style.display = "block";
         
-        // Carrega o QR Code
         const linkPet = "https://jhonatanogueira875-commits.github.io/PetSamas/pet-publico.html?id=" + pet.id;
         document.getElementById("nomePet").textContent = pet.nome_pet;
+        
+        // Limpa qrcode anterior para não duplicar caso recarregue
+        document.getElementById("qrcode").innerHTML = "";
         
         new QRCode(document.getElementById("qrcode"), {
             text: linkPet,
@@ -45,9 +45,8 @@ window.onload = async () => {
 
         const btn = document.getElementById("btnBaixar");
         if (btn) btn.onclick = () => window.print();
-
     } else {
-        // Bloqueia e mostra o aviso de pagamento
+        // FORÇA O BLOQUEIO SE NO BANCO ESTIVER FALSE
         document.getElementById("conteudoLiberado").style.display = "none";
         document.getElementById("bloqueioPagamento").style.display = "block";
     }
