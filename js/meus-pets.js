@@ -26,6 +26,7 @@ verificarLogin();
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
 
+
 // ======================================================
 // ELEMENTOS
 // ======================================================
@@ -33,6 +34,8 @@ const EMAIL_ADMIN = "nogueira100988@outlook.com";
 const listaPets = document.getElementById("listaPets");
 
 const adminArea = document.getElementById("adminArea");
+
+const botaoNovoPet = document.getElementById("botaoNovoPet");
 
 let pets = [];
 
@@ -58,16 +61,20 @@ async function verificarAdministrador() {
 
     const user = await getUser();
 
-    if (!user) return;
+    if (!user) return false;
 
     if (
         user.email &&
         user.email.toLowerCase() === EMAIL_ADMIN.toLowerCase()
     ) {
 
-        adminArea.style.display = "block";
+        window.location.href = "admin.html";
+
+        return true;
 
     }
+
+    return false;
 
 }
 
@@ -118,6 +125,12 @@ function renderizarPets() {
 
     if (pets.length === 0) {
 
+        if (botaoNovoPet) {
+
+            botaoNovoPet.style.display = "none";
+
+        }
+
         listaPets.innerHTML = `
 
             <p>Você ainda não possui nenhum pet cadastrado.</p>
@@ -137,6 +150,12 @@ function renderizarPets() {
         `;
 
         return;
+
+    }
+
+    if (botaoNovoPet) {
+
+        botaoNovoPet.style.display = "inline-block";
 
     }
 
@@ -233,7 +252,7 @@ Obrigado!`
 
                     🗑 Excluir
 
-                </button>
+                    </button>
 
                 <hr>
 
@@ -291,7 +310,9 @@ async function excluirPet(id) {
 
 (async function () {
 
-    await verificarAdministrador();
+    const admin = await verificarAdministrador();
+
+    if (admin) return;
 
     await carregarPets();
 

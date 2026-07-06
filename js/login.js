@@ -64,7 +64,7 @@ formulario.addEventListener("submit", async function (event) {
 
     ) {
 
-        window.location.href = "/PetSamas/admin.html";
+        window.location.href = "admin.html";
 
         return;
 
@@ -93,11 +93,11 @@ formulario.addEventListener("submit", async function (event) {
 
     if (pets.length === 0) {
 
-        window.location.href = "/PetSamas/cadastro.html";
+        window.location.href = "cadastro.html";
 
     } else {
 
-        window.location.href = "/PetSamas/meus-pets.html";
+        window.location.href = "meus-pets.html";
 
     }
 

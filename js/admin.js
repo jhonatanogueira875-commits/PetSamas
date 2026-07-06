@@ -5,27 +5,26 @@ Arquivo: admin.js
 
 Responsável por:
 
+✔ Permitir acesso apenas ao administrador
 ✔ Listar todos os pets
-✔ Mostrar status do QR
 ✔ Liberar QR Code
+✔ Bloquear QR Code
 ==========================================================
+*/
 
-
-*/// ======================================================
+// ======================================================
 // ADMINISTRADOR
 // ======================================================
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
 
+
 // ======================================================
-// ELEMENTO
+// ELEMENTOS
 // ======================================================
 
 const listaPets = document.getElementById("listaPets");
 
-// ======================================================
-// CARREGAR PETS
-// ======================================================
 
 // ======================================================
 // VERIFICAR ADMINISTRADOR
@@ -40,11 +39,18 @@ async function verificarAdministrador() {
     if (!user) {
 
         window.location.href = "login.html";
+
         return false;
 
     }
 
-    if (user.email !== EMAIL_ADMIN) {
+    if (
+
+        !user.email ||
+
+        user.email.toLowerCase() !== EMAIL_ADMIN.toLowerCase()
+
+    ) {
 
         alert("Acesso restrito ao administrador.");
 
@@ -57,6 +63,12 @@ async function verificarAdministrador() {
     return true;
 
 }
+
+
+// ======================================================
+// CARREGAR PETS
+// ======================================================
+
 async function carregarPets() {
 
     const { data: pets, error } = await banco
@@ -67,13 +79,15 @@ async function carregarPets() {
     if (error) {
 
         listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
+
         return;
 
     }
 
-    if (pets.length === 0) {
+    if (!pets || pets.length === 0) {
 
         listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
+
         return;
 
     }
@@ -100,27 +114,30 @@ async function carregarPets() {
 
                     ${
                         pet.qr_liberado
+
                         ? "🟢 QR LIBERADO"
+
                         : "🔴 QR BLOQUEADO"
                     }
 
                 </p>
 
                 ${
-                    !pet.qr_liberado
+                    pet.qr_liberado
+
                     ?
 
-                    `<button onclick="liberarQR(${pet.id})">
+                    `<button onclick="bloquearQR(${pet.id})">
 
-                        ✅ Liberar QR
+                        🔒 Bloquear QR
 
                     </button>`
 
                     :
 
-                    `<button disabled>
+                    `<button onclick="liberarQR(${pet.id})">
 
-                        ✔ Já Liberado
+                        ✅ Liberar QR
 
                     </button>`
                 }
@@ -135,38 +152,69 @@ async function carregarPets() {
 
 }
 
+
 // ======================================================
 // LIBERAR QR
 // ======================================================
 
 async function liberarQR(id) {
 
-    const confirmar = confirm("Deseja liberar este QR Code?");
-
-    if (!confirmar) return;
+    if (!confirm("Deseja liberar este QR Code?")) return;
 
     const { error } = await banco
         .from("pets")
         .update({
+
             qr_liberado: true
+
         })
         .eq("id", id);
 
     if (error) {
 
         alert("Erro ao liberar o QR Code.");
+
         return;
 
     }
-
-    alert("QR Code liberado com sucesso!");
 
     carregarPets();
 
 }
 
+
 // ======================================================
-// INICIAR
+// BLOQUEAR QR
+// ======================================================
+
+async function bloquearQR(id) {
+
+    if (!confirm("Deseja bloquear este QR Code?")) return;
+
+    const { error } = await banco
+        .from("pets")
+        .update({
+
+            qr_liberado: false
+
+        })
+        .eq("id", id);
+
+    if (error) {
+
+        alert("Erro ao bloquear o QR Code.");
+
+        return;
+
+    }
+
+    carregarPets();
+
+}
+
+
+// ======================================================
+// INICIALIZAÇÃO
 // ======================================================
 
 (async function () {
@@ -175,6 +223,6 @@ async function liberarQR(id) {
 
     if (!permitido) return;
 
-    carregarPets();
+    await carregarPets();
 
 })();
