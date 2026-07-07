@@ -18,16 +18,33 @@ const LINK_SITE = "https://jhonatanogueira875-commits.github.io/PetSamas/";
 
 
 // ======================================================
+// ELEMENTO QR
+// ======================================================
+
+const qrContainer = document.getElementById("qrcode");
+
+
+// ======================================================
+// CENTRALIZAÇÃO
+// ======================================================
+
+qrContainer.style.display = "flex";
+qrContainer.style.justifyContent = "center";
+qrContainer.style.alignItems = "center";
+qrContainer.style.width = "100%";
+
+
+// ======================================================
 // GERAR QR CODE
 // ======================================================
 
-new QRCode(document.getElementById("qrcode"), {
+new QRCode(qrContainer, {
 
     text: LINK_SITE,
 
-    width: 280,
+    width: 320,
 
-    height: 280,
+    height: 320,
 
     colorDark: "#000000",
 
