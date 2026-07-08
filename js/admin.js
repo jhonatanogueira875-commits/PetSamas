@@ -4,225 +4,62 @@ PetSamas
 Arquivo: admin.js
 
 Responsável por:
-
-✔ Permitir acesso apenas ao administrador
-✔ Listar todos os pets
-✔ Liberar QR Code
-✔ Bloquear QR Code
+✔ Carregar a lista de pets
+✔ Redirecionar para impressão de lotes
 ==========================================================
 */
 
-// ======================================================
-// ADMINISTRADOR
-// ======================================================
-
-const EMAIL_ADMIN = "nogueira100988@outlook.com";
-
+// Carrega os dados ao abrir a página
+document.addEventListener("DOMContentLoaded", () => {
+    carregarPets();
+});
 
 // ======================================================
-// ELEMENTOS
+// FUNÇÃO PARA REDIRECIONAR PARA IMPRESSÃO DE LOTE
 // ======================================================
 
-const listaPets = document.getElementById("listaPets");
+function irParaImpressao() {
+    const inputLote = document.getElementById("inputLote");
+    const numeroLote = inputLote.value.trim();
 
-
-// ======================================================
-// VERIFICAR ADMINISTRADOR
-// ======================================================
-
-async function verificarAdministrador() {
-
-    const { data } = await banco.auth.getUser();
-
-    const user = data.user;
-
-    if (!user) {
-
-        window.location.href = "login.html";
-
-        return false;
-
+    if (numeroLote) {
+        // Redireciona para a página passando o número do lote como parâmetro
+        window.location.href = `impressao-lote.html?lote=${numeroLote}`;
+    } else {
+        alert("Por favor, digite o número do lote que deseja imprimir.");
+        inputLote.focus();
     }
-
-    if (
-
-        !user.email ||
-
-        user.email.toLowerCase() !== EMAIL_ADMIN.toLowerCase()
-
-    ) {
-
-        alert("Acesso restrito ao administrador.");
-
-        window.location.href = "index.html";
-
-        return false;
-
-    }
-
-    return true;
-
 }
 
-
 // ======================================================
-// CARREGAR PETS
+// CARREGAR LISTA DE PETS (Logica original mantida)
 // ======================================================
 
 async function carregarPets() {
+    const listaDiv = document.getElementById("listaPets");
+    
+    try {
+        const { data, error } = await banco
+            .from("qrcodes")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-    const { data: pets, error } = await banco
-        .from("pets")
-        .select("*")
-        .order("id", { ascending: false });
+        if (error) throw error;
 
-    if (error) {
+        if (data.length === 0) {
+            listaDiv.innerHTML = "Nenhum pet cadastrado.";
+            return;
+        }
 
-        listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
-
-        return;
-
+        let html = "<h3>Pets Cadastrados:</h3><ul>";
+        data.forEach(pet => {
+            html += `<li>${pet.codigo} - Status: ${pet.status}</li>`;
+        });
+        html += "</ul>";
+        
+        listaDiv.innerHTML = html;
+    } catch (err) {
+        console.error(err);
+        listaDiv.innerHTML = "Erro ao carregar dados.";
     }
-
-    if (!pets || pets.length === 0) {
-
-        listaPets.innerHTML = "<p>Nenhum pet cadastrado.</p>";
-
-        return;
-
-    }
-
-    listaPets.innerHTML = "";
-
-    pets.forEach(function (pet) {
-
-        listaPets.innerHTML += `
-
-            <div class="card-pet">
-
-                <h2>🐶 ${pet.nome_pet}</h2>
-
-                <p><strong>👤 Tutor:</strong> ${pet.nome_tutor}</p>
-
-                <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
-
-                <p><strong>📞 Telefone:</strong> ${pet.telefone}</p>
-
-                <p>
-
-                    <strong>Status:</strong>
-
-                    ${
-                        pet.qr_liberado
-
-                        ? "🟢 QR LIBERADO"
-
-                        : "🔴 QR BLOQUEADO"
-                    }
-
-                </p>
-
-                ${
-                    pet.qr_liberado
-
-                    ?
-
-                    `<button onclick="bloquearQR(${pet.id})">
-
-                        🔒 Bloquear QR
-
-                    </button>`
-
-                    :
-
-                    `<button onclick="liberarQR(${pet.id})">
-
-                        ✅ Liberar QR
-
-                    </button>`
-                }
-
-                <hr>
-
-            </div>
-
-        `;
-
-    });
-
 }
-
-
-// ======================================================
-// LIBERAR QR
-// ======================================================
-
-async function liberarQR(id) {
-
-    if (!confirm("Deseja liberar este QR Code?")) return;
-
-    const { error } = await banco
-        .from("pets")
-        .update({
-
-            qr_liberado: true
-
-        })
-        .eq("id", id);
-
-    if (error) {
-
-        alert("Erro ao liberar o QR Code.");
-
-        return;
-
-    }
-
-    carregarPets();
-
-}
-
-
-// ======================================================
-// BLOQUEAR QR
-// ======================================================
-
-async function bloquearQR(id) {
-
-    if (!confirm("Deseja bloquear este QR Code?")) return;
-
-    const { error } = await banco
-        .from("pets")
-        .update({
-
-            qr_liberado: false
-
-        })
-        .eq("id", id);
-
-    if (error) {
-
-        alert("Erro ao bloquear o QR Code.");
-
-        return;
-
-    }
-
-    carregarPets();
-
-}
-
-
-// ======================================================
-// INICIALIZAÇÃO
-// ======================================================
-
-(async function () {
-
-    const permitido = await verificarAdministrador();
-
-    if (!permitido) return;
-
-    await carregarPets();
-
-})();

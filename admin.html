@@ -17,18 +17,10 @@
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
-
         <img
             src="assets/images/logo.jpg"
             alt="Logo PetSamas"
             id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
 
         <h1>
 
@@ -44,10 +36,6 @@
 
         <br>
 
-        <!-- ==================================================
-             QR INSTITUCIONAL
-        =================================================== -->
-
         <a href="qr-institucional.html">
 
             <button>
@@ -60,9 +48,13 @@
 
         <br><br>
 
-        <!-- ==================================================
-             LISTA DOS PETS
-        =================================================== -->
+        <div style="border: 1px solid #ccc; padding: 15px; border-radius: 10px; background-color: #f9f9f9;">
+            <h3>🖨 Imprimir Lote</h3>
+            <input type="text" id="inputLote" placeholder="Digite o número do lote" style="padding: 8px; width: 60%;">
+            <button onclick="irParaImpressao()" style="padding: 8px;">Acessar Lote</button>
+        </div>
+
+        <br><br>
 
         <div id="listaPets">
 
@@ -71,10 +63,6 @@
         </div>
 
         <br><br>
-
-        <!-- ==================================================
-             SAIR
-        =================================================== -->
 
         <button onclick="sair()">
 
@@ -92,23 +80,11 @@
 
     </main>
 
-    <!-- ==================================================
-         SUPABASE
-    =================================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="js/supabase.js"></script>
 
-    <!-- ==================================================
-         LOGOUT
-    =================================================== -->
-
     <script src="js/logout.js"></script>
-
-    <!-- ==================================================
-         ADMIN
-    =================================================== -->
 
     <script src="js/admin.js"></script>
 
