@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Ativar QR Code - PetSamas</title>
+    <title>Produção de QR Codes - PetSamas</title>
 
     <link rel="stylesheet"
           href="css/style.css">
@@ -30,21 +30,35 @@
 
         <h1>
 
-            🐾 Ativação
+            🏭 Produção
 
         </h1>
 
         <p class="subtitulo">
 
-            Estamos verificando seu QR Code...
+            Gere e baixe os QR Codes cadastrados.
 
         </p>
 
-        <div id="conteudo">
+        <br>
 
-            Aguarde...
+        <div id="listaQRCodes">
+
+            Carregando...
 
         </div>
+
+        <br><br>
+
+        <a href="admin.html">
+
+            <button>
+
+                ⬅ Voltar ao Painel
+
+            </button>
+
+        </a>
 
     </main>
 
@@ -52,7 +66,9 @@
 
     <script src="js/supabase.js"></script>
 
-    <script src="js/ativar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="js/producao.js"></script>
 
 </body>
 

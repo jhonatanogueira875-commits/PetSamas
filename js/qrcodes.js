@@ -7,6 +7,7 @@ Responsável por:
 
 ✔ Gerar lotes de QR Codes
 ✔ Buscar o último número cadastrado
+✔ Buscar o último lote cadastrado
 ✔ Continuar a sequência automaticamente
 ✔ Salvar o lote no Supabase
 ==========================================================
@@ -31,22 +32,24 @@ async function gerarLote(quantidade) {
     try {
 
         // ==================================================
-        // BUSCA O ÚLTIMO NÚMERO CADASTRADO
+        // BUSCA O ÚLTIMO NÚMERO E O ÚLTIMO LOTE
         // ==================================================
 
         const { data: ultimo, error } = await banco
             .from("qrcodes")
-            .select("numero")
+            .select("numero, lote")
             .order("numero", { ascending: false })
             .limit(1);
 
         if (error) throw error;
 
         let proximoNumero = 1;
+        let proximoLote = 1;
 
-        if (ultimo.length > 0 && ultimo[0].numero != null) {
+        if (ultimo.length > 0) {
 
-            proximoNumero = ultimo[0].numero + 1;
+            proximoNumero = (ultimo[0].numero || 0) + 1;
+            proximoLote = (ultimo[0].lote || 0) + 1;
 
         }
 
@@ -54,15 +57,17 @@ async function gerarLote(quantidade) {
         // GERA O LOTE
         // ==================================================
 
-        const lote = [];
+        const qrcodes = [];
 
         for (let i = 0; i < quantidade; i++) {
 
             const numero = proximoNumero + i;
 
-            lote.push({
+            qrcodes.push({
 
                 numero: numero,
+
+                lote: proximoLote,
 
                 codigo: `PET-${String(numero).padStart(6, "0")}`,
 
@@ -80,7 +85,7 @@ async function gerarLote(quantidade) {
 
         const { error: erroInsert } = await banco
             .from("qrcodes")
-            .insert(lote);
+            .insert(qrcodes);
 
         if (erroInsert) throw erroInsert;
 
@@ -92,11 +97,13 @@ async function gerarLote(quantidade) {
 
             <h3>✅ Lote criado com sucesso!</h3>
 
+            <p><strong>Lote:</strong> ${proximoLote}</p>
+
             <p><strong>Quantidade:</strong> ${quantidade}</p>
 
-            <p><strong>Primeiro QR:</strong> ${lote[0].codigo}</p>
+            <p><strong>Primeiro QR:</strong> ${qrcodes[0].codigo}</p>
 
-            <p><strong>Último QR:</strong> ${lote[lote.length - 1].codigo}</p>
+            <p><strong>Último QR:</strong> ${qrcodes[qrcodes.length - 1].codigo}</p>
 
         `;
 
