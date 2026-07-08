@@ -44,15 +44,12 @@ body{
 }
 
 /* ======================================================
-   LOGO (Otimizada para a nova identidade)
+   LOGO
 ====================================================== */
 #logo{
     width:140px;
     max-width:100%;
     margin-bottom:20px;
-    /* Se a logo for branca, remova a linha abaixo. 
-       Se for preta, pode manter ou remover conforme preferir. */
-    /* filter: invert(1); */ 
 }
 
 /* ======================================================
@@ -197,26 +194,51 @@ footer{
 /* ======================================================
    QR CODE
 ====================================================== */
-
 #qrcode{
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     width:100%;
-
     margin:20px auto;
-
 }
 
 #qrcode img,
 #qrcode canvas{
-
     display:block;
-
     margin:0 auto;
+}
 
+/* ======================================================
+   ESTILOS PARA IMPRESSÃO (A4)
+====================================================== */
+@media print {
+    body {
+        background: none;
+        background-color: white;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    button, a, #logo, .subtitulo, br {
+        display: none !important;
+    }
+
+    #gradeQRCodes {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    #gradeQRCodes > div {
+        border: 1px solid #000 !important;
+        padding: 10px !important;
+        break-inside: avoid; /* Mantém o item unido na página */
+        text-align: center;
+    }
 }

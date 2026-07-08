@@ -2,154 +2,82 @@
 ==========================================================
 PetSamas
 Arquivo: impressao-lote.js
-
-Responsável por:
-
-✔ Buscar um lote no Supabase
-✔ Gerar os QR Codes para impressão
+Responsável por: Buscar um lote e gerar grade de QR Codes
 ==========================================================
 */
 
-
-// ======================================================
-// LÊ O LOTE DA URL
-// ======================================================
-
 const params = new URLSearchParams(window.location.search);
-
 const numeroLote = params.get("lote");
-
 const informacoes = document.getElementById("informacoesLote");
-
 const grade = document.getElementById("gradeQRCodes");
 
-
-// ======================================================
-// LINK OFICIAL
-// ======================================================
-
-const SITE =
-
-"https://jhonatanogueira875-commits.github.io/PetSamas";
-
-
-// ======================================================
-// INICIAR
-// ======================================================
+const SITE = "https://jhonatanogueira875-commits.github.io/PetSamas";
 
 if (!numeroLote) {
-
-    informacoes.innerHTML = `
-
-        <h3>❌ Nenhum lote informado.</h3>
-
-    `;
-
-}
-else {
-
+    informacoes.innerHTML = "<h3>❌ Nenhum lote informado.</h3>";
+} else {
     carregarLote();
-
 }
-
-
-// ======================================================
-// CARREGAR LOTE
-// ======================================================
 
 async function carregarLote() {
-
     informacoes.innerHTML = "Carregando lote...";
 
     const { data, error } = await banco
-
         .from("qrcodes")
-
         .select("*")
-
         .eq("lote", numeroLote)
-
         .order("numero", { ascending: true });
 
     if (error) {
-
         console.error(error);
-
         informacoes.innerHTML = "Erro ao consultar o banco.";
-
         return;
-
     }
 
     if (data.length === 0) {
-
         informacoes.innerHTML = "Lote não encontrado.";
-
         return;
-
     }
 
     informacoes.innerHTML = `
-
         <h2>📦 Lote ${numeroLote}</h2>
-
-        <p>${data.length} QR Codes</p>
-
+        <p>${data.length} QR Codes encontrados.</p>
     `;
 
     grade.innerHTML = "";
 
-
-
-    // ==================================================
-    // GERA CADA QR CODE
-    // ==================================================
-
     data.forEach(qr => {
-
         const card = document.createElement("div");
-
-        card.style.width = "220px";
-        card.style.display = "inline-block";
-        card.style.margin = "15px";
-        card.style.padding = "15px";
+        card.className = "qr-card"; // Usaremos CSS para controlar o tamanho
+        
+        // Estilo básico para visualização na tela
         card.style.border = "1px solid #ddd";
-        card.style.borderRadius = "12px";
-        card.style.background = "#ffffff";
+        card.style.borderRadius = "8px";
+        card.style.padding = "10px";
+        card.style.background = "#fff";
         card.style.textAlign = "center";
 
         const areaQR = document.createElement("div");
-
+        areaQR.id = `qrcode-${qr.codigo}`; // ID único para a biblioteca
         areaQR.style.display = "flex";
         areaQR.style.justifyContent = "center";
-        areaQR.style.marginBottom = "12px";
+        areaQR.style.marginBottom = "5px";
 
         card.appendChild(areaQR);
 
-        new QRCode(areaQR, {
-
-            text: `${SITE}/ativar.html?codigo=${qr.codigo}`,
-
-            width: 150,
-
-            height: 150,
-
-            colorDark: "#000000",
-
-            colorLight: "#ffffff",
-
-            correctLevel: QRCode.CorrectLevel.H
-
-        });
-
-        const codigo = document.createElement("strong");
-
-        codigo.innerText = qr.codigo;
-
-        card.appendChild(codigo);
+        const codigoText = document.createElement("strong");
+        codigoText.style.fontSize = "12px";
+        codigoText.innerText = qr.codigo;
+        card.appendChild(codigoText);
 
         grade.appendChild(card);
 
+        // Gera o QR Code com tamanho adequado para A4
+        new QRCode(areaQR, {
+            text: `${SITE}/ativar.html?codigo=${qr.codigo}`,
+            width: 120, // Tamanho ideal para 4 por linha no A4
+            height: 120,
+            correctLevel: QRCode.CorrectLevel.H
+        });
     });
-
 }
