@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Impressão de Lote - PetSamas</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/images/favicon.png">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ==================================================
+             LOGO
+        =================================================== -->
+
+        <img
+            src="assets/images/logo.jpg"
+            alt="Logo PetSamas"
+            id="logo">
+
+        <!-- ==================================================
+             TÍTULO
+        =================================================== -->
+
+        <h1>
+
+            🖨 Impressão de Lote
+
+        </h1>
+
+        <p class="subtitulo">
+
+            QR Codes prontos para impressão.
+
+        </p>
+
+        <!-- ==================================================
+             INFORMAÇÕES DO LOTE
+        =================================================== -->
+
+        <div id="informacoesLote">
+
+            Carregando lote...
+
+        </div>
+
+        <br>
+
+        <!-- ==================================================
+             ÁREA DOS QR CODES
+        =================================================== -->
+
+        <div id="gradeQRCodes">
+
+        </div>
+
+        <br><br>
+
+        <!-- ==================================================
+             BOTÕES
+        =================================================== -->
+
+        <button onclick="window.print()">
+
+            🖨 Imprimir / Salvar em PDF
+
+        </button>
+
+        <br><br>
+
+        <a href="admin.html">
+
+            <button>
+
+                ⬅ Voltar ao Painel
+
+            </button>
+
+        </a>
+
+    </main>
+
+    <!-- ==================================================
+         SUPABASE
+    =================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <!-- ==================================================
+         BIBLIOTECA QR CODE
+    =================================================== -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- ==================================================
+         JAVASCRIPT
+    =================================================== -->
+
+    <script src="js/impressao-lote.js"></script>
+
+</body>
+
+</html>
