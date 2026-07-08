@@ -1,22 +1,36 @@
 /*
 ==========================================================
-PetSamas - Login.js
-==========================================================
+PetSamas
+Arquivo: login.js
 
 Responsável por:
 
 ✔ Realizar login
 ✔ Identificar administrador
-✔ Redirecionar administrador para o painel
-✔ Redirecionar usuários comuns
+✔ Manter o QR Code pela URL
+✔ Redirecionar corretamente
 ==========================================================
 */
+
 
 // ======================================================
 // ADMINISTRADOR
 // ======================================================
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
+
+
+// ======================================================
+// LÊ O QR CODE DA URL
+// ======================================================
+
+const parametros = new URLSearchParams(window.location.search);
+const codigoQR = parametros.get("codigo");
+
+// DEBUG DE ENTRADA
+console.log("LOGIN - URL:", window.location.href);
+console.log("LOGIN - codigoQR:", codigoQR);
+
 
 // ======================================================
 // FORMULÁRIO
@@ -29,8 +43,8 @@ formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const email = document.getElementById("email").value.trim();
-
     const senha = document.getElementById("senha").value;
+
 
     // ==================================================
     // LOGIN
@@ -53,6 +67,7 @@ formulario.addEventListener("submit", async function (event) {
 
     const user = data.user;
 
+
     // ==================================================
     // ADMINISTRADOR
     // ==================================================
@@ -70,22 +85,27 @@ formulario.addEventListener("submit", async function (event) {
 
     }
 
+
     // ==================================================
-    // BUSCAR PETS
+    // BUSCA PETS DO USUÁRIO
     // ==================================================
 
     const { data: pets, error: erroPets } = await banco
+
         .from("pets")
+
         .select("id")
+
         .eq("user_id", user.id);
 
     if (erroPets) {
 
-        alert("Erro ao carregar dados.");
+        alert("Erro ao carregar os pets.");
 
         return;
 
     }
+
 
     // ==================================================
     // REDIRECIONAMENTO
@@ -93,7 +113,27 @@ formulario.addEventListener("submit", async function (event) {
 
     if (pets.length === 0) {
 
-        window.location.href = "cadastro.html";
+        if (codigoQR) {
+
+            window.location.href = `cadastro.html?codigo=${codigoQR}`;
+
+        } else {
+
+            window.location.href = "cadastro.html";
+
+        }
+
+        return;
+
+    }
+
+    // DEBUG DE SAÍDA
+    console.log("REDIRECIONANDO PARA:");
+    console.log(`meus-pets.html?codigo=${codigoQR}`);
+
+    if (codigoQR) {
+
+        window.location.href = `meus-pets.html?codigo=${codigoQR}`;
 
     } else {
 

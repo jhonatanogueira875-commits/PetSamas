@@ -8,6 +8,7 @@ Responsável por:
 ✔ Ler o código do QR pela URL
 ✔ Consultar o Supabase
 ✔ Informar o status do QR Code
+✔ Encaminhar o usuário mantendo o código na URL
 ==========================================================
 */
 
@@ -24,7 +25,7 @@ const conteudo = document.getElementById("conteudo");
 
 
 // ======================================================
-// VALIDA
+// VALIDAÇÃO
 // ======================================================
 
 if (!codigo) {
@@ -62,11 +63,14 @@ async function verificarQRCode() {
 
         .single();
 
+
     if (error || !data) {
 
         conteudo.innerHTML = `
 
             <h3>❌ QR Code não encontrado.</h3>
+
+            <p>Verifique se o QR Code é válido.</p>
 
         `;
 
@@ -74,7 +78,14 @@ async function verificarQRCode() {
 
     }
 
+
+    // ==================================================
+    // STATUS
+    // ==================================================
+
     switch (data.status) {
+
+        // ----------------------------------------------
 
         case "disponivel":
 
@@ -82,21 +93,33 @@ async function verificarQRCode() {
 
                 <h2>✅ QR Code disponível</h2>
 
-                <p>Este QR Code ainda não foi ativado.</p>
+                <p>
+
+                    Este QR Code ainda não foi ativado.
+
+                </p>
 
                 <br>
 
-                <a href="login.html">
+                <a href="login.html?codigo=${codigo}">
 
-                    <button>🔐 Entrar</button>
+                    <button>
+
+                        🔐 Entrar
+
+                    </button>
 
                 </a>
 
                 <br><br>
 
-                <a href="cadastro-usuario.html">
+                <a href="cadastro-usuario.html?codigo=${codigo}">
 
-                    <button>👤 Criar conta</button>
+                    <button>
+
+                        👤 Criar Conta
+
+                    </button>
 
                 </a>
 
@@ -104,35 +127,73 @@ async function verificarQRCode() {
 
             break;
 
+        // ----------------------------------------------
+
         case "ativado":
 
             conteudo.innerHTML = `
 
-                <h2>🐾 QR Code já ativado</h2>
+                <h2>
 
-                <p>Este QR Code já pertence a um pet.</p>
+                    🐾 QR Code já ativado
+
+                </h2>
+
+                <p>
+
+                    Este QR Code já está vinculado a um pet.
+
+                </p>
+
+                <br>
+
+                <a href="pet-publico.html?codigo=${codigo}">
+
+                    <button>
+
+                        👁 Ver Perfil do Pet
+
+                    </button>
+
+                </a>
 
             `;
 
             break;
+
+        // ----------------------------------------------
 
         case "bloqueado":
 
             conteudo.innerHTML = `
 
-                <h2>🚫 QR Code bloqueado</h2>
+                <h2>
 
-                <p>Entre em contato com o suporte.</p>
+                    🚫 QR Code bloqueado
+
+                </h2>
+
+                <p>
+
+                    Entre em contato com o suporte.
+
+                </p>
 
             `;
 
             break;
 
+        // ----------------------------------------------
+
         default:
 
             conteudo.innerHTML = `
 
-                <h2>Status desconhecido.</h2>
+                <h2>
+
+                    Status desconhecido.
+
+                </h2>
 
             `;
 

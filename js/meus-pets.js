@@ -2,318 +2,158 @@
 ==========================================================
 PetSamas
 Arquivo: meus-pets.js
-
-Responsável por:
-
-✔ Verificar login
-✔ Buscar pets do usuário
-✔ Exibir cards
-✔ Liberar QR Code após ativação
-✔ Exibir Painel Administrativo para o administrador
 ==========================================================
 */
 
-// ======================================================
-// PROTEÇÃO
-// ======================================================
-
 verificarLogin();
-
-
-// ======================================================
-// ADMINISTRADOR
-// ======================================================
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
 
-
-// ======================================================
-// ELEMENTOS
-// ======================================================
-
 const listaPets = document.getElementById("listaPets");
-
 const adminArea = document.getElementById("adminArea");
-
 const botaoNovoPet = document.getElementById("botaoNovoPet");
 
 let pets = [];
 
+// ======================================================
+// QR PENDENTE DE ATIVAÇÃO
+// ======================================================
+
+const params = new URLSearchParams(window.location.search);
+let qrPendente = params.get("codigo") || sessionStorage.getItem("codigoQR");
+
+if (params.get("codigo")) {
+    sessionStorage.setItem("codigoQR", params.get("codigo"));
+}
+
+console.log("QR PENDENTE DETECTADO:", qrPendente);
 
 // ======================================================
 // PEGAR USUÁRIO LOGADO
 // ======================================================
 
 async function getUser() {
-
     const { data } = await banco.auth.getUser();
-
     return data.user;
-
 }
-
-
-// ======================================================
-// VERIFICAR ADMINISTRADOR
-// ======================================================
 
 async function verificarAdministrador() {
-
     const user = await getUser();
-
     if (!user) return false;
-
-    if (
-        user.email &&
-        user.email.toLowerCase() === EMAIL_ADMIN.toLowerCase()
-    ) {
-
+    if (user.email && user.email.toLowerCase() === EMAIL_ADMIN.toLowerCase()) {
         window.location.href = "admin.html";
-
         return true;
-
     }
-
     return false;
-
 }
 
-
-// ======================================================
-// CARREGAR PETS
-// ======================================================
-
 async function carregarPets() {
-
     const user = await getUser();
-
     if (!user) {
-
         window.location.href = "login.html";
-
         return;
-
     }
-
     const { data, error } = await banco
         .from("pets")
         .select("*")
         .eq("user_id", user.id);
 
     if (error) {
-
         listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
-
         return;
-
     }
-
     pets = data || [];
-
     renderizarPets();
-
 }
-
-
-// ======================================================
-// RENDERIZAÇÃO
-// ======================================================
 
 function renderizarPets() {
-
     listaPets.innerHTML = "";
-
     if (pets.length === 0) {
-
-        if (botaoNovoPet) {
-
-            botaoNovoPet.style.display = "none";
-
-        }
-
+        if (botaoNovoPet) botaoNovoPet.style.display = "none";
         listaPets.innerHTML = `
-
             <p>Você ainda não possui nenhum pet cadastrado.</p>
-
             <br>
-
-            <a href="cadastro.html">
-
-                <button>
-
-                    ➕ Cadastrar meu primeiro pet
-
-                </button>
-
-            </a>
-
+            <a href="cadastro.html"><button>➕ Cadastrar meu primeiro pet</button></a>
         `;
-
         return;
-
     }
 
-    if (botaoNovoPet) {
-
-        botaoNovoPet.style.display = "inline-block";
-
-    }
+    if (botaoNovoPet) botaoNovoPet.style.display = "inline-block";
 
     pets.forEach(function (pet) {
-
-        const foto = pet.foto && pet.foto !== ""
-
-            ? pet.foto
-
-            : "assets/images/logo.jpg";
-
-        let botaoQRCode = "";
-
-        if (pet.qr_liberado) {
-
-            botaoQRCode = `
-
-                <a href="qr-code.html?id=${pet.id}">
-
-                    <button>
-
-                        📱 QR Code
-
-                    </button>
-
-                </a>
-
-            `;
-
-        } else {
-
-            const mensagem = encodeURIComponent(
-`Olá!
-
-Acabei de cadastrar meu pet no PetSamas e gostaria de ativar meu QR Code.
-
-🐶 Pet: ${pet.nome_pet}
-
-Obrigado!`
-            );
-
-            botaoQRCode = `
-
-                <a href="https://wa.me/5542984097827?text=${mensagem}" target="_blank">
-
-                    <button>
-
-                        🟡 Ativar QR Code
-
-                    </button>
-
-                </a>
-
-            `;
-
-        }
+        const foto = pet.foto && pet.foto !== "" ? pet.foto : "assets/images/logo.jpg";
+        
+        // ADIÇÃO PARA DIAGNÓSTICO
+        console.log("PET COMPLETO:", pet);
+        
+        let botaoQRCode = qrPendente ? 
+            `<button onclick="vincularQRCode('${pet.id}')">🔗 Vincular este QR Code</button>` : 
+            `<a href="qr-code.html?id=${pet.id}"><button>📱 QR Code</button></a>`;
 
         listaPets.innerHTML += `
-
             <div class="card-pet">
-
-                <img
-                    src="${foto}"
-                    class="foto-card"
-                    alt="${pet.nome_pet}">
-
+                <img src="${foto}" class="foto-card" alt="${pet.nome_pet}">
                 <h2>🐶 ${pet.nome_pet}</h2>
-
                 <p><strong>👤 Tutor:</strong> ${pet.nome_tutor}</p>
-
                 <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
-
                 <br>
-
-                <a href="pet.html?id=${pet.id}">
-
-                    <button>
-
-                        👁 Ver Perfil
-
-                    </button>
-
-                </a>
-
+                <a href="pet.html?id=${pet.id}"><button>👁 Ver Perfil</button></a>
                 ${botaoQRCode}
-
-                <button onclick="editarPet(${pet.id})">
-
-                    ✏️ Editar
-
-                </button>
-
-                <button onclick="excluirPet(${pet.id})">
-
-                    🗑 Excluir
-
-                    </button>
-
+                <button onclick="editarPet(${pet.id})">✏️ Editar</button>
+                <button onclick="excluirPet(${pet.id})">🗑 Excluir</button>
                 <hr>
-
             </div>
-
         `;
-
     });
-
 }
 
-
-// ======================================================
-// EDITAR
-// ======================================================
-
-function editarPet(id) {
-
-    window.location.href = `cadastro.html?id=${id}`;
-
-}
-
-
-// ======================================================
-// EXCLUIR
-// ======================================================
+function editarPet(id) { window.location.href = `cadastro.html?id=${id}`; }
 
 async function excluirPet(id) {
-
     const confirmar = confirm("Deseja realmente excluir este pet?");
-
     if (!confirmar) return;
-
-    const { error } = await banco
-        .from("pets")
-        .delete()
-        .eq("id", id);
-
-    if (error) {
-
-        alert("Erro ao excluir o pet.");
-
-        return;
-
-    }
-
+    const { error } = await banco.from("pets").delete().eq("id", id);
+    if (error) { alert("Erro ao excluir o pet."); return; }
     carregarPets();
-
 }
 
+// ======================================================
+// VINCULAR QR CODE (DIAGNÓSTICO COMPLETO)
+// ======================================================
 
-// ======================================================
-// INICIALIZAÇÃO
-// ======================================================
+async function vincularQRCode(idPet) {
+    if (!qrPendente) {
+        alert("QR Code não informado.");
+        return;
+    }
+
+    const confirmar = confirm("Deseja vincular este QR Code a este pet?");
+    if (!confirmar) return;
+
+    const { data, error } = await banco
+        .from("qrcodes")
+        .update({
+            status: "ativado",
+            pet_id: idPet,
+            activated_at: new Date().toISOString()
+        })
+        .eq("codigo", qrPendente)
+        .select();
+
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("QR Code ativado com sucesso!");
+    window.location.href = `qr-code.html?id=${idPet}`;
+}
 
 (async function () {
-
     const admin = await verificarAdministrador();
-
     if (admin) return;
-
     await carregarPets();
-
 })();
