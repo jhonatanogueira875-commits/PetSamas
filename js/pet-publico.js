@@ -1,33 +1,86 @@
 /*
 ==========================================================
 PetSamas
+
 Arquivo: pet-publico.js
+==========================================================
 
 Responsável por:
 
-✔ Ler o ID da URL
-✔ Buscar o pet no Supabase
-✔ Exibir informações públicas
-✔ Exibir a foto
-✔ Criar o link do WhatsApp
+✔ Ler o QR Code da URL
+✔ Buscar o QR no Supabase
+✔ Descobrir qual pet pertence ao QR
+✔ Exibir o perfil público
 ==========================================================
 */
 
 
 // ======================================================
-// LÊ O ID DA URL
+// LÊ O CÓDIGO DO QR
 // ======================================================
 
 const parametros = new URLSearchParams(window.location.search);
 
-const idPet = parametros.get("id");
+const codigo = parametros.get("codigo");
 
 
 // ======================================================
-// CARREGA O PET
+// CARREGAR PET
 // ======================================================
 
 async function carregarPet() {
+
+    if (!codigo) {
+
+        alert("QR Code inválido.");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // PROCURA O QR
+    // ==================================================
+
+    const { data: qr, error: erroQR } = await banco
+
+        .from("qrcodes")
+
+        .select("*")
+
+        .eq("codigo", codigo)
+
+        .single();
+
+
+    if (erroQR || !qr) {
+
+        alert("QR Code não encontrado.");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
+
+    if (!qr.pet_id) {
+
+        alert("Este QR Code ainda não está vinculado a nenhum pet.");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // PROCURA O PET
+    // ==================================================
 
     const { data: pet, error } = await banco
 
@@ -35,7 +88,7 @@ async function carregarPet() {
 
         .select("*")
 
-        .eq("id", Number(idPet))
+        .eq("id", qr.pet_id)
 
         .single();
 
@@ -88,9 +141,12 @@ async function carregarPet() {
     if (telefone.length >= 10) {
 
         botaoWhatsapp.href =
+
             `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
 
-    } else {
+    }
+
+    else {
 
         botaoWhatsapp.href = "#";
 

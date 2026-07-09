@@ -47,13 +47,18 @@ async function verificarAdministrador() {
     return false;
 }
 
+// ======================================================
+// CARREGAR PETS E VINCULAÇÃO DE QR
+// ======================================================
+
 async function carregarPets() {
     const user = await getUser();
     if (!user) {
         window.location.href = "login.html";
         return;
     }
-    const { data, error } = await banco
+
+    const { data: listaPetsBanco, error } = await banco
         .from("pets")
         .select("*")
         .eq("user_id", user.id);
@@ -62,9 +67,24 @@ async function carregarPets() {
         listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
         return;
     }
-    pets = data || [];
+
+    const { data: listaQR } = await banco
+        .from("qrcodes")
+        .select("*");
+
+    pets = (listaPetsBanco || []).map(function (pet) {
+        pet.qr = listaQR.find(function (qr) {
+            return Number(qr.pet_id) === Number(pet.id);
+        });
+        return pet;
+    });
+
     renderizarPets();
 }
+
+// ======================================================
+// RENDERIZAÇÃO
+// ======================================================
 
 function renderizarPets() {
     listaPets.innerHTML = "";
@@ -83,12 +103,30 @@ function renderizarPets() {
     pets.forEach(function (pet) {
         const foto = pet.foto && pet.foto !== "" ? pet.foto : "assets/images/logo.jpg";
         
-        // ADIÇÃO PARA DIAGNÓSTICO
         console.log("PET COMPLETO:", pet);
         
-        let botaoQRCode = qrPendente ? 
-            `<button onclick="vincularQRCode('${pet.id}')">🔗 Vincular este QR Code</button>` : 
-            `<a href="qr-code.html?id=${pet.id}"><button>📱 QR Code</button></a>`;
+        let botaoQRCode = "";
+
+        if (pet.qr) {
+            botaoQRCode = `
+                <a href="qr-code.html?id=${pet.id}">
+                    <button>📱 Meu QR Code</button>
+                </a>
+            `;
+        } else if (qrPendente) {
+            botaoQRCode = `
+                <button onclick="vincularQRCode('${pet.id}')">
+                    🔗 Vincular este QR Code
+                </button>
+            `;
+        } else {
+            const mensagem = encodeURIComponent(`Olá! Gostaria de ativar um QR Code para o pet: 🐶 ${pet.nome_pet}`);
+            botaoQRCode = `
+                <a href="https://wa.me/5542984097827?text=${mensagem}" target="_blank">
+                    <button>🟡 Solicitar QR Code</button>
+                </a>
+            `;
+        }
 
         listaPets.innerHTML += `
             <div class="card-pet">
@@ -118,7 +156,7 @@ async function excluirPet(id) {
 }
 
 // ======================================================
-// VINCULAR QR CODE (DIAGNÓSTICO COMPLETO)
+// VINCULAR QR CODE
 // ======================================================
 
 async function vincularQRCode(idPet) {
