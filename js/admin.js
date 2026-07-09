@@ -1,65 +1,66 @@
 /*
 ==========================================================
-PetSamas
 Arquivo: admin.js
-
-Responsável por:
-✔ Carregar a lista de pets
-✔ Redirecionar para impressão de lotes
 ==========================================================
 */
 
-// Carrega os dados ao abrir a página
 document.addEventListener("DOMContentLoaded", () => {
-    carregarPets();
+    console.log("Painel Administrativo carregado.");
+    carregarDashboard();
 });
 
-// ======================================================
-// FUNÇÃO PARA REDIRECIONAR PARA IMPRESSÃO DE LOTE
-// ======================================================
+async function carregarDashboard() {
+    console.log("Iniciando contadores do dashboard...");
 
-function irParaImpressao() {
-    const inputLote = document.getElementById("inputLote");
-    const numeroLote = inputLote.value.trim();
+    // 1. QR disponíveis
+    const { count: disponiveis, error: erroDisponiveis } = await banco
+        .from("qrcodes")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "disponivel");
 
-    if (numeroLote) {
-        // Redireciona para a página passando o número do lote como parâmetro
-        window.location.href = `impressao-lote.html?lote=${numeroLote}`;
+    if (erroDisponiveis) {
+        console.error("Erro ao buscar QR disponíveis:", erroDisponiveis);
+        document.getElementById("qrDisponiveis").textContent = "Erro";
     } else {
-        alert("Por favor, digite o número do lote que deseja imprimir.");
-        inputLote.focus();
+        document.getElementById("qrDisponiveis").textContent = disponiveis ?? 0;
     }
-}
 
-// ======================================================
-// CARREGAR LISTA DE PETS (Logica original mantida)
-// ======================================================
+    // 2. QR ativados
+    const { count: ativados, error: erroAtivados } = await banco
+        .from("qrcodes")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "ativado");
 
-async function carregarPets() {
-    const listaDiv = document.getElementById("listaPets");
-    
-    try {
-        const { data, error } = await banco
-            .from("qrcodes")
-            .select("*")
-            .order("created_at", { ascending: false });
+    if (erroAtivados) {
+        console.error("Erro ao buscar QR ativados:", erroAtivados);
+        document.getElementById("qrAtivados").textContent = "Erro";
+    } else {
+        document.getElementById("qrAtivados").textContent = ativados ?? 0;
+    }
 
-        if (error) throw error;
+    // 3. Total de pets
+    const { count: pets, error: erroPets } = await banco
+        .from("pets")
+        .select("*", { count: "exact", head: true });
 
-        if (data.length === 0) {
-            listaDiv.innerHTML = "Nenhum pet cadastrado.";
-            return;
-        }
+    if (erroPets) {
+        console.error("Erro ao buscar total de pets:", erroPets);
+        document.getElementById("totalPets").textContent = "Erro";
+    } else {
+        document.getElementById("totalPets").textContent = pets ?? 0;
+    }
 
-        let html = "<h3>Pets Cadastrados:</h3><ul>";
-        data.forEach(pet => {
-            html += `<li>${pet.codigo} - Status: ${pet.status}</li>`;
-        });
-        html += "</ul>";
-        
-        listaDiv.innerHTML = html;
-    } catch (err) {
-        console.error(err);
-        listaDiv.innerHTML = "Erro ao carregar dados.";
+    // 4. Último Lote
+    const { data: ultimoLote, error: erroLote } = await banco
+        .from("qrcodes")
+        .select("lote")
+        .not("lote", "is", null)
+        .order("lote", { ascending: false })
+        .limit(1);
+
+    if (!erroLote && ultimoLote && ultimoLote.length > 0) {
+        document.getElementById("ultimoLote").textContent = ultimoLote[0].lote;
+    } else {
+        document.getElementById("ultimoLote").textContent = "Nenhum";
     }
 }

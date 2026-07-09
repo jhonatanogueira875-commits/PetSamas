@@ -35,7 +35,8 @@ async function carregarLote() {
         return;
     }
 
-    if (data.length === 0) {
+    // 1. Comparação mais segura
+    if (!data || data.length === 0) {
         informacoes.innerHTML = "Lote não encontrado.";
         return;
     }
@@ -52,17 +53,21 @@ async function carregarLote() {
         const card = document.createElement("div");
         card.className = "qr-card";
         
-        // Estrutura do card
+        // 3. Mostrar o status do QR
         card.innerHTML = `
             <div class="qr-container" id="qr-${qr.codigo}"></div>
             <p><strong>${qr.codigo}</strong></p>
+            <small>Status: ${qr.status}</small>
         `;
         
         grade.appendChild(card);
 
+        // 2. Definir o link de forma legível
+        const linkQR = `${SITE}/ativar.html?codigo=${qr.codigo}`;
+        
         // Gera o QR Code dentro da div criada
         new QRCode(document.getElementById(`qr-${qr.codigo}`), {
-            text: `${SITE}/ativar.html?codigo=${qr.codigo}`,
+            text: linkQR,
             width: 120,
             height: 120,
             correctLevel: QRCode.CorrectLevel.H
