@@ -103,8 +103,6 @@ function renderizarPets() {
     pets.forEach(function (pet) {
         const foto = pet.foto && pet.foto !== "" ? pet.foto : "assets/images/logo.jpg";
         
-        console.log("PET COMPLETO:", pet);
-        
         let botaoQRCode = "";
 
         if (pet.qr) {
@@ -178,13 +176,15 @@ async function vincularQRCode(idPet) {
         .eq("codigo", qrPendente)
         .select();
 
-    console.log("DATA:", data);
-    console.log("ERROR:", error);
-
     if (error) {
-        alert(error.message);
+        console.error("ERRO:", error);
+        alert("Erro: " + error.message);
         return;
     }
+
+    // LIMPEZA DO ESTADO PENDENTE
+    sessionStorage.removeItem("codigoQR");
+    qrPendente = null;
 
     alert("QR Code ativado com sucesso!");
     window.location.href = `qr-code.html?id=${idPet}`;
