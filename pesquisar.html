@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisar QR Code - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+
+    <main class="container">
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        
+        <h1>🔍 Pesquisar QR Code</h1>
+        
+        <div class="card-dashboard">
+            <h3>Informe o código</h3>
+            <input type="text" id="inputCodigo" placeholder="Ex: PS-12345">
+            <button onclick="buscarQRCode()">Buscar</button>
+        </div>
+
+        <div id="resultadoPesquisa" style="margin-top: 20px;">
+            </div>
+
+        <br>
+
+        <button onclick="history.back()">
+            ⬅ Voltar
+        </button>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/pesquisar.js"></script>
+</body>
+</html>
