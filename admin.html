@@ -52,7 +52,22 @@
         <button onclick="sair()">🚪 Sair</button>
     </main>
 
+    <div id="modalQR" class="modal">
+        <div class="modal-content">
+            <h3>✅ QR Online Gerado</h3>
+            <p>Código: <strong id="codigoGerado"></strong></p>
+            
+            <div id="qrcodeGerado"></div>
+            
+            <input type="text" id="linkGerado" readonly style="margin: 15px 0; text-align: center;">
+            
+            <button id="btnCopiarLink">📋 Copiar Link</button>
+            <button onclick="fecharModalQR()" style="background: #666; margin-top: 10px;">Fechar</button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/logout.js"></script>
     <script src="js/admin.js"></script>
