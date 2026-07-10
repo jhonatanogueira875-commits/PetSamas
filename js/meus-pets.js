@@ -1,6 +1,5 @@
 /*
 ==========================================================
-PetSamas
 Arquivo: meus-pets.js
 ==========================================================
 */
@@ -8,29 +7,18 @@ Arquivo: meus-pets.js
 verificarLogin();
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
-
 const listaPets = document.getElementById("listaPets");
-const adminArea = document.getElementById("adminArea");
 const botaoNovoPet = document.getElementById("botaoNovoPet");
 
 let pets = [];
 
-// ======================================================
-// QR PENDENTE DE ATIVAÇÃO
-// ======================================================
-
+// Gerenciamento de QR pendente
 const params = new URLSearchParams(window.location.search);
 let qrPendente = params.get("codigo") || sessionStorage.getItem("codigoQR");
 
 if (params.get("codigo")) {
     sessionStorage.setItem("codigoQR", params.get("codigo"));
 }
-
-console.log("QR PENDENTE DETECTADO:", qrPendente);
-
-// ======================================================
-// PEGAR USUÁRIO LOGADO
-// ======================================================
 
 async function getUser() {
     const { data } = await banco.auth.getUser();
@@ -47,10 +35,6 @@ async function verificarAdministrador() {
     return false;
 }
 
-// ======================================================
-// CARREGAR PETS E VINCULAÇÃO DE QR
-// ======================================================
-
 async function carregarPets() {
     const user = await getUser();
     if (!user) {
@@ -58,37 +42,44 @@ async function carregarPets() {
         return;
     }
 
-    const { data: listaPetsBanco, error } = await banco
+    // 1. Busca os pets do usuário
+    const { data: listaPetsBanco, error: errorPets } = await banco
         .from("pets")
         .select("*")
         .eq("user_id", user.id);
 
-    if (error) {
+    if (errorPets) {
+        console.error("Erro ao buscar pets:", errorPets);
         listaPets.innerHTML = "<p>Erro ao carregar os pets.</p>";
         return;
     }
 
-    const { data: listaQR } = await banco
+    // 2. Busca todos os QRs
+    const { data: listaQR, error: errorQR } = await banco
         .from("qrcodes")
         .select("*");
 
-    pets = (listaPetsBanco || []).map(function (pet) {
-        pet.qr = listaQR.find(function (qr) {
-            return Number(qr.pet_id) === Number(pet.id);
+    if (errorQR) {
+        console.error("Erro ao buscar QRs:", errorQR);
+    }
+
+    // 3. Vincula o QR ao Pet no front-end
+    pets = (listaPetsBanco || []).map((pet) => {
+        const qrEncontrado = (listaQR || []).find((qr) => {
+            return String(qr.pet_id) === String(pet.id);
         });
+        
+        pet.qr = qrEncontrado;
         return pet;
     });
 
     renderizarPets();
 }
 
-// ======================================================
-// RENDERIZAÇÃO
-// ======================================================
-
 function renderizarPets() {
     listaPets.innerHTML = "";
-    if (pets.length === 0) {
+    
+    if (!pets || pets.length === 0) {
         if (botaoNovoPet) botaoNovoPet.style.display = "none";
         listaPets.innerHTML = `
             <p>Você ainda não possui nenhum pet cadastrado.</p>
@@ -100,9 +91,8 @@ function renderizarPets() {
 
     if (botaoNovoPet) botaoNovoPet.style.display = "inline-block";
 
-    pets.forEach(function (pet) {
+    pets.forEach((pet) => {
         const foto = pet.foto && pet.foto !== "" ? pet.foto : "assets/images/logo.jpg";
-        
         let botaoQRCode = "";
 
         if (pet.qr) {
@@ -146,16 +136,49 @@ function renderizarPets() {
 function editarPet(id) { window.location.href = `cadastro.html?id=${id}`; }
 
 async function excluirPet(id) {
-    const confirmar = confirm("Deseja realmente excluir este pet?");
+    console.log(">>> NOVA FUNÇÃO EXCLUIR PET EXECUTANDO <<<");
+    
+    const confirmar = confirm("Deseja realmente excluir este pet? Esta ação é irreversível.");
     if (!confirmar) return;
-    const { error } = await banco.from("pets").delete().eq("id", id);
-    if (error) { alert("Erro ao excluir o pet."); return; }
+
+    // --------------------------------------------------
+    // 1. Libera o QR vinculado ao pet
+    // --------------------------------------------------
+    const resultadoQR = await banco
+        .from("qrcodes")
+        .update({
+            pet_id: null,
+            status: "disponivel",
+            qr_liberado: false
+        })
+        .eq("pet_id", id)
+        .select();
+
+    console.log("Resultado UPDATE QR:", resultadoQR);
+
+    if (resultadoQR.error) {
+        console.error("Erro ao liberar QR:", resultadoQR.error);
+        alert("Erro ao liberar o QR Code.");
+        return;
+    }
+
+    // --------------------------------------------------
+    // 2. Agora exclui o pet
+    // --------------------------------------------------
+    const { error: erroPet } = await banco
+        .from("pets")
+        .delete()
+        .eq("id", id);
+
+    if (erroPet) {
+        console.error("Erro ao excluir pet:", erroPet);
+        alert("Erro ao excluir o pet.");
+        return;
+    }
+
+    alert("Pet excluído com sucesso!\nQR Code liberado novamente.");
     carregarPets();
 }
-
-// ======================================================
-// VINCULAR QR CODE
-// ======================================================
 
 async function vincularQRCode(idPet) {
     if (!qrPendente) {
@@ -166,27 +189,24 @@ async function vincularQRCode(idPet) {
     const confirmar = confirm("Deseja vincular este QR Code a este pet?");
     if (!confirmar) return;
 
-    const { data, error } = await banco
+    const { error } = await banco
         .from("qrcodes")
         .update({
             status: "ativado",
             pet_id: idPet,
             activated_at: new Date().toISOString()
         })
-        .eq("codigo", qrPendente)
-        .select();
+        .eq("codigo", qrPendente);
 
     if (error) {
         console.error("ERRO:", error);
-        alert("Erro: " + error.message);
+        alert("Erro ao vincular: " + error.message);
         return;
     }
 
-    // LIMPEZA DO ESTADO PENDENTE
     sessionStorage.removeItem("codigoQR");
     qrPendente = null;
-
-    alert("QR Code ativado com sucesso!");
+    alert("✅ QR Code ativado com sucesso!");
     window.location.href = `qr-code.html?id=${idPet}`;
 }
 
