@@ -1,202 +1,73 @@
 /*
 ==========================================================
-PetSamas
-Arquivo: ativar.js
-
-Responsável por:
-
-✔ Ler o código do QR pela URL
-✔ Consultar o Supabase
-✔ Informar o status do QR Code
-✔ Encaminhar o usuário mantendo o código na URL
+PetSamas - Arquivo: ativar.js
 ==========================================================
 */
 
-
-// ======================================================
-// LÊ O CÓDIGO DA URL
-// ======================================================
-
 const params = new URLSearchParams(window.location.search);
-
 const codigo = params.get("codigo");
-
 const conteudo = document.getElementById("conteudo");
 
-
-// ======================================================
-// VALIDAÇÃO
-// ======================================================
-
 if (!codigo) {
-
-    conteudo.innerHTML = `
-
-        <h3>❌ QR Code inválido.</h3>
-
-        <p>O código não foi informado.</p>
-
-    `;
-
+    conteudo.innerHTML = `<h3>❌ QR Code inválido.</h3><p>O código não foi informado.</p>`;
 } else {
-
     verificarQRCode();
-
 }
 
-
-// ======================================================
-// CONSULTA O SUPABASE
-// ======================================================
-
 async function verificarQRCode() {
-
     conteudo.innerHTML = "Consultando QR Code...";
 
     const { data, error } = await banco
-
         .from("qrcodes")
-
         .select("*")
-
         .eq("codigo", codigo)
-
         .single();
 
-
     if (error || !data) {
-
-        conteudo.innerHTML = `
-
-            <h3>❌ QR Code não encontrado.</h3>
-
-            <p>Verifique se o QR Code é válido.</p>
-
-        `;
-
+        conteudo.innerHTML = `<h3>❌ QR Code não encontrado.</h3><p>Verifique se o QR Code é válido.</p>`;
         return;
-
     }
 
-
     // ==================================================
-    // STATUS
+    // LÓGICA DE UX PERSONALIZADA POR ORIGEM
     // ==================================================
-
     switch (data.status) {
-
-        // ----------------------------------------------
-
         case "disponivel":
-
+            const eFisico = data.origem === "fisico";
+            
             conteudo.innerHTML = `
-
-                <h2>✅ QR Code disponível</h2>
-
+                <h2>${eFisico ? "📦 QR Code Físico" : "🌐 QR Code Online"}</h2>
                 <p>
-
-                    Este QR Code ainda não foi ativado.
-
+                    ${eFisico 
+                        ? "Este QR pertence a um produto físico." 
+                        : "Este QR foi gerado digitalmente."}
+                    Faça login para concluir a vinculação ao seu pet.
                 </p>
-
                 <br>
-
                 <a href="login.html?codigo=${codigo}">
-
-                    <button>
-
-                        🔐 Entrar
-
-                    </button>
-
+                    <button>🔗 Vincular este QR ao meu pet</button>
                 </a>
-
                 <br><br>
-
-                <a href="cadastro-usuario.html?codigo=${codigo}">
-
-                    <button>
-
-                        👤 Criar Conta
-
-                    </button>
-
-                </a>
-
+                <small>Não tem conta? <a href="cadastro-usuario.html?codigo=${codigo}">Criar conta</a></small>
             `;
-
             break;
-
-        // ----------------------------------------------
 
         case "ativado":
-
             conteudo.innerHTML = `
-
-                <h2>
-
-                    🐾 QR Code já ativado
-
-                </h2>
-
-                <p>
-
-                    Este QR Code já está vinculado a um pet.
-
-                </p>
-
+                <h2>🐾 QR Code já ativado</h2>
+                <p>Este QR Code já está vinculado a um pet.</p>
                 <br>
-
                 <a href="pet-publico.html?codigo=${codigo}">
-
-                    <button>
-
-                        👁 Ver Perfil do Pet
-
-                    </button>
-
+                    <button>👁 Ver Perfil do Pet</button>
                 </a>
-
             `;
-
             break;
-
-        // ----------------------------------------------
 
         case "bloqueado":
-
-            conteudo.innerHTML = `
-
-                <h2>
-
-                    🚫 QR Code bloqueado
-
-                </h2>
-
-                <p>
-
-                    Entre em contato com o suporte.
-
-                </p>
-
-            `;
-
+            conteudo.innerHTML = `<h2>🚫 QR Code bloqueado</h2><p>Entre em contato com o suporte.</p>`;
             break;
 
-        // ----------------------------------------------
-
         default:
-
-            conteudo.innerHTML = `
-
-                <h2>
-
-                    Status desconhecido.
-
-                </h2>
-
-            `;
-
+            conteudo.innerHTML = `<h2>Status desconhecido.</h2>`;
     }
-
 }
