@@ -30,8 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
  * Função para gerar QR via RPC (Seguro)
  */
 async function gerarQROnline() {
-    console.log("Chamando função RPC para gerar QR...");
-
     const { data, error } = await banco.rpc("gerar_qr_online");
 
     if (error) {
@@ -40,8 +38,11 @@ async function gerarQROnline() {
         return;
     }
 
+    // Acessa o primeiro item do array retornado pelo RPC
+    const codigo = data[0].codigo;
+    
     // Sucesso: Chama a função para mostrar o modal
-    mostrarModalQR(data.codigo);
+    mostrarModalQR(codigo);
     
     // Atualiza o dashboard
     carregarDashboard();
