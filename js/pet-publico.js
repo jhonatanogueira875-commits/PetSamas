@@ -1,26 +1,11 @@
 /*
 ==========================================================
-PetSamas
-Arquivo: pet-publico.js
-==========================================================
-Responsável por:
-✔ Ler o QR Code da URL
-✔ Buscar e validar o status do QR no Supabase
-✔ Descobrir qual pet pertence ao QR
-✔ Exibir o perfil público de forma otimizada
+PetSamas - Pet Público (API v1.0 - Consumindo RPC)
 ==========================================================
 */
 
-// ======================================================
-// LÊ O CÓDIGO DO QR
-// ======================================================
-
 const parametros = new URLSearchParams(window.location.search);
 const codigo = parametros.get("codigo");
-
-// ======================================================
-// CARREGAR PET
-// ======================================================
 
 async function carregarPet() {
     if (!codigo) {
@@ -29,88 +14,52 @@ async function carregarPet() {
         return;
     }
 
-    // ==================================================
-    // PROCURA O QR (OTIMIZADO: Busca apenas o necessário)
-    // ==================================================
+    try {
+        // Chamada única para a nossa API Pública (RPC)
+        // O Supabase lida com a autenticação anon automaticamente
+        const { data: resposta, error } = await banco.rpc("obter_pet_publico", {
+            codigo_qr: codigo
+        });
 
-    const { data: qr, error: erroQR } = await banco
-        .from("qrcodes")
-        .select("pet_id, status")
-        .eq("codigo", codigo)
-        .single();
+        if (error) {
+            console.error("Erro na API:", error);
+            alert("Erro de comunicação com o servidor.");
+            return;
+        }
 
-    if (erroQR || !qr) {
-        alert("QR Code não encontrado.");
-        window.location.href = "index.html";
-        return;
-    }
+        // Validação da nossa API (Padronizada)
+        if (!resposta || !resposta.encontrado) {
+            alert("Pet não localizado.");
+            window.location.href = "index.html";
+            return;
+        }
 
-    // ==================================================
-    // VALIDAÇÃO DE STATUS (SEGURANÇA PARA O FUTURO)
-    // ==================================================
+        // Extração dos dados do objeto padronizado
+        const { nome, foto, cidade, telefone, nome_tutor } = resposta.pet;
 
-    if (qr.status !== "ativado") {
-        alert("Este QR Code não está ativado ou está bloqueado.");
-        window.location.href = "index.html";
-        return;
-    }
+        // Preenchimento do perfil
+        document.getElementById("foto1").src = 
+            foto && foto.trim() !== "" ? foto : "assets/images/logo.jpg";
+        
+        document.getElementById("nomePet").textContent = nome;
+        document.getElementById("nomeTutor").textContent = nome_tutor;
+        document.getElementById("cidadePet").textContent = cidade;
 
-    if (!qr.pet_id) {
-        alert("Este QR Code não está vinculado a nenhum pet.");
-        window.location.href = "index.html";
-        return;
-    }
+        // Lógica do WhatsApp
+        const telefoneLimpo = String(telefone || "").replace(/\D/g, "");
+        const mensagem = `Olá! Encontrei o pet ${nome}.`;
+        const botaoWhatsapp = document.getElementById("linkWhatsapp");
 
-    // ==================================================
-    // PROCURA O PET
-    // ==================================================
+        if (telefoneLimpo.length >= 10) {
+            botaoWhatsapp.href = `https://wa.me/55${telefoneLimpo}?text=${encodeURIComponent(mensagem)}`;
+        } else {
+            botaoWhatsapp.onclick = (e) => { e.preventDefault(); alert("Telefone indisponível."); };
+        }
 
-    const { data: pet, error } = await banco
-        .from("pets")
-        .select("*")
-        .eq("id", qr.pet_id)
-        .single();
-
-    if (error || !pet) {
-        alert("Pet não encontrado.");
-        window.location.href = "index.html";
-        return;
-    }
-
-    // ==================================================
-    // PREENCHIMENTO DO PERFIL
-    // ==================================================
-
-    document.getElementById("foto1").src =
-        pet.foto && pet.foto.trim() !== ""
-            ? pet.foto
-            : "assets/images/logo.jpg";
-
-    document.getElementById("nomePet").textContent = pet.nome_pet;
-    document.getElementById("nomeTutor").textContent = pet.nome_tutor;
-    document.getElementById("cidadePet").textContent = pet.cidade;
-
-    // ==================================================
-    // WHATSAPP (LÓGICA DO BOTÃO)
-    // ==================================================
-
-    const telefone = String(pet.telefone || "").replace(/\D/g, "");
-    const mensagem = `Olá! Encontrei o pet ${pet.nome_pet}.`;
-    const botaoWhatsapp = document.getElementById("linkWhatsapp");
-
-    if (telefone.length >= 10) {
-        botaoWhatsapp.href = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
-    } else {
-        botaoWhatsapp.href = "#";
-        botaoWhatsapp.onclick = function (e) {
-            e.preventDefault();
-            alert("Telefone do tutor indisponível.");
-        };
+    } catch (err) {
+        console.error("Erro inesperado no carregamento:", err);
+        alert("Ocorreu um erro ao processar o perfil.");
     }
 }
-
-// ======================================================
-// INICIALIZAÇÃO
-// ======================================================
 
 carregarPet();
