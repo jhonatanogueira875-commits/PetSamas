@@ -8,22 +8,42 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Painel Administrativo carregado.");
     carregarDashboard();
 
-    // Navegação
-    document.getElementById("btnLotes").addEventListener("click", () => { window.location.href = "lotes.html"; });
-    document.getElementById("btnPesquisar").addEventListener("click", () => { window.location.href = "pesquisar.html"; });
-    document.getElementById("btnPets").addEventListener("click", () => { window.location.href = "pets.html"; });
-    document.getElementById("btnUsuarios").addEventListener("click", () => { window.location.href = "usuarios.html"; });
+    // Navegação com verificação de segurança individual
+    const configurarNav = (id, url) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener("click", () => { window.location.href = url; });
+        } else {
+            console.warn(`Elemento ${id} não encontrado no DOM. Pulando.`);
+        }
+    };
+
+    configurarNav("btnLotes", "lotes.html");
+    configurarNav("btnPesquisar", "pesquisar.html");
+    configurarNav("btnPets", "pets.html");
+    configurarNav("btnUsuarios", "usuarios.html");
 
     // Botão de Gerar QR Online
-    document.getElementById("btnGerarOnline").addEventListener("click", gerarQROnline);
+    const btnGerar = document.getElementById("btnGerarOnline");
+    if (btnGerar) {
+        btnGerar.addEventListener("click", () => {
+            console.log("Botão Gerar QR clicado!");
+            gerarQROnline();
+        });
+    }
 
     // Botão Copiar Link
-    document.getElementById("btnCopiarLink").addEventListener("click", () => {
-        const campo = document.getElementById("linkGerado");
-        campo.select();
-        navigator.clipboard.writeText(campo.value);
-        alert("✅ Link copiado!");
-    });
+    const btnCopiar = document.getElementById("btnCopiarLink");
+    if (btnCopiar) {
+        btnCopiar.addEventListener("click", () => {
+            const campo = document.getElementById("linkGerado");
+            if (campo) {
+                campo.select();
+                navigator.clipboard.writeText(campo.value);
+                alert("✅ Link copiado!");
+            }
+        });
+    }
 });
 
 /**
@@ -38,13 +58,15 @@ async function gerarQROnline() {
         return;
     }
 
-    // Acessa o primeiro item do array retornado pelo RPC
-    const codigo = data[0].codigo;
+    const codigo = (typeof data === 'object' && data !== null) ? (data.codigo || data[0]?.codigo || Object.values(data)[0]) : data;
     
-    // Sucesso: Chama a função para mostrar o modal
+    if (!codigo) {
+        console.error("Formato de retorno inesperado:", data);
+        alert("Erro: O sistema não retornou um código válido.");
+        return;
+    }
+    
     mostrarModalQR(codigo);
-    
-    // Atualiza o dashboard
     carregarDashboard();
 }
 
@@ -54,26 +76,32 @@ async function gerarQROnline() {
 function mostrarModalQR(codigo) {
     const link = `https://jhonatanogueira875-commits.github.io/PetSamas/ativar.html?codigo=${codigo}`;
 
-    document.getElementById("codigoGerado").textContent = codigo;
-    document.getElementById("linkGerado").value = link;
+    const campoCodigo = document.getElementById("codigoGerado");
+    const campoLink = document.getElementById("linkGerado");
+    const qrDiv = document.getElementById("qrcodeGerado");
+    const modal = document.getElementById("modalQR");
 
-    const qr = document.getElementById("qrcodeGerado");
-    qr.innerHTML = ""; // Limpa o QR anterior
+    if (campoCodigo) campoCodigo.textContent = codigo;
+    if (campoLink) campoLink.value = link;
 
-    new QRCode(qr, {
-        text: link,
-        width: 220,
-        height: 220
-    });
+    if (qrDiv) {
+        qrDiv.innerHTML = ""; 
+        new QRCode(qrDiv, {
+            text: link,
+            width: 220,
+            height: 220
+        });
+    }
 
-    document.getElementById("modalQR").style.display = "flex";
+    if (modal) modal.style.display = "flex";
 }
 
 /**
  * Fecha o modal
  */
 function fecharModalQR() {
-    document.getElementById("modalQR").style.display = "none";
+    const modal = document.getElementById("modalQR");
+    if (modal) modal.style.display = "none";
 }
 
 /**
@@ -82,24 +110,33 @@ function fecharModalQR() {
 async function carregarDashboard() {
     console.log("Atualizando contadores do dashboard...");
 
-    // 1. QR disponíveis
-    const { count: disponiveis } = await banco.from("qrcodes").select("*", { count: "exact", head: true }).eq("status", "disponivel");
-    document.getElementById("qrDisponiveis").textContent = disponiveis ?? 0;
+    try {
+        const { count: disponiveis, error: err1 } = await banco.from("qrcodes").select("*", { count: "exact", head: true }).eq("status", "disponivel");
+        if (err1) throw err1;
+        if (document.getElementById("qrDisponiveis")) document.getElementById("qrDisponiveis").textContent = disponiveis ?? 0;
 
-    // 2. QR ativados
-    const { count: ativados } = await banco.from("qrcodes").select("*", { count: "exact", head: true }).eq("status", "ativado");
-    document.getElementById("qrAtivados").textContent = ativados ?? 0;
+        const { count: ativados, error: err2 } = await banco.from("qrcodes").select("*", { count: "exact", head: true }).eq("status", "ativado");
+        if (err2) throw err2;
+        if (document.getElementById("qrAtivados")) document.getElementById("qrAtivados").textContent = ativados ?? 0;
 
-    // 3. Total de pets
-    const { count: pets } = await banco.from("pets").select("*", { count: "exact", head: true });
-    document.getElementById("totalPets").textContent = pets ?? 0;
+        const { count: pets, error: err3 } = await banco.from("pets").select("*", { count: "exact", head: true });
+        if (err3) throw err3;
+        if (document.getElementById("totalPets")) document.getElementById("totalPets").textContent = pets ?? 0;
 
-    // 4. Último Lote
-    const { data: ultimoLote } = await banco.from("qrcodes").select("lote").not("lote", "is", null).order("lote", { ascending: false }).limit(1);
-    
-    if (ultimoLote && ultimoLote.length > 0) {
-        document.getElementById("ultimoLote").textContent = ultimoLote[0].coluna_lote || ultimoLote[0].lote;
-    } else {
-        document.getElementById("ultimoLote").textContent = "Nenhum";
+        const { data: ultimoLote, error: err4 } = await banco.from("qrcodes").select("lote").not("lote", "is", null).order("lote", { ascending: false }).limit(1);
+        if (err4) throw err4;
+        
+        const elLote = document.getElementById("ultimoLote");
+        if (elLote) {
+            if (ultimoLote && ultimoLote.length > 0) {
+                elLote.textContent = ultimoLote[0].coluna_lote || ultimoLote[0].lote;
+            } else {
+                elLote.textContent = "Nenhum";
+            }
+        }
+
+        console.log("Dashboard atualizado com sucesso!");
+    } catch (err) {
+        console.error("Erro ao carregar o dashboard:", err);
     }
 }
