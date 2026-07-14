@@ -76,6 +76,14 @@ async function carregarPets() {
     renderizarPets();
 }
 
+// Função alterada conforme solicitado
+async function vincularQRCode(idPet) {
+    // Lógica de vinculação aqui...
+    
+    // Redirecionamento alterado
+    window.location.href = "completar-perfil.html";
+}
+
 function renderizarPets() {
     listaPets.innerHTML = "";
     
@@ -129,33 +137,3 @@ function renderizarPets() {
         if (pet.qr) {
             botaoQRCode = `
                 <a href="qr-code.html?id=${pet.id}">
-                    <button>📱 Meu QR Code</button>
-                </a>
-            `;
-        } else if (qrPendente) {
-            botaoQRCode = `
-                <button onclick="vincularQRCode('${pet.id}')">
-                    🔗 Vincular este QR Code
-                </button>
-            `;
-        } else {
-            const mensagem = encodeURIComponent(`Olá! Gostaria de ativar um QR Code para o pet: 🐶 ${pet.nome_pet}`);
-            botaoQRCode = `
-                <a href="https://wa.me/5542984097827?text=${mensagem}" target="_blank">
-                    <button>🟡 Solicitar QR Code</button>
-                </a>
-            `;
-        }
-
-        listaPets.innerHTML += `
-            <div class="card-pet">
-                <img src="${foto}" class="foto-card" alt="${pet.nome_pet}">
-                <h2>🐶 ${pet.nome_pet}</h2>
-                <p><strong>Status:</strong> ${statusPet}</p>
-                <p><strong>👤 Tutor:</strong> ${pet.nome_tutor}</p>
-                <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
-                <br>
-                <a href="pet.html?id=${pet.id}"><button>👁 Ver Perfil</button></a>
-                ${botaoQRCode}${botaoStatus}
-                <button onclick="editarPet(${pet.id})">✏️ Editar</button>
-                <button onclick="excluirPet

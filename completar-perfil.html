@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Completar Cadastro - PetSamas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/images/favicon.png">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <img src="assets/images/logo.jpg" id="logo" alt="PetSamas">
+
+        <h1>⚠ Complete seu cadastro</h1>
+
+        <p>
+            Seu pet já está protegido!
+        </p>
+
+        <p>
+            Informe seu telefone e sua cidade para facilitar o contato caso alguém encontre seu pet.
+        </p>
+
+        <br>
+
+        <input
+            type="text"
+            id="telefone"
+            placeholder="Telefone">
+
+        <br><br>
+
+        <input
+            type="text"
+            id="cidade"
+            placeholder="Cidade">
+
+        <br><br>
+
+        <button onclick="salvarPerfil()">
+            💾 Salvar
+        </button>
+
+        <br><br>
+
+        <button onclick="pular()">
+            ⏭ Pular
+        </button>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="js/completar-perfil.js"></script>
+
+</body>
+
+</html>

@@ -7,6 +7,7 @@ Responsável por:
 
 ✔ Criar usuário
 ✔ Fazer login automático
+✔ Criar perfil na tabela profiles
 ✔ Redirecionar para cadastro do primeiro pet
 ==========================================================
 */
@@ -86,6 +87,50 @@ formulario.addEventListener("submit", async function (event) {
         window.location.href = "login.html";
 
         return;
+
+    }
+
+    // ===============================================
+    // OBTÉM O USUÁRIO LOGADO
+    // ===============================================
+
+    const {
+
+        data: {
+
+            user
+
+        }
+
+    } = await banco.auth.getUser();
+
+    // ===============================================
+    // CRIA O PERFIL
+    // ===============================================
+
+    if (user) {
+
+        const { error: erroPerfil } = await banco
+            .from("profiles")
+            .upsert({
+
+                id: user.id,
+
+                nome: nome,
+
+                telefone: "",
+
+                cidade: "",
+
+                avatar_url: ""
+
+            });
+
+        if (erroPerfil) {
+
+            console.error("Erro ao criar perfil:", erroPerfil);
+
+        }
 
     }
 
