@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Lotes - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+
+    <main class="container">
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        
+        <h1>📦 Gerenciar Lotes</h1>
+        
+        <div class="card-dashboard">
+            <h3>➕ Criar Novo Lote</h3>
+            <input type="number" id="numLote" placeholder="Número do Lote (Ex: 10)">
+            <input type="number" id="qtdQRCodes" placeholder="Quantidade de QR Codes">
+            <button onclick="gerarLote()">Gerar Lote</button>
+        </div>
+
+        <hr>
+
+        <div id="listaLotes">
+            Carregando lotes...
+        </div>
+
+        <br>
+
+        <button onclick="history.back()">
+            ⬅ Voltar
+        </button>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/lotes.js"></script>
+</body>
+</html>

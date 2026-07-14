@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Pets - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+
+    <main class="container">
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        
+        <h1>🐶 Gerenciar Pets</h1>
+        
+        <div id="listaPets">
+            Carregando pets cadastrados...
+        </div>
+
+        <br>
+
+        <button onclick="history.back()">
+            ⬅ Voltar
+        </button>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/pets.js"></script>
+</body>
+</html>

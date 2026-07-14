@@ -1,0 +1,118 @@
+/*
+==========================================================
+PetSamas - Arquivo: style.css
+==========================================================
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: url('../assets/images/pets-3715733_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.5); 
+    background-blend-mode: darken;
+    color: #222;
+    min-height: 100vh;
+}
+
+.container {
+    width: 92%;
+    max-width: 500px;
+    margin: 40px auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.2);
+    text-align: center;
+}
+
+#logo { width: 140px; max-width: 100%; margin-bottom: 20px; }
+
+#foto1 {
+    display: block; width: 220px; max-width: 100%; height: 220px;
+    object-fit: cover; border-radius: 20px; border: 5px solid #eeeeee;
+    margin: 0 auto 25px auto;
+}
+
+.foto-card {
+    width: 120px; height: 120px; object-fit: cover; border-radius: 15px;
+    display: block; margin: 0 auto 15px auto;
+}
+
+img { max-width: 100%; height: auto; }
+
+h1 { font-size: 40px; margin-bottom: 10px; }
+h2 { margin-top: 15px; margin-bottom: 15px; }
+h3 { margin-top: 25px; margin-bottom: 10px; }
+
+.subtitulo { color: #666; margin-bottom: 30px; font-size: 18px; }
+
+form { text-align: left; }
+label { display: block; margin-top: 18px; margin-bottom: 8px; font-weight: bold; }
+input { width: 100%; padding: 14px; border: 1px solid #cccccc; border-radius: 10px; font-size: 16px; }
+input[type=file] { padding: 10px; }
+
+button {
+    width: 100%; padding: 16px; margin-top: 20px; border: none; border-radius: 12px;
+    background: #25D366; color: white; font-size: 18px; font-weight: bold;
+    cursor: pointer; transition: .2s;
+}
+button:hover { transform: scale(1.02); }
+
+a { text-decoration: none; }
+footer { margin-top: 35px; color: #666; font-size: 15px; }
+
+@media (max-width: 600px) {
+    .container { padding: 25px; }
+    h1 { font-size: 32px; }
+    button { font-size: 16px; }
+}
+
+#qrcode {
+    display: flex; justify-content: center; align-items: center;
+    width: 100%; margin: 20px auto;
+}
+#qrcode img, #qrcode canvas { display: block; margin: 0 auto; }
+
+/* MODAL DE QR CODE */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+}
+
+#qrcodeGerado {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+@media print {
+    body { background: none; background-color: white; }
+    .container { width: 100%; max-width: 100%; box-shadow: none; padding: 0; }
+    button, a, #logo, .subtitulo, br { display: none !important; }
+    #gradeQRCodes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+    #gradeQRCodes > div { border: 1px solid #000 !important; padding: 10px !important; break-inside: avoid; text-align: center; }
+}

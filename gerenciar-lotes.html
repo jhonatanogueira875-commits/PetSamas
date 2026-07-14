@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Lotes - PetSamas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <img src="assets/images/logo.jpg"
+             id="logo"
+             alt="PetSamas">
+
+        <h1>📦 Gerenciar Lotes</h1>
+
+        <p class="subtitulo">
+            Selecione um lote para visualizar seus QR Codes.
+        </p>
+
+        <br>
+
+        <div id="listaLotes">
+            Carregando...
+        </div>
+
+        <br><br>
+
+        <a href="admin.html">
+            <button>⬅ Voltar ao Painel</button>
+        </a>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/gerenciar-lotes.js"></script>
+
+</body>
+
+</html>

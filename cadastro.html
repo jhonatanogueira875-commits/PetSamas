@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Pet - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+
+    <main class="container">
+        <!-- Logo -->
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+
+        <!-- Título -->
+        <h1 id="tituloPagina">🐾 Cadastrar Pet</h1>
+        <p class="subtitulo">Preencha os dados do seu pet para gerar seu perfil.</p>
+
+        <!-- Formulário -->
+        <form id="formCadastro">
+            <label for="nomePet">🐶 Nome do Pet</label>
+            <input type="text" id="nomePet" placeholder="Digite o nome do pet" required>
+
+            <label for="nomeTutor">👤 Nome do Tutor</label>
+            <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
+
+            <label for="cidade">📍 Cidade</label>
+            <input type="text" id="cidade" placeholder="Digite sua cidade" required>
+
+            <label for="telefone">📞 WhatsApp</label>
+            <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
+
+            <label for="foto">📷 Foto do Pet</label>
+            <input type="file" id="foto" accept="image/*">
+
+            <!-- Checkbox de Aceite dos Termos -->
+            <div style="margin: 20px 0; font-size: 14px; line-height: 1.4; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #f9f9f9;">
+                <input type="checkbox" id="aceiteTermos" required>
+                <label for="aceiteTermos">
+                    Declaro estar ciente e aceito que a validade do QR Code é de <b>1 (um) ano</b> a partir da ativação. 
+                    <a href="termos.html" target="_blank" style="color: #007bff; text-decoration: underline;">(Ver Termos)</a>
+                </label>
+            </div>
+
+            <br>
+            <button type="submit">💾 Salvar Pet</button>
+        </form>
+
+        <br>
+        <a href="meus-pets.html"><button>🐾 Meus Pets</button></a>
+        <br><br>
+        <a href="index.html">← Voltar para a Página Inicial</a>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

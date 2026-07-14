@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Produção de QR Codes - PetSamas</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/images/favicon.png">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <img
+            src="assets/images/logo.jpg"
+            alt="Logo PetSamas"
+            id="logo">
+
+        <h1>
+
+            🏭 Produção
+
+        </h1>
+
+        <p class="subtitulo">
+
+            Gere e baixe os QR Codes cadastrados.
+
+        </p>
+
+        <br>
+
+        <div id="listaQRCodes">
+
+            Carregando...
+
+        </div>
+
+        <br><br>
+
+        <a href="admin.html">
+
+            <button>
+
+                ⬅ Voltar ao Painel
+
+            </button>
+
+        </a>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="js/producao.js"></script>
+
+</body>
+
+</html>

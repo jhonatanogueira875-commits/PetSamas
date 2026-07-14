@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code do Pet - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <main class="container">
+        
+        <div id="bloqueioPagamento" style="display: none; text-align: center; padding: 20px;">
+            <h2>📱 Nenhum QR Code Vinculado</h2>
+            <p>Este pet ainda não possui um QR Code ativo.</p>
+            <p>Escaneie um QR Code disponível para realizar a vinculação.</p>
+            
+            <br>
+            <a href="meus-pets.html">
+                <button>← Voltar aos meus pets</button>
+            </a>
+        </div>
+
+        <div id="conteudoLiberado" style="display: none;">
+            <h1>🐾 QR Code do Pet</h1>
+            <p>Este é o QR Code oficial do seu pet.</p>
+            <h2 id="nomePet">Carregando...</h2>
+            
+            <div id="qrcode" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+            
+            <p>📌 Imprima este QR Code ou fixe-o na coleira do seu pet.</p>
+            
+            <button onclick="window.print()">🖨️ Imprimir QR Code</button>
+            <br><br>
+            <button id="btnBaixar">⬇️ Baixar QR Code</button>
+            <br><br>
+            <a href="meus-pets.html">
+                ⬅️ Voltar aos meus pets
+            </a>
+            <br><br>
+            <a href="cadastro.html">
+                ➕ Cadastrar outro pet
+            </a>
+        </div>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/qr-code.js"></script>
+</body>
+</html>

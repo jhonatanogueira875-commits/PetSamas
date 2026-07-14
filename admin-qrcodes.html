@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciar QR Codes - PetSamas</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/images/favicon.png">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- ==================================================
+             LOGO
+        =================================================== -->
+
+        <img
+            src="assets/images/logo.jpg"
+            alt="Logo PetSamas"
+            id="logo">
+
+        <!-- ==================================================
+             TÍTULO
+        =================================================== -->
+
+        <h1>
+
+            📦 Gerenciar QR Codes
+
+        </h1>
+
+        <p class="subtitulo">
+
+            Gere lotes de QR Codes para distribuição.
+
+        </p>
+
+        <br>
+
+        <!-- ==================================================
+             BOTÃO
+        =================================================== -->
+
+        <button onclick="gerarLote(100)">
+
+            ➕ Gerar 100 QR Codes
+
+        </button>
+
+        <br><br>
+
+        <!-- ==================================================
+             RESULTADO
+        =================================================== -->
+
+        <div id="resultado">
+
+            Nenhum lote gerado.
+
+        </div>
+
+        <br><br>
+
+        <!-- ==================================================
+             VOLTAR
+        =================================================== -->
+
+        <a href="admin.html">
+
+            <button>
+
+                ⬅ Voltar ao Painel
+
+            </button>
+
+        </a>
+
+    </main>
+
+    <!-- ==================================================
+         SUPABASE
+    =================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <!-- ==================================================
+         QR CODES
+    =================================================== -->
+
+    <script src="js/qrcodes.js"></script>
+
+</body>
+
+</html>

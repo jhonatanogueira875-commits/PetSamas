@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .card-dashboard {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #fcfcfc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+
+        <h1>🛠 Painel Administrativo</h1>
+
+        <p class="subtitulo">
+            Bem-vindo ao painel administrativo do PetSamas.
+        </p>
+
+        <br>
+
+        <div class="card-dashboard">
+            <h3>📊 Dashboard</h3>
+            <p>📦 QR Disponíveis: <strong id="qrDisponiveis">...</strong></p>
+            <p>✅ QR Ativados: <strong id="qrAtivados">...</strong></p>
+            <p>🐶 Pets Cadastrados: <strong id="totalPets">...</strong></p>
+            <p>📦 Último Lote: <strong id="ultimoLote">...</strong></p>
+        </div>
+
+        <br>
+
+        <button id="btnLotes">📦 Gerenciar Lotes</button>
+        <br><br>
+        <button id="btnGerarOnline">🌐 Gerar QR Online</button>
+        <br><br>
+        <button id="btnPesquisar">🔍 Pesquisar QR Code</button>
+        <br><br>
+        <button id="btnPets">🐶 Gerenciar Pets</button>
+        <br><br>
+        <button id="btnUsuarios">👤 Gerenciar Usuários</button>
+        <br><br>
+        <button onclick="sair()">🚪 Sair</button>
+    </main>
+
+    <div id="modalQR" class="modal">
+        <div class="modal-content">
+            <h3>✅ QR Online Gerado</h3>
+            <p>Código: <strong id="codigoGerado"></strong></p>
+            
+            <div id="qrcodeGerado"></div>
+            
+            <input type="text" id="linkGerado" readonly style="margin: 15px 0; text-align: center;">
+            
+            <button id="btnCopiarLink">📋 Copiar Link</button>
+            <button onclick="fecharModalQR()" style="background: #666; margin-top: 10px;">Fechar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/logout.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
