@@ -2,65 +2,53 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Completar Cadastro - PetSamas</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>Completar Cadastro - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" href="assets/images/favicon.png">
-
 </head>
 
 <body>
 
     <main class="container">
 
-        <img src="assets/images/logo.jpg" id="logo" alt="PetSamas">
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" id="logo" alt="Safe Samas" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>⚠ Complete seu cadastro</h1>
 
         <p>
-            Seu pet já está protegido!
+            Seu pet ou item já está protegido!
         </p>
 
         <p>
-            Informe seu telefone e sua cidade para facilitar o contato caso alguém encontre seu pet.
+            Informe seu telefone e sua cidade para facilitar o contato caso alguém encontre seu item ou pet.
         </p>
 
         <br>
 
-        <input
-            type="text"
-            id="telefone"
-            placeholder="Telefone">
-
+        <input type="text" id="telefone" placeholder="Telefone">
         <br><br>
 
-        <input
-            type="text"
-            id="cidade"
-            placeholder="Cidade">
-
+        <input type="text" id="cidade" placeholder="Cidade">
         <br><br>
 
-        <button onclick="salvarPerfil()">
+        <!-- BOTÕES COM CLASSE btn-samas -->
+        <button onclick="salvarPerfil()" class="btn-samas">
             💾 Salvar
         </button>
 
         <br><br>
 
-        <button onclick="pular()">
+        <button onclick="pular()" class="btn-samas">
             ⏭ Pular
         </button>
 
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="js/supabase.js"></script>
-
     <script src="js/completar-perfil.js"></script>
 
 </body>

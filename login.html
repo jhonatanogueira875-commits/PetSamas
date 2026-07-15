@@ -2,53 +2,34 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Entrar - PetSamas</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
+    <title>Entrar - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
 <body>
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
+        <!-- LOGO -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
-
+        <!-- TÍTULO -->
         <h1>Entrar</h1>
 
         <p class="subtitulo">
-
-            Acesse sua conta para gerenciar seus pets.
-
+            Acesse sua conta para gerenciar seus itens.
         </p>
 
-        <!-- ==================================================
-             FORMULÁRIO
-        =================================================== -->
-
+        <!-- FORMULÁRIO -->
         <form id="formLogin">
 
             <!-- E-mail -->
-
             <label for="email">
-
                 📧 E-mail
-
             </label>
-
             <input
                 type="email"
                 id="email"
@@ -57,13 +38,9 @@
                 required>
 
             <!-- Senha -->
-
             <label for="senha">
-
                 🔒 Senha
-
             </label>
-
             <input
                 type="password"
                 id="senha"
@@ -73,74 +50,48 @@
 
             <br><br>
 
-            <button type="submit">
-
+            <button type="submit" class="btn-samas">
                 🔐 Entrar
-
             </button>
 
         </form>
 
-        <!-- ==================================================
-             RECUPERAÇÃO DE SENHA
-        =================================================== -->
-
+        <!-- RECUPERAÇÃO DE SENHA -->
         <p style="margin-top:20px;">
-
-            <a href="recuperar-senha.html">
-
+            <a href="recuperar-senha.html" style="color: #2c3e50; font-weight: bold;">
                 Esqueceu sua senha?
-
             </a>
-
         </p>
 
         <br>
 
         <p>
-
             Ainda não possui uma conta?
-
         </p>
 
         <br>
 
         <a href="cadastro-usuario.html">
-
-            <button>
-
+            <button class="btn-samas">
                 👤 Criar Conta
-
             </button>
-
         </a>
 
         <br><br>
 
-        <a href="index.html">
-
+        <a href="index.html" style="color: #2c3e50; font-weight: bold;">
             ← Voltar para a Página Inicial
-
         </a>
 
     </main>
 
-    <!-- ==================================================
-         Biblioteca Oficial do Supabase
-    =================================================== -->
-
+    <!-- Biblioteca Oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- ==================================================
-         Conexão com o Supabase
-    =================================================== -->
-
+    <!-- Conexão com o Supabase -->
     <script src="js/supabase.js"></script>
 
-    <!-- ==================================================
-         JavaScript da página
-    =================================================== -->
-
+    <!-- JavaScript da página -->
     <script src="js/login.js"></script>
 
 </body>

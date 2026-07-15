@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Lotes - PetSamas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Gerenciar Lotes - Safe Samas</title>
+    <!-- Adicionado versionamento de CSS -->
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
     <main class="container">
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
         
         <h1>📦 Gerenciar Lotes</h1>
         
@@ -18,7 +20,7 @@
             <h3>➕ Criar Novo Lote</h3>
             <input type="number" id="numLote" placeholder="Número do Lote (Ex: 10)">
             <input type="number" id="qtdQRCodes" placeholder="Quantidade de QR Codes">
-            <button onclick="gerarLote()">Gerar Lote</button>
+            <button onclick="gerarLote()" class="btn-samas">Gerar Lote</button>
         </div>
 
         <hr>
@@ -29,7 +31,7 @@
 
         <br>
 
-        <button onclick="history.back()">
+        <button onclick="history.back()" class="btn-samas">
             ⬅ Voltar
         </button>
     </main>

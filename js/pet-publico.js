@@ -45,9 +45,9 @@ async function carregarPet() {
         document.getElementById("nomeTutor").textContent = nome_tutor;
         document.getElementById("cidadePet").textContent = cidade;
 
-        // Lógica do WhatsApp
+        // Lógica do WhatsApp (Modificada para mensagem neutra)
         const telefoneLimpo = String(telefone || "").replace(/\D/g, "");
-        const mensagem = `Olá! Encontrei o pet ${nome}.`;
+        const mensagem = `Olá! Encontrei este item (${nome}) e gostaria de devolvê-lo.`;
         const botaoWhatsapp = document.getElementById("linkWhatsapp");
 
         if (telefoneLimpo.length >= 10) {

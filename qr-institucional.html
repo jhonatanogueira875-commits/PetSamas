@@ -2,110 +2,60 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>QR Institucional - PetSamas</title>
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <link rel="icon"
-          type="image/png"
-          href="assets/images/favicon.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Institucional - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
 <body>
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
-
-        <img
-            src="assets/images/logo.jpg"
-            alt="Logo PetSamas"
-            id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>
-
             📢 QR Institucional
-
         </h1>
 
         <p class="subtitulo">
-
-            Utilize este QR Code para divulgar o PetSamas.
-
+            Utilize este QR Code para divulgar o Safe Samas.
         </p>
 
         <br>
 
-        <!-- ==================================================
-             QR CODE
-        =================================================== -->
-
-        <div id="qrcode"></div>
+        <!-- QR CODE -->
+        <div id="qrcode" style="display: flex; justify-content: center; margin: 20px 0;"></div>
 
         <br>
 
         <p>
-
             <strong>Destino:</strong>
-
         </p>
-
         <p id="linkSite">
-
-            https://jhonatanogueira875-commits.github.io/PetSamas/
-
+            https://jhonatanogueira875-commits.github.io/SafeSamas/
         </p>
 
         <br>
 
-        <!-- ==================================================
-             BOTÕES
-        =================================================== -->
-
-        <button onclick="baixarQRCode()">
-
+        <!-- BOTÕES PADRONIZADOS -->
+        <button onclick="baixarQRCode()" class="btn-samas">
             ⬇ Baixar QR Code
-
         </button>
 
         <br><br>
 
         <a href="admin.html">
-
-            <button>
-
+            <button class="btn-samas">
                 🛠 Voltar ao Painel
-
             </button>
-
         </a>
 
     </main>
 
-    <!-- ==================================================
-         BIBLIOTECA QR CODE
-    =================================================== -->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- ==================================================
-         JAVASCRIPT
-    =================================================== -->
-
     <script src="js/qr-institucional.js"></script>
 
 </body>

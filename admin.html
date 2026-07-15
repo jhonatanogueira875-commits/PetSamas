@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - PetSamas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Painel Administrativo - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <style>
         .card-dashboard {
             border: 1px solid #ddd;
@@ -13,45 +13,39 @@
             background-color: #fcfcfc;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             text-align: left;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
     <main class="container">
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>🛠 Painel Administrativo</h1>
 
         <p class="subtitulo">
-            Bem-vindo ao painel administrativo do PetSamas.
+            Bem-vindo ao painel administrativo do Safe Samas.
         </p>
-
-        <br>
 
         <div class="card-dashboard">
             <h3>📊 Dashboard</h3>
             <p>📦 QR Disponíveis: <strong id="qrDisponiveis">...</strong></p>
             <p>✅ QR Ativados: <strong id="qrAtivados">...</strong></p>
-            <p>🐶 Pets Cadastrados: <strong id="totalPets">...</strong></p>
+            <p>🐾 Pets/Itens Cadastrados: <strong id="totalPets">...</strong></p>
             <p>📦 Último Lote: <strong id="ultimoLote">...</strong></p>
         </div>
 
-        <br>
-
-        <button id="btnLotes">📦 Gerenciar Lotes</button>
-        <br><br>
-        <button id="btnGerarOnline">🌐 Gerar QR Online</button>
-        <br><br>
-        <button id="btnPesquisar">🔍 Pesquisar QR Code</button>
-        <br><br>
-        <button id="btnPets">🐶 Gerenciar Pets</button>
-        <br><br>
+        <button id="btnLotes" class="btn-samas">📦 Gerenciar Lotes</button>
+        <button id="btnGerarOnline" class="btn-samas">🌐 Gerar QR Online</button>
+        <button id="btnPesquisar" class="btn-samas">🔍 Pesquisar QR Code</button>
+        <button id="btnPets" class="btn-samas">🐾 Gerenciar Pets/Itens</button>
+        
         <a href="admin-usuarios.html">
-            <button>👥 Gerenciar Usuários</button>
+            <button class="btn-samas">👥 Gerenciar Usuários</button>
         </a>
-        <br><br>
-        <button onclick="sair()">🚪 Sair</button>
+        
+        <button onclick="sair()" class="btn-samas btn-danger">🚪 Sair</button>
     </main>
 
     <div id="modalQR" class="modal">
@@ -61,10 +55,10 @@
             
             <div id="qrcodeGerado"></div>
             
-            <input type="text" id="linkGerado" readonly style="margin: 15px 0; text-align: center;">
+            <input type="text" id="linkGerado" readonly style="margin: 15px 0; text-align: center; width: 100%; padding: 10px;">
             
-            <button id="btnCopiarLink">📋 Copiar Link</button>
-            <button onclick="fecharModalQR()" style="background: #666; margin-top: 10px;">Fechar</button>
+            <button id="btnCopiarLink" class="btn-samas">📋 Copiar Link</button>
+            <button onclick="fecharModalQR()" class="btn-samas" style="background: #666; margin-top: 10px;">Fechar</button>
         </div>
     </div>
 

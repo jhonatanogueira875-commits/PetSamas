@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisar QR Code - PetSamas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Pesquisar QR Code - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
     <main class="container">
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
         
         <h1>🔍 Pesquisar QR Code</h1>
         
@@ -19,8 +20,9 @@
             <input 
                 type="text" 
                 id="inputCodigo" 
-                placeholder="QR Code, nome do pet, tutor ou telefone">
-            <button onclick="buscarQRCode()">
+                placeholder="QR Code, nome, tutor ou telefone">
+            
+            <button onclick="buscarQRCode()" class="btn-samas">
                 🔍 Pesquisar
             </button>
         </div>
@@ -30,7 +32,7 @@
 
         <br>
 
-        <button onclick="history.back()">
+        <button onclick="history.back()" class="btn-samas">
             ⬅ Voltar
         </button>
     </main>

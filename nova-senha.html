@@ -2,110 +2,52 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Nova Senha - PetSamas</title>
-
-    <link rel="stylesheet" href="css/style.css">
-
+    <title>Nova Senha - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
 </head>
 
 <body>
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
-
-        <img
-            src="assets/images/logo.jpg"
-            alt="Logo PetSamas"
-            id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>Nova Senha</h1>
 
         <p class="subtitulo">
-
             Digite sua nova senha para concluir a recuperação da conta.
-
         </p>
 
-        <!-- ==================================================
-             FORMULÁRIO
-        =================================================== -->
-
+        <!-- FORMULÁRIO -->
         <form id="formNovaSenha">
 
-            <label for="senha">
+            <label for="senha">🔒 Nova Senha</label>
+            <input type="password" id="senha" placeholder="Digite a nova senha" autocomplete="new-password" required>
 
-                🔒 Nova Senha
-
-            </label>
-
-            <input
-                type="password"
-                id="senha"
-                placeholder="Digite a nova senha"
-                autocomplete="new-password"
-                required>
-
-            <label for="confirmarSenha">
-
-                🔒 Confirmar Senha
-
-            </label>
-
-            <input
-                type="password"
-                id="confirmarSenha"
-                placeholder="Confirme a nova senha"
-                autocomplete="new-password"
-                required>
+            <label for="confirmarSenha">🔒 Confirmar Senha</label>
+            <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha" autocomplete="new-password" required>
 
             <br><br>
 
-            <button type="submit">
-
+            <!-- BOTÃO PADRONIZADO -->
+            <button type="submit" class="btn-samas">
                 💾 Salvar Nova Senha
-
             </button>
-
         </form>
 
         <br><br>
 
-        <a href="login.html">
-
+        <a href="login.html" style="color: #2c3e50; font-weight: bold;">
             ← Voltar para o Login
-
         </a>
 
     </main>
 
-    <!-- ==================================================
-         Biblioteca Oficial do Supabase
-    =================================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- ==================================================
-         Conexão com o Supabase
-    =================================================== -->
-
     <script src="js/supabase.js"></script>
-
-    <!-- ==================================================
-         JavaScript
-    =================================================== -->
-
     <script src="js/nova-senha.js"></script>
 
 </body>

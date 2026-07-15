@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar - PetSamas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Cadastrar - Safe Samas</title>
+    <!-- Adicionado versionamento de CSS -->
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
     <main class="container">
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1 id="tituloPagina">🐾/🔑 Cadastrar</h1>
         <p class="subtitulo">Preencha os dados do seu pet ou item para gerar seu perfil.</p>
@@ -18,7 +20,7 @@
         <form id="formCadastro">
             
             <label for="tipo">📦 O que você deseja proteger?</label>
-            <select id="tipo" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <select id="tipo" class="input-samas">
                 <option value="pet">🐾 Pet</option>
                 <option value="item">🔑 Item / Objeto</option>
             </select>
@@ -38,7 +40,7 @@
             <label for="foto">📷 Foto</label>
             <input type="file" id="foto" accept="image/*">
 
-            <div style="margin: 20px 0; font-size: 14px; line-height: 1.4; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #f9f9f9;">
+            <div class="card-termos">
                 <input type="checkbox" id="aceiteTermos" required>
                 <label for="aceiteTermos">
                     Declaro estar ciente e aceito que a validade do QR Code é de <b>1 (um) ano</b> a partir da ativação. 
@@ -47,13 +49,15 @@
             </div>
 
             <br>
-            <button type="submit">💾 Salvar</button>
+            <!-- BOTÃO COM CLASSE btn-samas -->
+            <button type="submit" class="btn-samas">💾 Salvar</button>
         </form>
 
         <br>
-        <a href="meus-pets.html"><button>🐾/🔑 Meus Cadastros</button></a>
+        <!-- BOTÕES COM CLASSE btn-samas -->
+        <a href="meus-pets.html"><button class="btn-samas">🐾/🔑 Meus Cadastros</button></a>
         <br><br>
-        <a href="index.html">← Voltar para a Página Inicial</a>
+        <a href="index.html" style="color: #2c3e50; font-weight: bold;">← Voltar para a Página Inicial</a>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

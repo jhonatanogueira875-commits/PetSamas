@@ -2,84 +2,43 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Lotes Produzidos - PetSamas</title>
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <link rel="icon"
-          type="image/png"
-          href="assets/images/favicon.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotes Produzidos - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
 <body>
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
-
-        <img
-            src="assets/images/logo.jpg"
-            alt="Logo PetSamas"
-            id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
+        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>
-
             📦 Lotes Produzidos
-
         </h1>
 
         <p class="subtitulo">
-
             Gerencie os lotes de QR Codes produzidos.
-
         </p>
 
-        <!-- ==================================================
-             LISTA DOS LOTES
-        =================================================== -->
-
         <div id="listaLotes">
-
             Carregando lotes...
-
         </div>
 
         <br><br>
 
-        <!-- ==================================================
-             VOLTAR
-        =================================================== -->
-
         <a href="admin.html">
-
-            <button>
-
+            <button class="btn-samas">
                 ⬅ Voltar ao Painel
-
             </button>
-
         </a>
 
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="js/supabase.js"></script>
-
     <script src="js/admin-lotes.js"></script>
 
 </body>

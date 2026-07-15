@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Itens - PetSamas</title>
+    <title>Gerenciar Itens - Safe Samas</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
 <main class="container">
 
-    <img src="assets/images/logo.jpg"
-         alt="Logo PetSamas"
-         id="logo">
+    <!-- LOGO ATUALIZADA -->
+    <img src="assets/images/escudo.png" 
+         alt="Logo Safe Samas" 
+         id="logo" 
+         style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
     <h1>📦 Itens Cadastrados</h1>
 
     <p class="subtitulo">
         Pesquise um item utilizando o UUID do usuário,
-        nome do tutor ou nome do item.
+        nome do responsável ou nome do item.
     </p>
 
     <br>
@@ -30,9 +32,9 @@
         <input
             type="text"
             id="inputBusca"
-            placeholder="UUID, tutor ou nome do item">
+            placeholder="UUID, responsável ou nome do item">
 
-        <button id="btnBuscar">
+        <button id="btnBuscar" class="btn-samas">
             🔍 Buscar Itens
         </button>
 
@@ -50,16 +52,14 @@
 
     <br>
 
-    <button onclick="history.back()">
+    <button onclick="history.back()" class="btn-samas">
         ⬅ Voltar
     </button>
 
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="js/supabase.js"></script>
-
 <script src="js/pets.js"></script>
 
 </body>

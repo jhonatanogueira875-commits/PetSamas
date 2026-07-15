@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressão de Lote - PetSamas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Impressão de Lote - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
@@ -13,7 +13,11 @@
 
     <main class="container">
 
-        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
+        <!-- LOGO ATUALIZADA -->
+        <img src="assets/images/escudo.png" 
+             alt="Logo Safe Samas" 
+             id="logo" 
+             style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
 
         <h1>🖨 Impressão de Lote</h1>
 
@@ -32,13 +36,14 @@
 
         <br><br>
 
-        <button onclick="window.print()">
+        <!-- BOTÕES COM CLASSE btn-samas -->
+        <button onclick="window.print()" class="btn-samas">
             🖨 Imprimir / Salvar em PDF
         </button>
 
         <br><br>
 
-        <button onclick="history.back()">
+        <button onclick="history.back()" class="btn-samas">
             ⬅ Voltar
         </button>
 
@@ -46,9 +51,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <script src="js/impressao-lote.js"></script>
 
 </body>
