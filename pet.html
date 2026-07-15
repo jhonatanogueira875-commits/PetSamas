@@ -1,154 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>PetSamas</title>
-
+    <title>PetSamas - Perfil</title>
     <link rel="stylesheet" href="css/style.css">
-
 </head>
-
 <body>
-
     <main class="container">
-
-        <!-- ==========================================
-             FOTO DO PET
-        =========================================== -->
-
-        <img
-            id="foto1"
-            src="assets/images/logo.jpg"
-            alt="Foto do Pet">
-
-        <!-- ==========================================
-             NOME
-        =========================================== -->
-
-        <h1 id="nomePet">
-
-            Carregando...
-
-        </h1>
-
-        <!-- ==========================================
-             STATUS
-        =========================================== -->
-
-        <p id="statusPet">
-
-            Procurando meu tutor ❤️
-
-        </p>
-
-        <!-- ==========================================
-             MENSAGEM
-        =========================================== -->
-
-        <p id="mensagemPet">
-
-            Se você me encontrou, converse com meu tutor.
-
-        </p>
+        <img id="foto1" src="assets/images/logo.jpg" alt="Foto">
+        <h1 id="nomePet">Carregando...</h1>
+        
+        <p id="statusPet">Procurando meu tutor ❤️</p>
+        <p id="mensagemPet">Se você me encontrou, converse com meu proprietário.</p>
 
         <br>
-
-        <!-- ==========================================
-             TUTOR
-        =========================================== -->
-
-        <h3>
-
-            👤 Meu Tutor
-
-        </h3>
-
+        <h3 id="labelTutor">👤 Meu Tutor</h3>
         <p id="nomeTutor"></p>
 
         <br>
-
-        <!-- ==========================================
-             CIDADE
-        =========================================== -->
-
-        <h3>
-
-            📍 Cidade
-
-        </h3>
-
+        <h3>📍 Cidade</h3>
         <p id="cidadePet"></p>
 
         <br>
-
-        <!-- ==========================================
-             WHATSAPP
-        =========================================== -->
-
-        <a
-            id="linkWhatsapp"
-            href="#"
-            target="_blank">
-
-            <button>
-
-                💬 Conversar com meu tutor
-
-            </button>
-
+        <a id="linkWhatsapp" href="#" target="_blank">
+            <button id="btnContato">💬 Conversar com meu tutor</button>
         </a>
 
         <br><br>
-
-        <strong>
-
-            ❤️ Muito obrigado por ajudar!
-
-        </strong>
-
+        <strong>❤️ Muito obrigado por ajudar!</strong>
         <br><br>
 
-        <a href="meus-pets.html">
-
-            <button>
-
-                ⬅ Voltar para Meus Pets
-
-            </button>
-
-        </a>
-
+        <a href="meus-pets.html"><button>⬅ Voltar</button></a>
         <br><br>
-
-        <a href="index.html">
-
-            <button>
-
-                🏠 Página Inicial
-
-            </button>
-
-        </a>
-
+        <a href="index.html"><button>🏠 Página Inicial</button></a>
     </main>
 
-    <!-- Biblioteca do Supabase -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Conexão -->
-
     <script src="js/supabase.js"></script>
-
-    <!-- Página -->
-
     <script src="js/pet.js"></script>
-
 </body>
-
 </html>

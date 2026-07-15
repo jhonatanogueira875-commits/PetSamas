@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Pet - PetSamas</title>
+    <title>Cadastrar - PetSamas</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
     <main class="container">
-        <!-- Logo -->
         <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
 
-        <!-- Título -->
-        <h1 id="tituloPagina">🐾 Cadastrar Pet</h1>
-        <p class="subtitulo">Preencha os dados do seu pet para gerar seu perfil.</p>
+        <h1 id="tituloPagina">🐾/🔑 Cadastrar</h1>
+        <p class="subtitulo">Preencha os dados do seu pet ou item para gerar seu perfil.</p>
 
-        <!-- Formulário -->
         <form id="formCadastro">
-            <label for="nomePet">🐶 Nome do Pet</label>
-            <input type="text" id="nomePet" placeholder="Digite o nome do pet" required>
+            
+            <label for="tipo">📦 O que você deseja proteger?</label>
+            <select id="tipo" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="pet">🐾 Pet</option>
+                <option value="item">🔑 Item / Objeto</option>
+            </select>
 
-            <label for="nomeTutor">👤 Nome do Tutor</label>
+            <label for="nomePet">🐾/🔑 Nome do Pet ou Item</label>
+            <input type="text" id="nomePet" placeholder="Digite o nome" required>
+
+            <label for="nomeTutor">👤 Nome do Proprietário</label>
             <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
 
             <label for="cidade">📍 Cidade</label>
@@ -31,10 +35,9 @@
             <label for="telefone">📞 WhatsApp</label>
             <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
 
-            <label for="foto">📷 Foto do Pet</label>
+            <label for="foto">📷 Foto</label>
             <input type="file" id="foto" accept="image/*">
 
-            <!-- Checkbox de Aceite dos Termos -->
             <div style="margin: 20px 0; font-size: 14px; line-height: 1.4; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #f9f9f9;">
                 <input type="checkbox" id="aceiteTermos" required>
                 <label for="aceiteTermos">
@@ -44,11 +47,11 @@
             </div>
 
             <br>
-            <button type="submit">💾 Salvar Pet</button>
+            <button type="submit">💾 Salvar</button>
         </form>
 
         <br>
-        <a href="meus-pets.html"><button>🐾 Meus Pets</button></a>
+        <a href="meus-pets.html"><button>🐾/🔑 Meus Cadastros</button></a>
         <br><br>
         <a href="index.html">← Voltar para a Página Inicial</a>
     </main>

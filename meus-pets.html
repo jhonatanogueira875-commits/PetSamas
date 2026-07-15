@@ -2,127 +2,59 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Meus Pets - PetSamas</title>
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <link rel="icon"
-          type="image/png"
-          href="assets/images/favicon.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Cadastros - PetSamas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
 <body>
 
     <main class="container">
 
-        <!-- ==================================================
-             LOGO
-        =================================================== -->
+        <img src="assets/images/logo.jpg" alt="Logo PetSamas" id="logo">
 
-        <img
-            src="assets/images/logo.jpg"
-            alt="Logo PetSamas"
-            id="logo">
-
-        <!-- ==================================================
-             TÍTULO
-        =================================================== -->
-
-        <h1>
-
-            🐾 Meus Pets
-
+        <h1 id="tituloPagina">
+            🐾/🔑 Meu Espaço
         </h1>
 
-        <p class="subtitulo">
-
-            Aqui você pode visualizar e gerenciar todos os seus pets.
-
+        <p class="subtitulo" id="subtituloPagina">
+            Aqui você pode visualizar e gerenciar todos os seus itens e pets.
         </p>
 
         <br>
 
-        <!-- ==================================================
-             LISTA DOS PETS
-        =================================================== -->
-
         <div id="listaPets">
-
-            Carregando seus pets...
-
+            Carregando seus cadastros...
         </div>
 
         <br><br>
 
-        <!-- ==================================================
-             BOTÃO NOVO PET
-             (Ocultado automaticamente quando não houver pets)
-        =================================================== -->
-
         <a href="cadastro.html" id="botaoNovoPet">
-
             <button>
-
-                ➕ Cadastrar Novo Pet
-
+                ➕ Cadastrar Novo Item/Pet
             </button>
-
         </a>
 
         <br><br>
 
         <button onclick="sair()">
-
             🚪 Sair
-
         </button>
 
         <br><br>
 
         <a href="index.html">
-
             ← Voltar para a Página Inicial
-
         </a>
 
     </main>
 
-    <!-- ==================================================
-         SUPABASE
-    =================================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- ==================================================
-         CONEXÃO
-    =================================================== -->
-
     <script src="js/supabase.js"></script>
-
-    <!-- ==================================================
-         PROTEÇÃO
-    =================================================== -->
-
     <script src="js/auth.js"></script>
-
-    <!-- ==================================================
-         LOGOUT
-    =================================================== -->
-
     <script src="js/logout.js"></script>
-
-    <!-- ==================================================
-         LISTA DE PETS
-    =================================================== -->
-
     <script src="js/meus-pets.js"></script>
 
 </body>

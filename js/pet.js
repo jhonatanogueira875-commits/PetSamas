@@ -1,80 +1,39 @@
-/*
-==========================================================
-PetSamas
-Arquivo: pet.js
-==========================================================
-*/
-
-
 const parametros = new URLSearchParams(window.location.search);
-const idPet = parametros.get("id");
+const id = parametros.get("id");
 
-async function carregarPet() {
-
-    const { data: pet, error } = await banco
+async function carregarPerfil() {
+    const { data, error } = await banco
         .from("pets")
         .select("*")
-        .eq("id", idPet)
+        .eq("id", id)
         .single();
 
-    console.log("PET:", pet);
-
-    if (error || !pet) {
-
-        alert("Pet não encontrado.");
-        window.location.href = "index.html";
+    if (error || !data) {
+        document.getElementById("nomePet").innerText = "Item não encontrado.";
         return;
     }
 
-    // =========================
-    // FOTO (ROBUSTA)
-    // =========================
+    const isItem = data.tipo === "item";
+    
+    // Textos dinâmicos
+    const tituloTutor = isItem ? "👤 Meu Proprietário" : "👤 Meu Tutor";
+    const statusTxt = isItem ? "Procurando meu proprietário ❤️" : "Procurando meu tutor ❤️";
+    const msgTxt = isItem ? "Se você me encontrou, entre em contato." : "Se você me encontrou, converse com meu tutor.";
+    const btnTxt = isItem ? "💬 Conversar com o proprietário" : "💬 Conversar com meu tutor";
 
-    const fotoElement = document.getElementById("foto1");
+    // Preencher elementos
+    document.getElementById("foto1").src = data.foto || "assets/images/logo.jpg";
+    document.getElementById("nomePet").innerText = data.nome_pet;
+    document.getElementById("statusPet").innerText = statusTxt;
+    document.getElementById("mensagemPet").innerText = msgTxt;
+    document.getElementById("labelTutor").innerText = tituloTutor;
+    document.getElementById("nomeTutor").innerText = data.nome_tutor;
+    document.getElementById("cidadePet").innerText = data.cidade;
+    document.getElementById("btnContato").innerText = btnTxt;
 
-    if (pet.foto && pet.foto.trim() !== "") {
-
-        fotoElement.src = pet.foto;
-
-    } else {
-
-        fotoElement.src = "assets/images/logo.jpg";
-    }
-
-    // =========================
-    // DADOS
-    // =========================
-
-    document.getElementById("nomePet").textContent = pet.nome_pet || "";
-    document.getElementById("nomeTutor").textContent = pet.nome_tutor || "";
-    document.getElementById("cidadePet").textContent = pet.cidade || "";
-
-    // =========================
-    // WHATSAPP (100% SEGURO)
-    // =========================
-
-    let telefone = "";
-
-    if (pet.telefone) {
-        telefone = String(pet.telefone).replace(/\D/g, "");
-    }
-
-    console.log("TEL:", telefone);
-
-    const botao = document.getElementById("linkWhatsapp");
-
-    if (telefone.length >= 10) {
-
-        const mensagem = `Olá! Encontrei o pet ${pet.nome_pet || ""}.`;
-
-        botao.href =
-            `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
-
-    } else {
-
-        botao.href = "#";
-        console.warn("Telefone inválido");
-    }
+    // Link WhatsApp
+    const telFormatado = data.telefone.replace(/\D/g, "");
+    document.getElementById("linkWhatsapp").href = `https://wa.me/55${telFormatado}`;
 }
 
-carregarPet();
+carregarPerfil();
