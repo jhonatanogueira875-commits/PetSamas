@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Usuário - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>👤 Detalhes do Usuário</h1>
+        <div id="infoUsuario">Carregando dados do usuário...</div>
+        
+        <br>
+        <hr>
+        <br>
+
+        <h2>📦 Ativos Cadastrados</h2>
+        <div id="listaAtivos">Carregando ativos...</div>
+        
+        <br>
+        <button onclick="history.back()">⬅ Voltar</button>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/admin-detalhes.js"></script>
+</body>
+</html>

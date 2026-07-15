@@ -2,61 +2,43 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Gerenciar Usuários - PetSamas</title>
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <link rel="icon"
-          type="image/png"
-          href="assets/images/favicon.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Usuários - Safe Samas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 
 <body>
 
     <main class="container">
 
-        <img src="assets/images/logo.jpg"
-             id="logo"
-             alt="Logo PetSamas">
+        <img src="assets/images/logo.jpg" 
+             id="logo" 
+             alt="Logo Safe Samas">
 
         <h1>👥 Gerenciar Usuários</h1>
 
         <p class="subtitulo">
-
             Visualize todos os usuários cadastrados na plataforma.
-
         </p>
 
         <br>
 
         <div id="listaUsuarios">
-
             Carregando usuários...
-
         </div>
 
         <br>
 
         <button onclick="history.back()">
-
             ⬅ Voltar
-
         </button>
 
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="js/supabase.js"></script>
-
     <script src="js/admin-usuarios.js"></script>
 
 </body>

@@ -7,75 +7,52 @@ Arquivo: js/admin-usuarios.js
 const listaUsuarios = document.getElementById("listaUsuarios");
 
 async function carregarUsuarios() {
-
     listaUsuarios.innerHTML = "<p>Carregando usuários...</p>";
 
-    // Busca todos os perfis
+    // Busca todos os perfis cadastrados
     const { data: usuarios, error } = await banco
         .from("profiles")
         .select("*")
         .order("created_at", { ascending: false });
 
     if (error) {
-
         console.error(error);
-
         listaUsuarios.innerHTML = "<p>Erro ao carregar usuários.</p>";
-
         return;
-
     }
 
     if (!usuarios || usuarios.length === 0) {
-
-        listaUsuarios.innerHTML = "<p>Nenhum usuário encontrado.</p>";
-
+        listaUsuarios.innerHTML = "<p>Nenhum usuário encontrado na base.</p>";
         return;
-
     }
 
     listaUsuarios.innerHTML = "";
 
     for (const usuario of usuarios) {
-
-        // Conta quantos pets pertencem ao usuário
+        // Conta quantos ativos (pets/itens) pertencem ao usuário
         const { count } = await banco
             .from("pets")
             .select("*", { count: "exact", head: true })
             .eq("user_id", usuario.id);
 
         listaUsuarios.innerHTML += `
-
             <div class="card-dashboard">
-
-                <h3>👤 ${usuario.nome || "Sem nome"}</h3>
-
-                <p><strong>📞 Telefone:</strong> ${usuario.telefone || "-"}</p>
-
-                <p><strong>📍 Cidade:</strong> ${usuario.cidade || "-"}</p>
-
-                <p><strong>🐶 Pets cadastrados:</strong> ${count || 0}</p>
-
+                <h3>👤 ${usuario.nome || "Usuário Sem Nome"}</h3>
+                <p><strong>📞 Telefone:</strong> ${usuario.telefone || "Não informado"}</p>
+                <p><strong>📍 Cidade:</strong> ${usuario.cidade || "Não informada"}</p>
+                <p><strong>📦 Ativos cadastrados:</strong> ${count || 0}</p>
                 <button onclick="verUsuario('${usuario.id}')">
-
-                    👁 Visualizar
-
+                    👁 Visualizar Detalhes
                 </button>
-
             </div>
-
             <br>
-
         `;
-
     }
-
 }
 
-function verUsuario(id){
-
-    alert("Perfil do usuário: " + id);
-
+// Redireciona para a página de detalhes que iremos criar
+function verUsuario(id) {
+    window.location.href = `admin-detalhes-usuario.html?id=${id}`;
 }
 
 carregarUsuarios();
