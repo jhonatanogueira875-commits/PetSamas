@@ -39,7 +39,7 @@ async function carregarPet() {
 
         // Preenchimento do perfil
         document.getElementById("foto1").src = 
-            foto && foto.trim() !== "" ? foto : "assets/images/default-item.png";
+            foto && foto.trim() !== "" ? foto : "assets/images/default-item.jpg";
         
         document.getElementById("nomePet").textContent = nome;
         document.getElementById("nomeTutor").textContent = nome_tutor;

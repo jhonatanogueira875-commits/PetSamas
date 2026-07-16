@@ -56,7 +56,7 @@ function renderizarResultados(data) {
         // Lógica robusta para definir a foto
         const foto = (pet.foto && pet.foto !== "EMPTY") 
             ? pet.foto 
-            : "assets/images/default-item.png";
+            : "assets/images/default-item.jpg";
 
         return `
         <li class="card-dashboard" style="margin-bottom: 15px; list-style: none; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">

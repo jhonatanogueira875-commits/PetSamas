@@ -25,7 +25,7 @@ async function carregarPerfil() {
     const btnTxt = "💬 Falar com o responsável";
 
     // Preencher elementos
-    document.getElementById("foto1").src = data.foto || "assets/images/default-item.png";
+    document.getElementById("foto1").src = data.foto || "assets/images/default-item.jpg";
     document.getElementById("nomePet").innerText = data.nome_pet;
     document.getElementById("statusPet").innerText = statusTxt;
     document.getElementById("mensagemPet").innerText = msgTxt;
