@@ -167,3 +167,11 @@ footer { margin-top: 35px; color: #666; font-size: 15px; }
     #gradeQRCodes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
     #gradeQRCodes > div { border: 1px solid #000 !important; padding: 10px !important; break-inside: avoid; text-align: center; }
 }
+
+.hq-img{
+    width:100%;
+    border-radius:18px;
+    margin:20px 0 30px 0;
+    display:block;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
