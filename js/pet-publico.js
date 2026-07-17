@@ -1,65 +1,104 @@
 /*
 ==========================================================
-PetSamas - Pet Público (API v1.0 - Consumindo RPC)
+Arquivo: js/pet-publico.js
 ==========================================================
 */
 
 const parametros = new URLSearchParams(window.location.search);
 const codigo = parametros.get("codigo");
 
-async function carregarPet() {
+async function carregarPerfilPublico() {
+
     if (!codigo) {
         alert("QR Code inválido.");
         window.location.href = "index.html";
         return;
     }
 
-    try {
-        // Chamada única para a nossa API Pública (RPC)
-        // O Supabase lida com a autenticação anon automaticamente
-        const { data: resposta, error } = await banco.rpc("obter_pet_publico", {
+    const { data: resposta, error } = await banco.rpc(
+        "obter_pet_publico",
+        {
             codigo_qr: codigo
-        });
-
-        if (error) {
-            console.error("Erro na API:", error);
-            alert("Erro de comunicação com o servidor.");
-            return;
         }
+    );
 
-        // Validação da nossa API (Padronizada)
-        if (!resposta || !resposta.encontrado) {
-            alert("Pet não localizado.");
-            window.location.href = "index.html";
-            return;
-        }
+    if (error || !resposta || !resposta.pet) {
 
-        // Extração dos dados do objeto padronizado
-        const { nome, foto, cidade, telefone, nome_tutor } = resposta.pet;
+        document.getElementById("nomePet").innerText =
+            "Item não encontrado.";
 
-        // Preenchimento do perfil
-        document.getElementById("foto1").src = 
-            foto && foto.trim() !== "" ? foto : "assets/images/default-item.jpg";
-        
-        document.getElementById("nomePet").textContent = nome;
-        document.getElementById("nomeTutor").textContent = nome_tutor;
-        document.getElementById("cidadePet").textContent = cidade;
-
-        // Lógica do WhatsApp (Modificada para mensagem neutra)
-        const telefoneLimpo = String(telefone || "").replace(/\D/g, "");
-        const mensagem = `Olá! Encontrei este item (${nome}) e gostaria de devolvê-lo.`;
-        const botaoWhatsapp = document.getElementById("linkWhatsapp");
-
-        if (telefoneLimpo.length >= 10) {
-            botaoWhatsapp.href = `https://wa.me/55${telefoneLimpo}?text=${encodeURIComponent(mensagem)}`;
-        } else {
-            botaoWhatsapp.onclick = (e) => { e.preventDefault(); alert("Telefone indisponível."); };
-        }
-
-    } catch (err) {
-        console.error("Erro inesperado no carregamento:", err);
-        alert("Ocorreu um erro ao processar o perfil.");
+        return;
     }
+
+    const {
+        nome,
+        foto,
+        foto2,
+        foto3,
+        cidade,
+        telefone,
+        nome_tutor
+    } = resposta.pet;
+
+    // ==========================================
+    // GALERIA DE FOTOS
+    // ==========================================
+
+    const galeria =
+        document.getElementById("galeriaFotos");
+
+    const fotos = [];
+
+    if (foto) fotos.push(foto);
+    if (foto2) fotos.push(foto2);
+    if (foto3) fotos.push(foto3);
+
+    if (fotos.length === 0) {
+        fotos.push("assets/images/escudo.png");
+    }
+
+    galeria.innerHTML = fotos.map(f => `
+        <img
+            src="${f}"
+            alt="Foto do item"
+            class="foto-card"
+            onclick="window.open('${f}','_blank')"
+            style="
+                cursor:pointer;
+                width:100%;
+                max-width:260px;
+                border-radius:15px;
+                display:block;
+                margin:0 auto 15px auto;
+            ">
+    `).join("");
+
+    // ==========================================
+    // DADOS
+    // ==========================================
+
+    document.getElementById("nomePet").innerText =
+        nome;
+
+    document.getElementById("nomeTutor").innerText =
+        nome_tutor;
+
+    document.getElementById("cidadePet").innerText =
+        cidade;
+
+    // ==========================================
+    // WHATSAPP
+    // ==========================================
+
+    const telefoneLimpo =
+        String(telefone || "").replace(/\D/g, "");
+
+    const mensagem = encodeURIComponent(
+        `Olá! Encontrei o item "${nome}" e gostaria de devolvê-lo.`
+    );
+
+    document.getElementById("linkWhatsapp").href =
+        `https://wa.me/55${telefoneLimpo}?text=${mensagem}`;
 }
 
-carregarPet();
+carregarPerfilPublico();

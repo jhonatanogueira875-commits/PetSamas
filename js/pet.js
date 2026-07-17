@@ -1,6 +1,6 @@
 /*
 ==========================================================
-Arquivo: js/pet.js (CÓDIGO COMPLETO E CORRIGIDO)
+Arquivo: js/pet.js (VERSÃO DEFINITIVA)
 ==========================================================
 */
 
@@ -27,21 +27,23 @@ async function carregarPerfil() {
     // Preencher elementos
     const galeria = document.getElementById("galeriaFotos");
     const fotos = [];
-    // Foto principal
+    
+    // Foto principal e adicionais
     if (data.foto) fotos.push(data.foto);
-    // Segunda foto
     if (data.foto2) fotos.push(data.foto2);
-    // Terceira foto
     if (data.foto3) fotos.push(data.foto3);
-    // Se não existir nenhuma foto
+    
+    // Se não existir nenhuma foto, usa o escudo
     if (fotos.length === 0) {
-        fotos.push("assets/images/logo.jpg");
+        fotos.push("assets/images/escudo.png");
     }
-    galeria.innerHTML = fotos.map(foto => `
+
+    galeria.innerHTML = fotos.map((foto, indice) => `
         <img
             src="${foto}"
-            alt="Foto do item"
-            class="foto-card"
+            alt="Foto ${indice + 1}"
+            class="foto-card foto-ampliavel"
+            data-foto="${foto}"
             style="
                 width:100%;
                 max-width:260px;
@@ -50,6 +52,7 @@ async function carregarPerfil() {
                 display:block;
                 margin-left:auto;
                 margin-right:auto;
+                cursor:pointer;
             ">
     `).join("");
     
@@ -61,8 +64,8 @@ async function carregarPerfil() {
     document.getElementById("cidadePet").innerText = data.cidade;
     document.getElementById("btnContato").innerText = btnTxt;
 
-    // Link WhatsApp com mensagem personalizada e acolhedora
-    const telFormatado = data.telefone.replace(/\D/g, "");
+    // Link WhatsApp com mensagem personalizada e proteção para o telefone
+    const telFormatado = String(data.telefone || "").replace(/\D/g, "");
     const mensagem = encodeURIComponent(`Olá! 😊
 
 Encontrei "${data.nome_pet}", cadastrado no Safe Samas, e acredito que pertença a você.

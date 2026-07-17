@@ -2,63 +2,83 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Encontrei um item - Safe Samas</title>
-    <!-- Adicionado versionamento -->
+
     <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
 
 <body>
 
-    <main class="container">
+<main class="container">
 
-        <!-- FOTO DO ITEM -->
-        <img id="foto1" src="assets/images/escudo.png" alt="Foto do Item" style="max-width: 150px; display: block; margin: 0 auto 15px auto;">
+    <!-- GALERIA -->
+    <div id="galeriaFotos"></div>
 
-        <!-- NOME -->
-        <h1 id="nomePet">Carregando...</h1>
+    <!-- NOME -->
+    <h1 id="nomePet">Carregando...</h1>
 
-        <!-- STATUS -->
-        <p id="statusPet">🔍 Parece que este item foi encontrado.</p>
+    <!-- STATUS -->
+    <p id="statusPet">
+        🔍 Buscando responsável ❤️
+    </p>
 
-        <br>
+    <!-- MENSAGEM -->
+    <p id="mensagemPet">
+        Se você encontrou este item, entre em contato com o responsável.
+    </p>
 
-        <!-- MENSAGEM ACOLHEDORA -->
-        <p>Agradecemos por sua honestidade! Entre em contato com o proprietário pelo botão abaixo para combinar a devolução.</p>
+    <br>
 
-        <br>
+    <!-- RESPONSÁVEL -->
+    <h3 id="labelTutor">
+        👤 Responsável
+    </h3>
 
-        <!-- PROPRIETÁRIO -->
-        <h3>👤 Proprietário</h3>
-        <p id="nomeTutor"></p>
+    <p id="nomeTutor"></p>
 
-        <br>
+    <br>
 
-        <!-- CIDADE -->
-        <h3>📍 Cidade</h3>
-        <p id="cidadePet"></p>
+    <!-- CIDADE -->
+    <h3>
+        📍 Cidade
+    </h3>
 
-        <br>
+    <p id="cidadePet"></p>
 
-        <!-- WHATSAPP - A LÓGICA DE TEXTO SERÁ CONTROLADA NO JS -->
-        <a id="linkWhatsapp" href="#" target="_blank">
-            <button class="btn-samas">💚 Falar com o Proprietário</button>
-        </a>
+    <br>
 
-        <br><br>
+    <!-- BOTÃO -->
+    <a id="linkWhatsapp" href="#" target="_blank">
 
-        <strong>❤️ Muito obrigado por ajudar a devolver este item.</strong>
+        <button id="btnContato" class="btn-samas">
+            💬 Falar com o responsável
+        </button>
 
-        <br><br>
+    </a>
 
-        <p style="color:#777;font-size:14px;">Protegido por Safe Samas</p>
+    <br><br>
 
-    </main>
+    <strong>
+        ❤️ Muito obrigado por ajudar!
+    </strong>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/pet-publico.js"></script>
+    <br><br>
+
+    <p style="color:#777;font-size:14px;">
+        Protegido por Safe Samas
+    </p>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/pet-publico.js"></script>
 
 </body>
 </html>

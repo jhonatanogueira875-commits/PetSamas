@@ -1,43 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Safe Samas - Perfil</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
+
 <body>
-    <main class="container">
-        <div id="galeriaFotos"></div>
-        <h1 id="nomePet">Carregando...</h1>
-        
-        <p id="statusPet">🔍 Buscando responsável ❤️</p>
-        <p id="mensagemPet">Se você encontrou este item, entre em contato com o responsável.</p>
 
-        <br>
-        <h3 id="labelTutor">👤 Responsável</h3>
-        <p id="nomeTutor"></p>
+<main class="container">
 
-        <br>
-        <h3>📍 Cidade</h3>
-        <p id="cidadePet"></p>
+    <section id="galeriaFotos" class="galeria-fotos">
+        <!-- As fotos serão inseridas pelo pet.js -->
+    </section>
 
-        <br>
-        <a id="linkWhatsapp" href="#" target="_blank">
-            <button id="btnContato">💬 Falar com o responsável</button>
-        </a>
+    <h1 id="nomePet">Carregando...</h1>
 
-        <br><br>
-        <strong>❤️ Muito obrigado por ajudar!</strong>
-        <br><br>
+    <p id="statusPet">
+        🔍 Buscando responsável ❤️
+    </p>
 
-        <a href="meus-pets.html"><button>⬅ Voltar</button></a>
-        <br><br>
-        <a href="index.html"><button>🏠 Página Inicial</button></a>
-    </main>
+    <p id="mensagemPet">
+        Se você encontrou este item, entre em contato com o responsável.
+    </p>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/pet.js"></script>
+    <br>
+
+    <h3 id="labelTutor">
+        👤 Responsável
+    </h3>
+
+    <p id="nomeTutor"></p>
+
+    <br>
+
+    <h3>
+        📍 Cidade
+    </h3>
+
+    <p id="cidadePet"></p>
+
+    <br>
+
+    <a id="linkWhatsapp" href="#" target="_blank">
+
+        <button id="btnContato">
+            💬 Falar com o responsável
+        </button>
+
+    </a>
+
+    <br><br>
+
+    <strong>
+        ❤️ Muito obrigado por ajudar!
+    </strong>
+
+    <br><br>
+
+    <a href="meus-pets.html">
+        <button>⬅ Voltar</button>
+    </a>
+
+    <br><br>
+
+    <a href="index.html">
+        <button>🏠 Página Inicial</button>
+    </a>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/pet.js"></script>
+
 </body>
 </html>
