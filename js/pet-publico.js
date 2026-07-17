@@ -1,4 +1,3 @@
-alert("PET-PUBLICO NOVO CARREGADO");
 /*
 ==========================================================
 Arquivo: js/pet-publico.js
