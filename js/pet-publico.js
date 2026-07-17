@@ -75,18 +75,49 @@ async function carregarPerfilPublico() {
     `).join("");
 
     // ==========================================
-    // Clique nas imagens (TESTE)
-    // ==========================================
-    document.querySelectorAll(".foto-ampliavel").forEach((img) => {
-        img.onclick = function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+// Clique nas imagens
+// ==========================================
 
-            alert("Clique funcionando!");
+const modal = document.getElementById("modalFoto");
+const imagem = document.getElementById("imagemModal");
+const fechar = document.getElementById("fecharModal");
 
-            return false;
-        };
-    });
+document.querySelectorAll(".foto-ampliavel").forEach((img) => {
+
+    img.onclick = function () {
+
+        imagem.src = this.dataset.foto;
+
+        modal.classList.add("ativo");
+    };
+
+});
+
+fechar.onclick = function () {
+
+    modal.classList.remove("ativo");
+
+};
+
+modal.onclick = function (e) {
+
+    if (e.target === modal) {
+
+        modal.classList.remove("ativo");
+
+    }
+
+};
+
+document.addEventListener("keydown", function (e) {
+
+    if (e.key === "Escape") {
+
+        modal.classList.remove("ativo");
+
+    }
+
+});
 
     // ==========================================
     // DADOS
