@@ -16,6 +16,8 @@ Responsável por:
 
 const formulario = document.getElementById("formCadastro");
 const campoFoto = document.getElementById("foto");
+const campoFoto2 = document.getElementById("foto2");
+const campoFoto3 = document.getElementById("foto3");
 const campoTipo = document.getElementById("tipo"); // Novo campo adicionado
 
 // ======================================================
@@ -30,6 +32,8 @@ const idEdicao = parametros.get("id");
 // ======================================================
 
 let fotoBase64 = "";
+let fotoBase642 = "";
+let fotoBase643 = "";
 
 campoFoto.addEventListener("change", function () {
     const arquivo = campoFoto.files[0];
@@ -38,6 +42,32 @@ campoFoto.addEventListener("change", function () {
     leitor.onload = function (evento) {
         fotoBase64 = evento.target.result;
     };
+    leitor.readAsDataURL(arquivo);
+});
+
+campoFoto2.addEventListener("change", function () {
+    const arquivo = campoFoto2.files[0];
+    if (!arquivo) return;
+
+    const leitor = new FileReader();
+
+    leitor.onload = function (evento) {
+        fotoBase642 = evento.target.result;
+    };
+
+    leitor.readAsDataURL(arquivo);
+});
+
+campoFoto3.addEventListener("change", function () {
+    const arquivo = campoFoto3.files[0];
+    if (!arquivo) return;
+
+    const leitor = new FileReader();
+
+    leitor.onload = function (evento) {
+        fotoBase643 = evento.target.result;
+    };
+
     leitor.readAsDataURL(arquivo);
 });
 
@@ -68,6 +98,8 @@ async function carregarPets() {
                 }
 
                 fotoBase64 = pet.foto || "";
+                fotoBase642 = pet.foto2 || "";
+                fotoBase643 = pet.foto3 || "";
             }
         }
     }
@@ -111,7 +143,9 @@ formulario.addEventListener("submit", async function (event) {
                 cidade: document.getElementById("cidade").value,
                 telefone: document.getElementById("telefone").value,
                 tipo: campoTipo.value, // Atualiza o tipo
-                foto: fotoBase64
+                foto: fotoBase64,
+                foto2: fotoBase642,
+                foto3: fotoBase643
             })
             .eq("id", idEdicao);
 
@@ -136,6 +170,8 @@ formulario.addEventListener("submit", async function (event) {
         telefone: document.getElementById("telefone").value,
         tipo: campoTipo.value, // Grava o tipo
         foto: fotoBase64,
+        foto2: fotoBase642,
+        foto3: fotoBase643,
         user_id: user.id
     };
 

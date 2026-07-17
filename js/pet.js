@@ -25,7 +25,34 @@ async function carregarPerfil() {
     const btnTxt = "💬 Falar com o responsável";
 
     // Preencher elementos
-    document.getElementById("foto1").src = data.foto || "assets/images/default-item.jpg";
+    const galeria = document.getElementById("galeriaFotos");
+    const fotos = [];
+    // Foto principal
+    if (data.foto) fotos.push(data.foto);
+    // Segunda foto
+    if (data.foto2) fotos.push(data.foto2);
+    // Terceira foto
+    if (data.foto3) fotos.push(data.foto3);
+    // Se não existir nenhuma foto
+    if (fotos.length === 0) {
+        fotos.push("assets/images/logo.jpg");
+    }
+    galeria.innerHTML = fotos.map(foto => `
+        <img
+            src="${foto}"
+            alt="Foto do item"
+            class="foto-card"
+            style="
+                width:100%;
+                max-width:260px;
+                border-radius:15px;
+                margin-bottom:15px;
+                display:block;
+                margin-left:auto;
+                margin-right:auto;
+            ">
+    `).join("");
+    
     document.getElementById("nomePet").innerText = data.nome_pet;
     document.getElementById("statusPet").innerText = statusTxt;
     document.getElementById("mensagemPet").innerText = msgTxt;

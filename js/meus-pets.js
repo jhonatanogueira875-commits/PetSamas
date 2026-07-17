@@ -92,7 +92,9 @@ function renderizarPets() {
     if (botaoNovoPet) botaoNovoPet.style.display = "inline-block";
 
     pets.forEach((pet) => {
-        const foto = pet.foto && pet.foto !== "" ? pet.foto : "assets/images/default-item.jpg";
+        const foto = pet.foto && pet.foto !== ""
+            ? pet.foto
+            : "assets/images/escudo.png";
         
         // Identificação dinâmica
         const isItem = pet.tipo === "item";
