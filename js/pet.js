@@ -78,3 +78,38 @@ Fico no aguardo!`);
 }
 
 carregarPerfil();
+
+/* ======================================================
+   VISUALIZADOR DE FOTOS
+====================================================== */
+
+const modalFoto = document.getElementById("modalFoto");
+const imagemModal = document.getElementById("imagemModal");
+const fecharModal = document.getElementById("fecharModal");
+
+// Abre a foto
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("foto-ampliavel")) {
+        imagemModal.src = e.target.dataset.foto;
+        modalFoto.classList.add("ativo");
+    }
+});
+
+// Fecha pelo X
+fecharModal.addEventListener("click", function () {
+    modalFoto.classList.remove("ativo");
+});
+
+// Fecha clicando no fundo preto
+modalFoto.addEventListener("click", function (e) {
+    if (e.target === modalFoto) {
+        modalFoto.classList.remove("ativo");
+    }
+});
+
+// Fecha com ESC
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+        modalFoto.classList.remove("ativo");
+    }
+});
