@@ -1,3 +1,4 @@
+alert("PET-PUBLICO NOVO CARREGADO");
 /*
 ==========================================================
 Arquivo: js/pet-publico.js
@@ -57,12 +58,12 @@ async function carregarPerfilPublico() {
         fotos.push("assets/images/escudo.png");
     }
 
-    galeria.innerHTML = fotos.map(f => `
+    galeria.innerHTML = fotos.map((foto, indice) => `
         <img
-            src="${f}"
-            alt="Foto do item"
-            class="foto-card"
-            onclick="window.open('${f}','_blank')"
+            src="${foto}"
+            alt="Foto ${indice + 1}"
+            class="foto-card foto-ampliavel"
+            data-foto="${foto}"
             style="
                 cursor:pointer;
                 width:100%;
@@ -72,6 +73,20 @@ async function carregarPerfilPublico() {
                 margin:0 auto 15px auto;
             ">
     `).join("");
+
+    // ==========================================
+    // Clique nas imagens (TESTE)
+    // ==========================================
+    document.querySelectorAll(".foto-ampliavel").forEach((img) => {
+        img.onclick = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            alert("Clique funcionando!");
+
+            return false;
+        };
+    });
 
     // ==========================================
     // DADOS
