@@ -18,7 +18,7 @@ const formulario = document.getElementById("formCadastro");
 const campoFoto = document.getElementById("foto");
 const campoFoto2 = document.getElementById("foto2");
 const campoFoto3 = document.getElementById("foto3");
-const campoTipo = document.getElementById("tipo"); // Novo campo adicionado
+const campoTipo = document.getElementById("tipo");
 
 // ======================================================
 // URL PARAM (EDIÇÃO)
@@ -45,31 +45,29 @@ campoFoto.addEventListener("change", function () {
     leitor.readAsDataURL(arquivo);
 });
 
-campoFoto2.addEventListener("change", function () {
-    const arquivo = campoFoto2.files[0];
-    if (!arquivo) return;
+if (campoFoto2) {
+    campoFoto2.addEventListener("change", function () {
+        const arquivo = campoFoto2.files[0];
+        if (!arquivo) return;
+        const leitor = new FileReader();
+        leitor.onload = function (evento) {
+            fotoBase642 = evento.target.result;
+        };
+        leitor.readAsDataURL(arquivo);
+    });
+}
 
-    const leitor = new FileReader();
-
-    leitor.onload = function (evento) {
-        fotoBase642 = evento.target.result;
-    };
-
-    leitor.readAsDataURL(arquivo);
-});
-
-campoFoto3.addEventListener("change", function () {
-    const arquivo = campoFoto3.files[0];
-    if (!arquivo) return;
-
-    const leitor = new FileReader();
-
-    leitor.onload = function (evento) {
-        fotoBase643 = evento.target.result;
-    };
-
-    leitor.readAsDataURL(arquivo);
-});
+if (campoFoto3) {
+    campoFoto3.addEventListener("change", function () {
+        const arquivo = campoFoto3.files[0];
+        if (!arquivo) return;
+        const leitor = new FileReader();
+        leitor.onload = function (evento) {
+            fotoBase643 = evento.target.result;
+        };
+        leitor.readAsDataURL(arquivo);
+    });
+}
 
 // ======================================================
 // CARREGAR PET (EDIÇÃO)
@@ -92,7 +90,6 @@ async function carregarPets() {
                 document.getElementById("cidade").value = pet.cidade;
                 document.getElementById("telefone").value = pet.telefone;
                 
-                // Define o tipo se existir no banco
                 if (pet.tipo) {
                     campoTipo.value = pet.tipo;
                 }
@@ -142,10 +139,10 @@ formulario.addEventListener("submit", async function (event) {
                 nome_tutor: document.getElementById("nomeTutor").value,
                 cidade: document.getElementById("cidade").value,
                 telefone: document.getElementById("telefone").value,
-                tipo: campoTipo.value, // Atualiza o tipo
+                tipo: campoTipo.value,
                 foto: fotoBase64,
-                foto2: fotoBase642,
-                foto3: fotoBase643
+                foto2: fotoBase642, // Mantém fotos antigas em edições
+                foto3: fotoBase643  // Mantém fotos antigas em edições
             })
             .eq("id", idEdicao);
 
@@ -168,10 +165,10 @@ formulario.addEventListener("submit", async function (event) {
         nome_tutor: document.getElementById("nomeTutor").value,
         cidade: document.getElementById("cidade").value,
         telefone: document.getElementById("telefone").value,
-        tipo: campoTipo.value, // Grava o tipo
+        tipo: campoTipo.value,
         foto: fotoBase64,
-        foto2: fotoBase642,
-        foto3: fotoBase643,
+        foto2: "", // Cadastro novo sempre vazio
+        foto3: "", // Cadastro novo sempre vazio
         user_id: user.id
     };
 
