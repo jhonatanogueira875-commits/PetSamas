@@ -63,8 +63,13 @@ form.addEventListener("submit", async (e) => {
 
     }
 
-    alert("Senha alterada com sucesso!");
+    alert(`Sua senha foi alterada com sucesso!
 
+Faça login utilizando a nova senha.`
+    );
+
+    document.getElementById("senha").value = "";
+    document.getElementById("confirmarSenha").value = "";
     window.location.href = "login.html";
 
 });

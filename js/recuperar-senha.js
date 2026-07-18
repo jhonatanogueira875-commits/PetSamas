@@ -45,8 +45,10 @@ form.addEventListener("submit", async (e) => {
 
     }
 
-    alert(
-        "Enviamos um link para recuperação da senha.\n\nVerifique também a caixa de spam."
+    alert(`Se existir uma conta vinculada a este e-mail,
+você receberá um link para redefinir sua senha.
+
+Verifique também a caixa de spam.`
     );
 
     window.location.href = "login.html";
