@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teste Mercado Pago - Safe Samas</title>
+
+    <link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+</head>
+
+<body>
+
+<main class="container">
+
+    <img
+        src="assets/images/escudo.png"
+        id="logo"
+        alt="Safe Samas"
+        style="max-width:100px;display:block;margin:0 auto 20px;">
+
+    <h1>
+        Mercado Pago
+    </h1>
+
+    <p class="subtitulo">
+        Teste de comunicação entre GitHub, Supabase e Edge Functions.
+    </p>
+
+    <button
+        id="btnTeste"
+        class="btn-samas">
+
+        💳 Testar Edge Function
+
+    </button>
+
+    <br>
+
+    <div
+        id="resultado"
+        style="
+            text-align:left;
+            background:#ffffff;
+            border-radius:10px;
+            padding:15px;
+            min-height:120px;
+            font-family:monospace;
+            white-space:pre-wrap;
+            border:1px solid #ddd;
+        ">
+
+Aguardando teste...
+
+    </div>
+
+    <br><br>
+
+    <a href="index.html"
+       style="color:#2c3e50;font-weight:bold;">
+
+        ← Voltar
+
+    </a>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/teste-mercadopago.js"></script>
+
+</body>
+
+</html>
