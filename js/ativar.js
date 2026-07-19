@@ -41,11 +41,11 @@ async function verificarQRCode() {
                     ${eFisico 
                         ? "Este QR pertence a um produto físico." 
                         : "Este QR foi gerado digitalmente."}
-                    Faça login para concluir a vinculação ao seu pet.
+                    Faça login para concluir a vinculação ao seu perfil.
                 </p>
                 <br>
                 <a href="login.html?codigo=${codigo}">
-                    <button>🔗 Vincular este QR ao meu pet</button>
+                    <button>🔗 Vincular este QR ao meu perfil</button>
                 </a>
                 <br><br>
                 <small>Não tem conta? <a href="cadastro-usuario.html?codigo=${codigo}">Criar conta</a></small>
@@ -54,11 +54,11 @@ async function verificarQRCode() {
 
         case "ativado":
             conteudo.innerHTML = `
-                <h2>🐾 QR Code já ativado</h2>
-                <p>Este QR Code já está vinculado a um pet.</p>
+                <h2>QR Code já ativado</h2>
+                <p>Este QR Code já está vinculado a um perfil protegido.</p>
                 <br>
                 <a href="pet-publico.html?codigo=${codigo}">
-                    <button>👁 Ver Perfil do Pet</button>
+                    <button>👁 Ver Perfil Protegido</button>
                 </a>
             `;
             break;

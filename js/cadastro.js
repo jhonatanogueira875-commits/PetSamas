@@ -114,6 +114,17 @@ async function getUser() {
 }
 
 // ======================================================
+// PROTEÇÃO DA PÁGINA
+// ======================================================
+
+(async () => {
+    const autorizado = await protegerCadastro();
+    if (!autorizado) {
+        return;
+    }
+})();
+
+// ======================================================
 // SUBMIT
 // ======================================================
 
@@ -141,8 +152,8 @@ formulario.addEventListener("submit", async function (event) {
                 telefone: document.getElementById("telefone").value,
                 tipo: campoTipo.value,
                 foto: fotoBase64,
-                foto2: fotoBase642, // Mantém fotos antigas em edições
-                foto3: fotoBase643  // Mantém fotos antigas em edições
+                foto2: fotoBase642,
+                foto3: fotoBase643
             })
             .eq("id", idEdicao);
 
@@ -167,8 +178,8 @@ formulario.addEventListener("submit", async function (event) {
         telefone: document.getElementById("telefone").value,
         tipo: campoTipo.value,
         foto: fotoBase64,
-        foto2: "", // Cadastro novo sempre vazio
-        foto3: "", // Cadastro novo sempre vazio
+        foto2: "",
+        foto3: "",
         user_id: user.id
     };
 
