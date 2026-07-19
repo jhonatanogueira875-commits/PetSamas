@@ -113,9 +113,15 @@ async function getUser() {
     return data.user;
 }
 
-// ======================================================
-// PROTEÇÃO DA PÁGINA
-// ======================================================
+/*
+======================================================
+PROTEÇÃO DA PÁGINA
+
+Temporariamente removida.
+
+A verificação de assinatura ocorrerá
+somente na ativação do QR Code.
+======================================================
 
 (async () => {
     const autorizado = await protegerCadastro();
@@ -123,6 +129,7 @@ async function getUser() {
         return;
     }
 })();
+*/
 
 // ======================================================
 // SUBMIT

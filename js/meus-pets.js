@@ -116,10 +116,9 @@ function renderizarPets() {
                 </button>
             `;
         } else {
-            const mensagem = encodeURIComponent(`Olá! Gostaria de ativar um QR Code para: ${pet.nome_pet}`);
             botaoQRCode = `
-                <a href="https://wa.me/5542984097827?text=${mensagem}" target="_blank">
-                    <button>🟡 Solicitar QR Code</button>
+                <a href="liberar-qr.html?id=${pet.id}">
+                    <button>🔓 Liberar QR Code</button>
                 </a>
             `;
         }

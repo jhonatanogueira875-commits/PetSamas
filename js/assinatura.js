@@ -10,11 +10,10 @@ Responsável por:
 ==========================================================
 */
 
+// ==========================================================
+// CONSULTA ASSINATURA DO USUÁRIO
+// ==========================================================
 async function possuiAssinaturaAtiva() {
-
-    // ==========================================
-    // USUÁRIO LOGADO
-    // ==========================================
 
     const {
         data: { user }
@@ -22,12 +21,13 @@ async function possuiAssinaturaAtiva() {
 
     if (!user) {
         console.log("Usuário não logado.");
-        return false;
+        return {
+            autenticado: false,
+            possui: false,
+            status: null,
+            assinatura: null
+        };
     }
-
-    // ==========================================
-    // CONSULTA ASSINATURA
-    // ==========================================
 
     const {
         data,
@@ -36,16 +36,40 @@ async function possuiAssinaturaAtiva() {
         .from("assinaturas")
         .select("*")
         .eq("user_id", user.id)
-        .eq("status", "active")
-        .gt("data_fim", new Date().toISOString())
+        .order("created_at", { ascending: false })
         .limit(1);
 
     if (error) {
-        console.error("Erro na consulta de assinatura:", error);
-        return false;
+        console.error("Erro na consulta:", error);
+        return {
+            autenticado: true,
+            possui: false,
+            status: null,
+            assinatura: null
+        };
     }
 
-    return data.length > 0;
+    // Registro do resultado da consulta no console conforme solicitado
+    console.log("Resultado da consulta:", data);
+
+    if (!data || data.length === 0) {
+        return {
+            autenticado: true,
+            possui: false,
+            status: null,
+            assinatura: null
+        };
+    }
+
+    const assinatura = data[0];
+
+    return {
+        autenticado: true,
+        possui: assinatura.status === "active" &&
+                new Date(assinatura.data_fim) > new Date(),
+        status: assinatura.status,
+        assinatura
+    };
 }
 
 // ==========================================================
@@ -54,25 +78,24 @@ async function possuiAssinaturaAtiva() {
 
 async function protegerCadastro() {
 
+    // Se o usuário já está na página de assinatura, não faça nada!
+    if (window.location.pathname.includes("assinatura.html")) {
+        console.log("Já estamos na página de assinatura. Sem bloqueios.");
+        return true;
+    }
+
     console.log("==== INICIANDO VERIFICAÇÃO DE ASSINATURA ====");
 
-    const assinaturaAtiva =
-        await possuiAssinaturaAtiva();
+    const resultado = await possuiAssinaturaAtiva();
 
-    console.log("Assinatura ativa:", assinaturaAtiva);
+    console.log("Resultado da verificação:", resultado);
 
-    if (!assinaturaAtiva) {
-
+    if (!resultado.possui) {
         console.log("Redirecionando para assinatura.html");
-
         window.location.href = "assinatura.html";
-
         return false;
-
     }
 
     console.log("Usuário autorizado.");
-
     return true;
-
 }
