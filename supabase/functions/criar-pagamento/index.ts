@@ -7,27 +7,26 @@ Edge Function:
 criar-pagamento
 
 Versão:
-1.6
+2.1 (Com depuração robusta de resposta)
 
 Responsável por:
 
 ✔ Validar usuário autenticado
 
-✔ Criar assinatura pendente
-
 ✔ Criar preferência Mercado Pago
 
-✔ Retornar URL do Checkout
+✔ Retornar Checkout URL
 
 ==========================================================
 */
+
 import "@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "@supabase/supabase-js";
 
 const VALOR_ASSINATURA = 29.90;
 const TITULO_ASSINATURA = "Ativação anual Safe Samas";
 const DESCRICAO_ASSINATURA = "Licença anual do QR Code Safe Samas";
-const PREFIXO_REFERENCIA = "PETSAMAS";
+const PREFIXO_REFERENCIA = "SAFE";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -38,6 +37,12 @@ const corsHeaders = {
 };
 
 Deno.serve(async (req) => {
+
+    if (req.method === "OPTIONS") {
+        return new Response("ok", {
+            headers: corsHeaders
+        });
+    }
 
     const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
@@ -53,17 +58,15 @@ Deno.serve(async (req) => {
     );
 
     const {
-        data: {
-            user
-        },
+        data: { user },
         error: authError
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
+
         return new Response(
             JSON.stringify({
-                erro:
-                    "Usuário não autenticado."
+                erro: "Usuário não autenticado."
             }),
             {
                 status: 401,
@@ -73,19 +76,115 @@ Deno.serve(async (req) => {
                 }
             }
         );
+
     }
 
-    // TESTE DE IDENTIFICAÇÃO DO USUÁRIO
-    return new Response(
-        JSON.stringify({
-            usuario: user.id
-        }),
-        {
-            headers: {
-                ...corsHeaders,
-                "Content-Type": "application/json"
+    const externalReference =
+        `${PREFIXO_REFERENCIA}_${user.id}_${Date.now()}`;
+
+    const ACCESS_TOKEN =
+        Deno.env.get("MP_ACCESS_TOKEN");
+
+    const preference = {
+
+        items: [
+
+            {
+
+                title: TITULO_ASSINATURA,
+
+                description: DESCRICAO_ASSINATURA,
+
+                quantity: 1,
+
+                currency_id: "BRL",
+
+                unit_price: VALOR_ASSINATURA
+
             }
+
+        ],
+
+        external_reference: externalReference,
+
+        notification_url:
+            "https://zkgasxwggvdamuvxcsnf.supabase.co/functions/v1/webhook-mercadopago",
+
+        back_urls: {
+
+            success:
+                "https://safe-samas.vercel.app/sucesso.html",
+
+            failure:
+                "https://safe-samas.vercel.app/falha.html",
+
+            pending:
+                "https://safe-samas.vercel.app/pendente.html"
+
+        },
+
+        auto_return: "approved"
+
+    };
+
+    const resposta = await fetch(
+
+        "https://api.mercadopago.com/checkout/preferences",
+
+        {
+
+            method: "POST",
+
+            headers: {
+
+                Authorization:
+                    `Bearer ${ACCESS_TOKEN}`,
+
+                "Content-Type":
+                    "application/json"
+
+            },
+
+            body:
+                JSON.stringify(preference)
+
         }
+
+    );
+
+    const texto = await resposta.text();
+    console.log("=================================");
+    console.log("STATUS:", resposta.status);
+    console.log("BODY:");
+    console.log(texto);
+    console.log("=================================");
+    
+    let resultado = {};
+    try {
+        resultado = JSON.parse(texto);
+    } catch {
+        resultado = {
+            erro: texto
+        };
+    }
+
+    return new Response(
+
+        JSON.stringify(resultado),
+
+        {
+
+            headers: {
+
+                ...corsHeaders,
+
+                "Content-Type":
+                    "application/json"
+
+            }
+
+        }
+
     );
 
 });

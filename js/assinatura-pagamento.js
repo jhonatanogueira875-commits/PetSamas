@@ -63,13 +63,13 @@ botaoAssinar.addEventListener(
 
             }
 
-            if (!data.checkout_url) {
+            if (!data.init_point) {
 
                 alert(
-
                     "Checkout não retornado pelo servidor."
-
                 );
+
+                console.log(data);
 
                 botaoAssinar.disabled = false;
 
@@ -81,7 +81,7 @@ botaoAssinar.addEventListener(
             }
 
             window.location.href =
-                data.checkout_url;
+                data.init_point;
 
         }
 
