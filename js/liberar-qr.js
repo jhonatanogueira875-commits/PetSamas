@@ -37,6 +37,15 @@ Responsável por:
     }
 
     //--------------------------------------------------
+    // ID do pet recebido pela URL
+    //--------------------------------------------------
+
+    const params = new URLSearchParams(window.location.search);
+    const petId = params.get("id");
+
+    console.log("Pet selecionado:", petId);
+
+    //--------------------------------------------------
     // Assinatura
     //--------------------------------------------------
 
@@ -49,8 +58,9 @@ Responsável por:
 
     if (assinaturaAtiva.possui) {
 
-        console.log("Assinatura válida. Redirecionando para WhatsApp.");
-        window.location.href = "https://wa.me/5542984097827";
+        console.log("Assinatura válida. Redirecionando para QR Code.");
+
+        window.location.href = `qr-code.html?id=${petId}`;
 
         return;
 
@@ -61,6 +71,7 @@ Responsável por:
     //--------------------------------------------------
 
     console.log("Assinatura não encontrada ou expirada. Redirecionando para assinatura.html");
+
     window.location.href = "assinatura.html";
 
 })();
