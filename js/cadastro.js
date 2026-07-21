@@ -19,6 +19,10 @@ const campoFoto = document.getElementById("foto");
 const campoFoto2 = document.getElementById("foto2");
 const campoFoto3 = document.getElementById("foto3");
 const campoTipo = document.getElementById("tipo");
+const campoCategoria = document.getElementById("categoria");
+const contatoNome = document.getElementById("contatoNome");
+const contatoTelefone = document.getElementById("contatoTelefone");
+const contatoParentesco = document.getElementById("contatoParentesco");
 
 // ======================================================
 // URL PARAM (EDIÇÃO)
@@ -94,6 +98,16 @@ async function carregarPets() {
                     campoTipo.value = pet.tipo;
                 }
 
+                campoCategoria.value = pet.categoria || "";
+                contatoNome.value = pet.contato_nome || "";
+                contatoTelefone.value = pet.contato_telefone || "";
+                contatoParentesco.value = pet.contato_parentesco || "";
+
+                // Dispara o evento change ou função visual se necessário para atualizar a exibição dos blocos na edição
+                if (typeof atualizarCampos === "function") {
+                    atualizarCampos();
+                }
+
                 fotoBase64 = pet.foto || "";
                 fotoBase642 = pet.foto2 || "";
                 fotoBase643 = pet.foto3 || "";
@@ -158,6 +172,10 @@ formulario.addEventListener("submit", async function (event) {
                 cidade: document.getElementById("cidade").value,
                 telefone: document.getElementById("telefone").value,
                 tipo: campoTipo.value,
+                categoria: campoCategoria.value,
+                contato_nome: contatoNome.value,
+                contato_telefone: contatoTelefone.value,
+                contato_parentesco: contatoParentesco.value,
                 foto: fotoBase64,
                 foto2: fotoBase642,
                 foto3: fotoBase643
@@ -184,6 +202,10 @@ formulario.addEventListener("submit", async function (event) {
         cidade: document.getElementById("cidade").value,
         telefone: document.getElementById("telefone").value,
         tipo: campoTipo.value,
+        categoria: campoCategoria.value,
+        contato_nome: contatoNome.value,
+        contato_telefone: contatoTelefone.value,
+        contato_parentesco: contatoParentesco.value,
         foto: fotoBase64,
         foto2: "",
         foto3: "",

@@ -25,6 +25,21 @@
                 <option value="item">🔑 Item / Objeto</option>
             </select>
 
+            <div id="categoriaItem" style="display:none;">
+                <label for="categoria">📦 Categoria do Item</label>
+                <select id="categoria" class="input-samas">
+                    <option value="">Selecione</option>
+                    <option value="chaves">🔑 Chaves</option>
+                    <option value="carteira">👛 Carteira</option>
+                    <option value="mochila">🎒 Mochila</option>
+                    <option value="notebook">💻 Notebook</option>
+                    <option value="mala">🧳 Mala</option>
+                    <option value="documento">📄 Documento</option>
+                    <option value="celular">📱 Celular</option>
+                    <option value="outro">📦 Outro</option>
+                </select>
+            </div>
+
             <label for="nomePet">🐾/🔑 Nome do Pet ou Item</label>
             <input type="text" id="nomePet" placeholder="Digite o nome" required>
 
@@ -36,6 +51,32 @@
 
             <label for="telefone">📞 WhatsApp</label>
             <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
+
+            <div id="contatoConfianca" style="display:none;">
+                <hr>
+                <h3>👤 Contato de confiança</h3>
+                <p style="font-size:13px;color:#666;">
+                    Utilizado apenas caso este item seja um celular.
+                </p>
+
+                <label>Nome</label>
+                <input
+                    type="text"
+                    id="contatoNome"
+                    placeholder="Nome do contato">
+
+                <label>Telefone</label>
+                <input
+                    type="tel"
+                    id="contatoTelefone"
+                    placeholder="WhatsApp">
+
+                <label>Parentesco</label>
+                <input
+                    type="text"
+                    id="contatoParentesco"
+                    placeholder="Ex.: Esposa, Pai, Filho">
+            </div>
 
             <label for="foto">📷 Foto Principal</label>
             <input type="file" id="foto" accept="image/*">
@@ -74,20 +115,39 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/assinatura.js"></script>
+    <script>
+        console.log("CADASTRO.HTML ATUALIZADO");
 
-<script src="js/supabase.js"></script>
+        const tipo = document.getElementById("tipo");
+        const categoria = document.getElementById("categoria");
+        const blocoCategoria = document.getElementById("categoriaItem");
+        const blocoContato = document.getElementById("contatoConfianca");
 
-<script src="js/auth.js"></script>
+        tipo.addEventListener("change", atualizarCampos);
+        categoria.addEventListener("change", atualizarCampos);
 
-<script src="js/assinatura.js"></script>
+        function atualizarCampos() {
+            if (tipo.value === "item") {
+                blocoCategoria.style.display = "block";
+            } else {
+                blocoCategoria.style.display = "none";
+                blocoContato.style.display = "none";
+                return;
+            }
 
-<script>
+            if (categoria.value === "celular") {
+                blocoContato.style.display = "block";
+            } else {
+                blocoContato.style.display = "none";
+            }
+        }
 
-console.log("CADASTRO.HTML ATUALIZADO");
-
-</script>
-
-<script src="js/cadastro.js"></script>
+        atualizarCampos();
+    </script>
+    <script src="js/cadastro.js"></script>
 
 </body>
 </html>
