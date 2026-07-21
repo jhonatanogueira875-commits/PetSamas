@@ -1,3 +1,5 @@
+alert("pet-publico.js carregado");
+
 /*
 ==========================================================
 Arquivo: js/pet-publico.js
@@ -22,6 +24,9 @@ async function carregarPerfilPublico() {
         }
     );
 
+    console.log("RESPOSTA DO BANCO:", resposta);
+    console.log("PET:", resposta?.pet);
+
     if (error || !resposta || !resposta.pet) {
 
         document.getElementById("nomePet").innerText =
@@ -37,7 +42,12 @@ async function carregarPerfilPublico() {
         foto3,
         cidade,
         telefone,
-        nome_tutor
+        nome_tutor,
+        tipo,
+        categoria,
+        contato_nome,
+        contato_telefone,
+        contato_parentesco
     } = resposta.pet;
 
     // ==========================================
@@ -74,49 +84,49 @@ async function carregarPerfilPublico() {
     `).join("");
 
     // ==========================================
-// Clique nas imagens
-// ==========================================
+    // Clique nas imagens
+    // ==========================================
 
-const modal = document.getElementById("modalFoto");
-const imagem = document.getElementById("imagemModal");
-const fechar = document.getElementById("fecharModal");
+    const modal = document.getElementById("modalFoto");
+    const imagem = document.getElementById("imagemModal");
+    const fechar = document.getElementById("fecharModal");
 
-document.querySelectorAll(".foto-ampliavel").forEach((img) => {
+    document.querySelectorAll(".foto-ampliavel").forEach((img) => {
 
-    img.onclick = function () {
+        img.onclick = function () {
 
-        imagem.src = this.dataset.foto;
+            imagem.src = this.dataset.foto;
 
-        modal.classList.add("ativo");
+            modal.classList.add("ativo");
+        };
+
+    });
+
+    fechar.onclick = function () {
+
+        modal.classList.remove("ativo");
+
     };
 
-});
+    modal.onclick = function (e) {
 
-fechar.onclick = function () {
+        if (e.target === modal) {
 
-    modal.classList.remove("ativo");
+            modal.classList.remove("ativo");
 
-};
+        }
 
-modal.onclick = function (e) {
+    };
 
-    if (e.target === modal) {
+    document.addEventListener("keydown", function (e) {
 
-        modal.classList.remove("ativo");
+        if (e.key === "Escape") {
 
-    }
+            modal.classList.remove("ativo");
 
-};
+        }
 
-document.addEventListener("keydown", function (e) {
-
-    if (e.key === "Escape") {
-
-        modal.classList.remove("ativo");
-
-    }
-
-});
+    });
 
     // ==========================================
     // DADOS
@@ -125,8 +135,23 @@ document.addEventListener("keydown", function (e) {
     document.getElementById("nomePet").innerText =
         nome;
 
-    document.getElementById("nomeTutor").innerText =
-        nome_tutor;
+    if (tipo === "celular" && contato_nome) {
+
+        document.getElementById("labelTutor").innerText =
+            "👤 Contato de confiança";
+
+        document.getElementById("nomeTutor").innerText =
+            `${contato_nome} (${contato_parentesco})`;
+
+    } else {
+
+        document.getElementById("labelTutor").innerText =
+            "👤 Responsável";
+
+        document.getElementById("nomeTutor").innerText =
+            nome_tutor;
+
+    }
 
     document.getElementById("cidadePet").innerText =
         cidade;
@@ -135,8 +160,15 @@ document.addEventListener("keydown", function (e) {
     // WHATSAPP
     // ==========================================
 
+    let telefoneDestino = telefone;
+    if (
+        tipo === "celular" &&
+        contato_telefone
+    ) {
+        telefoneDestino = contato_telefone;
+    }
     const telefoneLimpo =
-        String(telefone || "").replace(/\D/g, "");
+        String(telefoneDestino || "").replace(/\D/g, "");
 
     const mensagem = encodeURIComponent(
         `Olá! Encontrei o item "${nome}" e gostaria de devolvê-lo.`
