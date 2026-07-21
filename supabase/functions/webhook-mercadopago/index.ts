@@ -141,26 +141,83 @@ Deno.serve(async (req) => {
     fim.setFullYear(fim.getFullYear() + 1);
 
     // ==========================================
-    // GRAVA ASSINATURA
+    // PROCURA ASSINATURA DO USUÁRIO
     // ==========================================
-    const { error } = await supabase.from("assinaturas").insert({
-      user_id: userId,
-      status: "active",
-      data_inicio: inicio.toISOString(),
-      data_fim: fim.toISOString(),
-      payment_id: String(paymentId),
-      external_reference: referencia
-    });
+    const { data: assinaturaUsuario } = await supabase
+      .from("assinaturas")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle();
 
-    if (error) {
-      console.log(error);
-      throw error;
+    // ==========================================
+    // USUÁRIO JÁ POSSUI ASSINATURA
+    // ==========================================
+    if (assinaturaUsuario) {
+
+      const creditosAtuais = assinaturaUsuario.creditos ?? 0;
+
+      const { error } = await supabase
+        .from("assinaturas")
+        .update({
+
+          status: "active",
+
+          creditos: creditosAtuais + 1,
+
+          data_inicio: inicio.toISOString(),
+
+          data_fim: fim.toISOString(),
+
+          payment_id: String(paymentId),
+
+          external_reference: referencia
+
+        })
+        .eq("id", assinaturaUsuario.id);
+
+      if (error) throw error;
+
+      console.log("=================================");
+      console.log("CRÉDITO ADICIONADO");
+      console.log("Usuário:", userId);
+      console.log("Créditos:", creditosAtuais + 1);
+      console.log("=================================");
+
     }
+    // ==========================================
+    // PRIMEIRA ASSINATURA
+    // ==========================================
+    else {
 
-    console.log("=================================");
-    console.log("ASSINATURA CRIADA");
-    console.log(userId);
-    console.log("=================================");
+      const { error } = await supabase
+        .from("assinaturas")
+        .insert({
+
+          user_id: userId,
+
+          status: "active",
+
+          creditos: 1,
+
+          data_inicio: inicio.toISOString(),
+
+          data_fim: fim.toISOString(),
+
+          payment_id: String(paymentId),
+
+          external_reference: referencia
+
+        });
+
+      if (error) throw error;
+
+      console.log("=================================");
+      console.log("PRIMEIRA ASSINATURA");
+      console.log("Usuário:", userId);
+      console.log("Créditos: 1");
+      console.log("=================================");
+
+    }
 
     // ==========================================
     // RETORNO

@@ -7,8 +7,10 @@ Arquivo: qr-code.js
 Responsável por:
 
 ✔ Buscar o pet
-✔ Verificar se existe QR
+✔ Verificar assinatura
+✔ Verificar créditos
 ✔ Criar QR Online automaticamente
+✔ Consumir crédito
 ✔ Salvar no banco
 ✔ Gerar imagem do QR
 ==========================================================
@@ -27,6 +29,45 @@ window.onload = async function () {
     if (!idPet) {
 
         window.location.href = "meus-pets.html";
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Usuário logado
+    //--------------------------------------------------
+
+    const {
+        data: { user }
+    } = await banco.auth.getUser();
+
+    if (!user) {
+
+        window.location.href = "login.html";
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Busca assinatura
+    //--------------------------------------------------
+
+    const { data: assinatura } = await banco
+
+        .from("assinaturas")
+
+        .select("*")
+
+        .eq("user_id", user.id)
+
+        .maybeSingle();
+
+    if (!assinatura) {
+
+        alert("Nenhuma assinatura encontrada.");
+
+        window.location.href = "assinatura.html";
+
         return;
 
     }
@@ -56,7 +97,7 @@ window.onload = async function () {
     }
 
     //--------------------------------------------------
-    // Procura QR já existente
+    // Procura QR existente
     //--------------------------------------------------
 
     let { data: qr } = await banco
@@ -72,12 +113,52 @@ window.onload = async function () {
         .maybeSingle();
 
     //--------------------------------------------------
-    // NÃO EXISTE
+    // NÃO POSSUI QR
     //--------------------------------------------------
 
     if (!qr) {
 
-        console.log("Nenhum QR encontrado. Criando automaticamente...");
+        //--------------------------------------------------
+        // Verifica créditos
+        //--------------------------------------------------
+
+        const creditos = assinatura.creditos ?? 0;
+
+        if (creditos <= 0) {
+
+            document.getElementById("conteudoLiberado").style.display = "none";
+
+            document.getElementById("bloqueioPagamento").style.display = "block";
+
+            document.getElementById("bloqueioPagamento").innerHTML = `
+
+                <h2>⚠️ Nenhum crédito disponível</h2>
+
+                <p>Você já utilizou todos os seus créditos.</p>
+
+                <br>
+
+                <a href="assinatura.html">
+                    <button class="btn-samas">
+                        ➕ Comprar novo QR
+                    </button>
+                </a>
+
+                <br><br>
+
+                <a href="https://wa.me/5542984097827" target="_blank">
+                    <button class="btn-samas">
+                        💬 Suporte
+                    </button>
+                </a>
+
+            `;
+
+            return;
+
+        }
+
+        console.log("Crédito disponível. Gerando QR Online...");
 
         //--------------------------------------------------
         // Último número utilizado
@@ -108,7 +189,7 @@ window.onload = async function () {
         const novoCodigo = `PET-${String(proximoNumero).padStart(6, "0")}`;
 
         //--------------------------------------------------
-        // Salva
+        // Salva QR
         //--------------------------------------------------
 
         const { data: novoQR, error: erroInsert } = await banco
@@ -150,6 +231,30 @@ window.onload = async function () {
         }
 
         qr = novoQR;
+
+        //--------------------------------------------------
+        // Consome 1 crédito
+        //--------------------------------------------------
+
+        const { error: erroCredito } = await banco
+
+            .from("assinaturas")
+
+            .update({
+
+                creditos: creditos - 1
+
+            })
+
+            .eq("id", assinatura.id);
+
+        if (erroCredito) {
+
+            console.error(erroCredito);
+
+        }
+
+        console.log("Crédito consumido.");
 
     }
 

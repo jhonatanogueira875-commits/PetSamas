@@ -113,13 +113,13 @@ Deno.serve(async (req) => {
         back_urls: {
 
             success:
-                "https://safe-samas.vercel.app/sucesso.html",
+                "https://safesamas.vercel.app/sucesso.html",
 
             failure:
-                "https://safe-samas.vercel.app/falha.html",
+                "https://safesamas.vercel.app/falha.html",
 
             pending:
-                "https://safe-samas.vercel.app/pendente.html"
+                "https://safesamas.vercel.app/pendente.html"
 
         },
 
@@ -153,19 +153,25 @@ Deno.serve(async (req) => {
     );
 
     const texto = await resposta.text();
+
     console.log("=================================");
     console.log("STATUS:", resposta.status);
     console.log("BODY:");
     console.log(texto);
     console.log("=================================");
-    
+
     let resultado = {};
+
     try {
+
         resultado = JSON.parse(texto);
+
     } catch {
+
         resultado = {
             erro: texto
         };
+
     }
 
     return new Response(
