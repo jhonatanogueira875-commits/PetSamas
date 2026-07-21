@@ -118,6 +118,8 @@ formulario.addEventListener("submit", async function (event) {
 
                 nome: nome,
 
+                email: user.email,
+
                 telefone: "",
 
                 cidade: "",
