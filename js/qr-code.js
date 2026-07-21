@@ -161,32 +161,54 @@ window.onload = async function () {
         console.log("Crédito disponível. Gerando QR Online...");
 
         //--------------------------------------------------
-        // Último número utilizado
+        // Descobre automaticamente o próximo código (Apenas sequenciais de 6 dígitos)
         //--------------------------------------------------
 
-        const { data: ultimo } = await banco
+        const { data: listaQR, error: erroLista } = await banco
 
             .from("qrcodes")
 
-            .select("numero")
+            .select("codigo");
 
-            .order("numero", { ascending: false })
+        if (erroLista) {
 
-            .limit(1);
+            console.error(erroLista);
 
-        let proximoNumero = 1;
+            alert("Erro ao consultar os QR Codes.");
 
-        if (ultimo && ultimo.length > 0) {
-
-            proximoNumero = (ultimo[0].numero || 0) + 1;
+            return;
 
         }
+
+        let maiorNumero = 0;
+
+        (listaQR || []).forEach((item) => {
+
+            if (!item.codigo) return;
+
+            const encontrado = item.codigo.match(/^PET-(\d{6})$/);
+
+            if (!encontrado) return;
+
+            const numero = Number(encontrado[1]);
+
+            if (numero > maiorNumero) {
+
+                maiorNumero = numero;
+
+            }
+
+        });
+
+        const proximoNumero = maiorNumero + 1;
 
         //--------------------------------------------------
         // Código
         //--------------------------------------------------
 
         const novoCodigo = `PET-${String(proximoNumero).padStart(6, "0")}`;
+
+        console.log("Novo QR:", novoCodigo);
 
         //--------------------------------------------------
         // Salva QR
@@ -229,6 +251,8 @@ window.onload = async function () {
             return;
 
         }
+
+        console.log("QR criado:", novoQR);
 
         qr = novoQR;
 
