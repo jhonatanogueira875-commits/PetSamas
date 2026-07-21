@@ -260,7 +260,7 @@ window.onload = async function () {
         // Consome 1 crédito
         //--------------------------------------------------
 
-        const { error: erroCredito } = await banco
+        const { data: atualizacao, error: erroCredito } = await banco
 
             .from("assinaturas")
 
@@ -270,7 +270,12 @@ window.onload = async function () {
 
             })
 
-            .eq("id", assinatura.id);
+            .eq("id", assinatura.id)
+
+            .select();
+
+        console.log("Resultado UPDATE:", atualizacao);
+        console.log("Erro UPDATE:", erroCredito);
 
         if (erroCredito) {
 
