@@ -41,12 +41,59 @@ async function carregarDetalhes() {
         const usuario = usuarioData[0]; // Pega o primeiro registro encontrado
 
         infoUsuario.innerHTML = `
-            <p><strong>Nome:</strong> ${usuario.nome || "Não informado"}</p>
-            <p><strong>Telefone:</strong> ${usuario.telefone || "Não informado"}</p>
-            <p><strong>Cidade:</strong> ${usuario.cidade || "Não informada"}</p>
+            <div class="card-dashboard">
+
+                <h3>👤 Perfil</h3>
+
+                <p><strong>Nome:</strong> ${usuario.nome || "Não informado"}</p>
+
+                <p><strong>E-mail:</strong> ${usuario.email || "Não informado"}</p>
+
+                <p><strong>Telefone:</strong> ${usuario.telefone || "Não informado"}</p>
+
+                <p><strong>Cidade:</strong> ${usuario.cidade || "Não informada"}</p>
+
+                <p><strong>Cadastro:</strong> ${new Date(usuario.created_at).toLocaleDateString("pt-BR")}</p>
+
+            </div>
         `;
 
-        // 2. Busca os ativos (pets/itens)
+        // 2. Busca a assinatura do usuário
+        const { data: assinatura } = await banco
+            .from("assinaturas")
+            .select("*")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+        if (assinatura) {
+            infoUsuario.innerHTML += `
+
+            <div class="card-dashboard">
+
+                <h3>💳 Assinatura</h3>
+
+                <p><strong>Status:</strong> ${assinatura.status}</p>
+
+                <p><strong>Créditos:</strong> ${assinatura.creditos ?? 0}</p>
+
+                <p><strong>Início:</strong>
+                ${new Date(assinatura.data_inicio).toLocaleDateString("pt-BR")}
+                </p>
+
+                <p><strong>Fim:</strong>
+                ${new Date(assinatura.data_fim).toLocaleDateString("pt-BR")}
+                </p>
+
+                <p><strong>Payment ID:</strong><br>
+                ${assinatura.payment_id || "-"}
+                </p>
+
+            </div>
+
+            `;
+        }
+
+        // 3. Busca os ativos (pets/itens)
         const { data: ativos, error: errorAtivos } = await banco
             .from("pets")
             .select("*")
@@ -64,18 +111,32 @@ async function carregarDetalhes() {
         }
 
         listaAtivos.innerHTML = "";
-        ativos.forEach(ativo => {
+        
+        for (const ativo of ativos) {
+            // Busca o código do QR correspondente ao pet para o link público correto
+            const { data: qrData } = await banco
+                .from("qrcodes")
+                .select("codigo")
+                .eq("pet_id", ativo.id)
+                .maybeSingle();
+
+            const linkPublico = qrData && qrData.codigo 
+                ? `pet-publico.html?codigo=${qrData.codigo}` 
+                : `pet-publico.html?id=${ativo.id}`;
+
             listaAtivos.innerHTML += `
                 <div class="card-dashboard">
-                    <h3>📦 ${ativo.nome || "Item sem nome"}</h3>
+                    <h3>📦 ${ativo.nome_pet || "Sem nome"}</h3>
+                    <p><strong>Espécie:</strong> ${ativo.especie || "Não informada"}</p>
+                    <p><strong>Categoria:</strong> ${ativo.categoria || "Não informada"}</p>
                     <p><strong>Status:</strong> ${ativo.status || "Ativo"}</p>
-                    <a href="pet-publico.html?id=${ativo.id}" target="_blank">
-                        <button>👁 Ver Página Pública</button>
+                    <a href="${linkPublico}" target="_blank">
+                        <button class="btn-samas">👁 Ver Página Pública</button>
                     </a>
                 </div>
                 <br>
             `;
-        });
+        }
 
     } catch (err) {
         console.error("Erro inesperado no sistema:", err);
