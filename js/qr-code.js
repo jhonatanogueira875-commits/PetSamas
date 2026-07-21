@@ -132,10 +132,9 @@ window.onload = async function () {
 
             document.getElementById("bloqueioPagamento").innerHTML = `
 
-                <h2>⚠️ Você já utilizou todos os seus créditos.</h2>
+                <h2>⚠️ Nenhum crédito disponível</h2>
 
-                <p>Cada QR Code possui um crédito individual.</p>
-                <p>Para proteger um novo item ou pet, adicione um novo crédito à sua conta.</p>
+                <p>Você já utilizou todos os seus créditos.</p>
 
                 <br>
 
@@ -158,6 +157,8 @@ window.onload = async function () {
             return;
 
         }
+
+        console.log("Crédito disponível. Gerando QR Online...");
 
         //--------------------------------------------------
         // Descobre automaticamente o próximo código (Apenas sequenciais de 6 dígitos)
@@ -207,6 +208,8 @@ window.onload = async function () {
 
         const novoCodigo = `PET-${String(proximoNumero).padStart(6, "0")}`;
 
+        console.log("Novo QR:", novoCodigo);
+
         //--------------------------------------------------
         // Salva QR
         //--------------------------------------------------
@@ -249,13 +252,15 @@ window.onload = async function () {
 
         }
 
+        console.log("QR criado:", novoQR);
+
         qr = novoQR;
 
         //--------------------------------------------------
         // Consome 1 crédito
         //--------------------------------------------------
 
-        const { error: erroCredito } = await banco
+        const { data: atualizacao, error: erroCredito } = await banco
 
             .from("assinaturas")
 
@@ -265,13 +270,20 @@ window.onload = async function () {
 
             })
 
-            .eq("id", assinatura.id);
+            .eq("id", assinatura.id)
+
+            .select();
+
+        console.log("Resultado UPDATE:", atualizacao);
+        console.log("Erro UPDATE:", erroCredito);
 
         if (erroCredito) {
 
             console.error(erroCredito);
 
         }
+
+        console.log("Crédito consumido.");
 
     }
 
