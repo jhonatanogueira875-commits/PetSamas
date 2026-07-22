@@ -5,23 +5,23 @@ Arquivo: assinatura-pagamento.js
 
 Responsável por:
 
-✔ Criar pagamento da assinatura
+✔ Criar pagamento de 1 crédito
 ✔ Redirecionar para o Mercado Pago
 ==========================================================
 */
 
-const botaoAssinar =
+const botaoComprar =
     document.getElementById("btnAssinar");
 
-botaoAssinar.addEventListener(
+botaoComprar.addEventListener(
 
     "click",
 
     async () => {
 
-        botaoAssinar.disabled = true;
+        botaoComprar.disabled = true;
 
-        botaoAssinar.innerText =
+        botaoComprar.innerText =
             "Conectando...";
 
         try {
@@ -49,15 +49,13 @@ botaoAssinar.addEventListener(
                 console.error(error);
 
                 alert(
-
-                    "Não foi possível iniciar o pagamento."
-
+                    "Não foi possível iniciar a compra."
                 );
 
-                botaoAssinar.disabled = false;
+                botaoComprar.disabled = false;
 
-                botaoAssinar.innerText =
-                    "💳 Assinar Agora";
+                botaoComprar.innerText =
+                    "💳 Comprar QR Code";
 
                 return;
 
@@ -71,10 +69,10 @@ botaoAssinar.addEventListener(
 
                 console.log(data);
 
-                botaoAssinar.disabled = false;
+                botaoComprar.disabled = false;
 
-                botaoAssinar.innerText =
-                    "💳 Assinar Agora";
+                botaoComprar.innerText =
+                    "💳 Comprar QR Code";
 
                 return;
 
@@ -90,15 +88,13 @@ botaoAssinar.addEventListener(
             console.error(erro);
 
             alert(
-
                 "Erro inesperado ao conectar ao servidor."
-
             );
 
-            botaoAssinar.disabled = false;
+            botaoComprar.disabled = false;
 
-            botaoAssinar.innerText =
-                "💳 Assinar Agora";
+            botaoComprar.innerText =
+                "💳 Comprar QR Code";
 
         }
 

@@ -1,8 +1,6 @@
 /*
 ==========================================================
-
 Safe Samas
-
 Edge Function:
 criar-pagamento
 
@@ -10,23 +8,19 @@ Versão:
 2.1 (Com depuração robusta de resposta)
 
 Responsável por:
-
 ✔ Validar usuário autenticado
-
 ✔ Criar preferência Mercado Pago
-
 ✔ Retornar Checkout URL
-
 ==========================================================
 */
 
 import "@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "@supabase/supabase-js";
 
-const VALOR_ASSINATURA = 29.90;
-const TITULO_ASSINATURA = "Ativação anual Safe Samas";
-const DESCRICAO_ASSINATURA = "Licença anual do QR Code Safe Samas";
-const PREFIXO_REFERENCIA = "SAFE";
+const VALOR_QR = 29.90;
+const TITULO_QR = "1 QR Code Safe Samas";
+const DESCRICAO_QR = "Compra de 1 crédito para geração de QR Code";
+const PREFIXO_REFERENCIA = "QR";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -91,15 +85,15 @@ Deno.serve(async (req) => {
 
             {
 
-                title: TITULO_ASSINATURA,
+                title: TITULO_QR,
 
-                description: DESCRICAO_ASSINATURA,
+                description: DESCRICAO_QR,
 
                 quantity: 1,
 
                 currency_id: "BRL",
 
-                unit_price: VALOR_ASSINATURA
+                unit_price: VALOR_QR
 
             }
 

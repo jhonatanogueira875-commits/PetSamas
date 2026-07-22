@@ -5,12 +5,13 @@ Arquivo: assinatura.js
 
 Responsável por:
 
-✔ Consultar a assinatura do usuário logado
+✔ Consultar os créditos do usuário logado
+(temporariamente utilizando a tabela "assinaturas")
 ==========================================================
 */
 
 // ==========================================================
-// CONSULTA ASSINATURA DO USUÁRIO
+// CONSULTA CRÉDITOS DO USUÁRIO
 // ==========================================================
 
 async function possuiAssinaturaAtiva() {
@@ -31,13 +32,14 @@ async function possuiAssinaturaAtiva() {
             autenticado: false,
             possui: false,
             status: null,
-            assinatura: null
+            assinatura: null,
+            creditos: 0
         };
 
     }
 
     //------------------------------------------------------
-    // Busca assinatura mais recente
+    // Busca registro mais recente
     //------------------------------------------------------
 
     const { data, error } = await banco
@@ -54,13 +56,14 @@ async function possuiAssinaturaAtiva() {
 
     if (error) {
 
-        console.error("Erro ao consultar assinatura:", error);
+        console.error("Erro ao consultar créditos:", error);
 
         return {
             autenticado: true,
             possui: false,
             status: null,
-            assinatura: null
+            assinatura: null,
+            creditos: 0
         };
 
     }
@@ -68,7 +71,7 @@ async function possuiAssinaturaAtiva() {
     console.log("Resultado da consulta:", data);
 
     //------------------------------------------------------
-    // Nenhuma assinatura encontrada
+    // Nenhum registro encontrado
     //------------------------------------------------------
 
     if (!data || data.length === 0) {
@@ -77,32 +80,33 @@ async function possuiAssinaturaAtiva() {
             autenticado: true,
             possui: false,
             status: null,
-            assinatura: null
+            assinatura: null,
+            creditos: 0
         };
 
     }
 
     //------------------------------------------------------
-    // Assinatura encontrada
+    // Registro encontrado
     //------------------------------------------------------
 
     const assinatura = data[0];
 
-    const ativa =
-
-        assinatura.status === "active" &&
-
-        new Date(assinatura.data_fim) > new Date();
+    const creditos = assinatura.creditos ?? 0;
 
     return {
 
         autenticado: true,
 
-        possui: ativa,
+        // Temporariamente "possui" significa:
+        // possui pelo menos 1 crédito disponível
+        possui: creditos > 0,
 
         status: assinatura.status,
 
-        assinatura
+        assinatura,
+
+        creditos
 
     };
 

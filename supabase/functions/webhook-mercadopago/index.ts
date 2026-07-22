@@ -11,7 +11,7 @@ const corsHeaders = {
 
 Deno.serve(async (req) => {
   
-  console.log("VERSAO 2.1");
+  console.log("VERSAO 2.1 - CREDITO");
 
   // ==========================================
   // CORS
@@ -122,7 +122,7 @@ Deno.serve(async (req) => {
     if (assinaturaExistente) {
       return new Response(
         JSON.stringify({
-          status: "assinatura já cadastrada"
+          status: "pagamento já processado"
         }),
         {
           headers: {
@@ -134,14 +134,14 @@ Deno.serve(async (req) => {
     }
 
     // ==========================================
-    // DATAS
+    // DATAS (COMPATIBILIDADE SEM EXPIRAÇÃO)
     // ==========================================
     const inicio = new Date();
-    const fim = new Date();
-    fim.setFullYear(fim.getFullYear() + 1);
+    const fim = new Date(inicio);
+    fim.setFullYear(fim.getFullYear() + 100);
 
     // ==========================================
-    // PROCURA ASSINATURA DO USUÁRIO
+    // PROCURA CADASTRO DO USUÁRIO
     // ==========================================
     const { data: assinaturaUsuario } = await supabase
       .from("assinaturas")
@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     // ==========================================
-    // USUÁRIO JÁ POSSUI ASSINATURA
+    // USUÁRIO JÁ POSSUI CADASTRO
     // ==========================================
     if (assinaturaUsuario) {
 
@@ -185,7 +185,7 @@ Deno.serve(async (req) => {
 
     }
     // ==========================================
-    // PRIMEIRA ASSINATURA
+    // PRIMEIRA COMPRA
     // ==========================================
     else {
 
@@ -212,7 +212,7 @@ Deno.serve(async (req) => {
       if (error) throw error;
 
       console.log("=================================");
-      console.log("PRIMEIRA ASSINATURA");
+      console.log("PRIMEIRA COMPRA");
       console.log("Usuário:", userId);
       console.log("Créditos: 1");
       console.log("=================================");
@@ -225,7 +225,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         status: "ok",
-        assinatura: true
+        credito_adicionado: true
       }),
       {
         headers: {

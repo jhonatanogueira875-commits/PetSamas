@@ -5,6 +5,17 @@ Arquivo: liberar-qr.js
 ==========================================================
 */
 
+// ==========================================================
+// CONFIGURAÇÃO TEMPORÁRIA
+// ==========================================================
+
+// true  = bloqueia geração automática do QR Online
+// false = libera novamente (quando Mercado Pago estiver pronto)
+
+const BLOQUEAR_QR_ONLINE = true;
+
+// ==========================================================
+
 const parametros = new URLSearchParams(window.location.search);
 const petId = Number(parametros.get("id"));
 
@@ -32,9 +43,7 @@ window.onload = async function () {
     if (!petId) {
 
         alert("Pet não identificado.");
-
         window.location.href = "meus-pets.html";
-
         return;
 
     }
@@ -58,20 +67,47 @@ window.onload = async function () {
     if (qrExistente) {
 
         window.location.href = `qr-code.html?id=${petId}`;
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // BLOQUEIO TEMPORÁRIO DO QR ONLINE
+    //--------------------------------------------------
+
+    if (BLOQUEAR_QR_ONLINE) {
+
+        alert(
+            "A geração automática de QR Online está temporariamente indisponível enquanto finalizamos a integração dos pagamentos."
+        );
+
+        window.location.href = "meus-pets.html";
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Gera QR automaticamente
+    //--------------------------------------------------
+
+    const { data, error } = await banco.rpc("gerar_qr_pet", {
+        p_pet_id: petId
+    });
+
+    if (error) {
+
+        console.error(error);
+
+        alert("Erro ao gerar QR.");
 
         return;
 
     }
 
     //--------------------------------------------------
-    // BLOQUEIO DO QR ONLINE (O Físico passa direto por aqui se for o caso, 
-    // ou tratamos a origem. Como aqui é a rota do gerador online, travamos aqui!)
+    // Abre a página do QR
     //--------------------------------------------------
-    
-    alert("A emissão de novos QR Codes online está temporariamente em manutenção para ajuste de pagamentos. Utilize uma tag física ou entre em contato com o suporte.");
-    window.location.href = "meus-pets.html";
-    return;
 
-    // (A função gerar_qr_pet via RPC só será religada 
-    // quando integrarmos o botão de pagamento do Mercado Pago)
+    window.location.href = `qr-code.html?id=${petId}`;
+
 };
