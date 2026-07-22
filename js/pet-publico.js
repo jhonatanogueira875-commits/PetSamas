@@ -1,5 +1,3 @@
-alert("pet-publico.js carregado");
-
 /*
 ==========================================================
 Arquivo: js/pet-publico.js
@@ -23,9 +21,6 @@ async function carregarPerfilPublico() {
             codigo_qr: codigo
         }
     );
-
-    console.log("RESPOSTA DO BANCO:", resposta);
-    console.log("PET:", resposta?.pet);
 
     if (error || !resposta || !resposta.pet) {
 

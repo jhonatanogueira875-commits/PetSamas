@@ -1,21 +1,14 @@
 /*
 ==========================================================
 Safe Samas
-
-Arquivo:
-liberar-qr.js
-
-Responsável por:
-
-✔ Verificar login
-
-✔ Verificar assinatura
-
-✔ Encaminhar usuário
+Arquivo: liberar-qr.js
 ==========================================================
 */
 
-(async () => {
+const parametros = new URLSearchParams(window.location.search);
+const petId = Number(parametros.get("id"));
+
+window.onload = async function () {
 
     //--------------------------------------------------
     // Usuário logado
@@ -25,40 +18,44 @@ Responsável por:
         data: { user }
     } = await banco.auth.getUser();
 
-    console.log("Usuário logado:", user);
-
     if (!user) {
 
-        console.log("Usuário não encontrado, redirecionando para login.");
         window.location.href = "login.html";
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Pet informado
+    //--------------------------------------------------
+
+    if (!petId) {
+
+        alert("Pet não identificado.");
+
+        window.location.href = "meus-pets.html";
 
         return;
 
     }
 
     //--------------------------------------------------
-    // ID do pet recebido pela URL
+    // Verifica se já existe QR
     //--------------------------------------------------
 
-    const params = new URLSearchParams(window.location.search);
-    const petId = params.get("id");
+    const { data: qrExistente } = await banco
 
-    console.log("Pet selecionado:", petId);
+        .from("qrcodes")
 
-    //--------------------------------------------------
-    // Assinatura
-    //--------------------------------------------------
+        .select("*")
 
-    const assinaturaAtiva = await possuiAssinaturaAtiva();
-    console.log("Resultado da assinatura:", assinaturaAtiva);
+        .eq("pet_id", petId)
 
-    //--------------------------------------------------
-    // Possui assinatura
-    //--------------------------------------------------
+        .eq("status", "ativado")
 
-    if (assinaturaAtiva.possui) {
+        .maybeSingle();
 
-        console.log("Assinatura válida. Redirecionando para QR Code.");
+    if (qrExistente) {
 
         window.location.href = `qr-code.html?id=${petId}`;
 
@@ -67,11 +64,27 @@ Responsável por:
     }
 
     //--------------------------------------------------
-    // Não possui assinatura
+    // Gera novo QR
     //--------------------------------------------------
 
-    console.log("Assinatura não encontrada ou expirada. Redirecionando para assinatura.html");
+    const { data, error } = await banco.rpc("gerar_qr_pet", {
+        p_pet_id: petId
+    });
 
-    window.location.href = "assinatura.html";
+    if (error) {
 
-})();
+        console.error(error);
+
+        alert("Erro ao gerar QR.");
+
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Abre a página do QR
+    //--------------------------------------------------
+
+    window.location.href = `qr-code.html?id=${petId}`;
+
+};
