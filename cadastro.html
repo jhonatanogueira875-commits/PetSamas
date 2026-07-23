@@ -4,121 +4,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar - Safe Samas</title>
-    <!-- Adicionado versionamento de CSS -->
+
     <link rel="stylesheet" href="css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
+
 <body>
 
     <main class="container">
-        <!-- LOGO ATUALIZADA -->
-        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
+
+        <img
+            src="assets/images/escudo.png"
+            alt="Logo Safe Samas"
+            id="logo"
+            style="max-width:100px; display:block; margin:0 auto 15px auto;">
 
         <h1 id="tituloPagina">🐾/🔑 Cadastrar</h1>
-        <p class="subtitulo">Preencha os dados do seu pet ou item para gerar seu perfil.</p>
+
+        <p class="subtitulo">
+            Preencha os dados do seu pet ou item para gerar seu perfil.
+        </p>
 
         <form id="formCadastro">
-            
-            <label for="tipo">📦 O que você deseja proteger?</label>
+
+            <label for="tipo">
+                📦 O que você deseja proteger?
+            </label>
+
             <select id="tipo" class="input-samas">
                 <option value="pet">🐾 Pet</option>
                 <option value="item">🔑 Item / Objeto</option>
             </select>
 
             <div id="categoriaItem" style="display:none;">
-                <label for="categoria">📦 Categoria do Item</label>
+
+                <label for="categoria">
+                    📦 Categoria do Item
+                </label>
+
                 <select id="categoria" class="input-samas">
+
                     <option value="">Selecione</option>
+
                     <option value="chaves">🔑 Chaves</option>
+
                     <option value="carteira">👛 Carteira</option>
+
                     <option value="mochila">🎒 Mochila</option>
+
                     <option value="notebook">💻 Notebook</option>
+
                     <option value="mala">🧳 Mala</option>
+
                     <option value="documento">📄 Documento</option>
+
                     <option value="celular">📱 Celular</option>
+
                     <option value="outro">📦 Outro</option>
+
                 </select>
+
             </div>
 
-            <label for="nomePet">🐾/🔑 Nome do Pet ou Item</label>
-            <input type="text" id="nomePet" placeholder="Digite o nome" required>
+            <label for="nomePet">
+                🐾/🔑 Nome do Pet ou Item
+            </label>
 
-            <label for="nomeTutor">👤 Nome do Proprietário</label>
-            <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
+            <input
+                type="text"
+                id="nomePet"
+                placeholder="Digite o nome"
+                required>
 
-            <label for="cidade">📍 Cidade</label>
-            <input type="text" id="cidade" placeholder="Digite sua cidade" required>
+            <label for="nomeTutor">
+                👤 Nome do Proprietário
+            </label>
 
-            <label for="telefone">📞 WhatsApp</label>
-            <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
+            <input
+                type="text"
+                id="nomeTutor"
+                placeholder="Digite seu nome"
+                required>
+
+            <label for="cidade">
+                📍 Cidade
+            </label>
+
+            <input
+                type="text"
+                id="cidade"
+                placeholder="Digite sua cidade"
+                required>
+
+            <label for="telefone">
+                📞 WhatsApp
+            </label>
+
+            <input
+                type="tel"
+                id="telefone"
+                placeholder="Ex.: (42) 99999-9999"
+                required>
 
             <div id="contatoConfianca" style="display:none;">
+
                 <hr>
+
                 <h3>👤 Contato de confiança</h3>
+
                 <p style="font-size:13px;color:#666;">
                     Utilizado apenas caso este item seja um celular.
                 </p>
 
                 <label>Nome</label>
+
                 <input
                     type="text"
                     id="contatoNome"
                     placeholder="Nome do contato">
 
                 <label>Telefone</label>
+
                 <input
                     type="tel"
                     id="contatoTelefone"
                     placeholder="WhatsApp">
 
                 <label>Parentesco</label>
+
                 <input
                     type="text"
                     id="contatoParentesco"
                     placeholder="Ex.: Esposa, Pai, Filho">
+
             </div>
 
-            <label for="foto">📷 Foto Principal</label>
-            <input type="file" id="foto" accept="image/*">
+            <label for="foto">
+                📷 Foto Principal
+            </label>
 
-            <!-- Campos de fotos secundárias ocultos -->
-            <!--
-            <label for="foto2">📷 Foto 2 (Opcional)</label>
-            <input type="file" id="foto2" accept="image/*">
+            <input
+                type="file"
+                id="foto"
+                accept="image/*">
 
-            <label for="foto3">📷 Foto 3 (Opcional)</label>
-            <input type="file" id="foto3" accept="image/*">
-            -->
+            <p
+                style="font-size:13px;color:#666;margin-top:8px;">
 
-            <p style="font-size:13px; color:#666; margin-top:8px;">
                 Utilize uma foto recente e bem iluminada para facilitar a identificação.
+
             </p>
 
             <div class="card-termos">
-                <input type="checkbox" id="aceiteTermos" required>
+
+                <input
+                    type="checkbox"
+                    id="aceiteTermos"
+                    required>
+
                 <label for="aceiteTermos">
-                    Declaro estar ciente e aceito que a validade do QR Code é de <b>1 (um) ano</b> a partir da ativação. 
-                    <a href="termos.html" target="_blank" style="color: #007bff; text-decoration: underline;">(Ver Termos)</a>
+
+                    Declaro estar ciente e aceito que a validade do QR Code é de
+                    <b>1 (um) ano</b> a partir da ativação.
+
+                    <a
+                        href="termos.html"
+                        target="_blank"
+                        style="color:#007bff;text-decoration:underline;">
+
+                        (Ver Termos)
+
+                    </a>
+
                 </label>
+
             </div>
 
             <br>
-            <!-- BOTÃO COM CLASSE btn-samas -->
-            <button type="submit" class="btn-samas">💾 Salvar</button>
+
+            <button
+                type="submit"
+                class="btn-samas">
+
+                💾 Salvar
+
+            </button>
+
         </form>
 
         <br>
-        <!-- BOTÕES COM CLASSE btn-samas -->
-        <a href="meus-pets.html"><button class="btn-samas">🐾/🔑 Meus Cadastros</button></a>
+
+        <a href="meus-pets.html">
+            <button class="btn-samas">
+                🐾/🔑 Meus Cadastros
+            </button>
+        </a>
+
         <br><br>
-        <a href="index.html" style="color: #2c3e50; font-weight: bold;">← Voltar para a Página Inicial</a>
+
+        <!-- Suporte -->
+        <p style="font-size:13px;color:#666;margin-bottom:12px;">
+            Está com dificuldades para realizar o cadastro?
+        </p>
+
+        <a
+            href="https://wa.me/5542984097827?text=Olá!%20Preciso%20de%20ajuda%20com%20o%20cadastro%20no%20Safe%20Samas."
+            target="_blank">
+
+            <button class="btn-samas">
+
+                💬 Falar com o Suporte
+
+            </button>
+
+        </a>
+
+        <br><br>
+
+        <a
+            href="index.html"
+            style="color:#2c3e50;font-weight:bold;">
+
+            ← Voltar para a Página Inicial
+
+        </a>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="js/supabase.js"></script>
+
     <script src="js/auth.js"></script>
+
     <script src="js/assinatura.js"></script>
+
     <script>
+
         console.log("CADASTRO.HTML ATUALIZADO");
 
         const tipo = document.getElementById("tipo");
@@ -130,23 +252,35 @@
         categoria.addEventListener("change", atualizarCampos);
 
         function atualizarCampos() {
+
             if (tipo.value === "item") {
+
                 blocoCategoria.style.display = "block";
+
             } else {
+
                 blocoCategoria.style.display = "none";
                 blocoContato.style.display = "none";
                 return;
+
             }
 
             if (categoria.value === "celular") {
+
                 blocoContato.style.display = "block";
+
             } else {
+
                 blocoContato.style.display = "none";
+
             }
+
         }
 
         atualizarCampos();
+
     </script>
+
     <script src="js/cadastro.js"></script>
 
 </body>
