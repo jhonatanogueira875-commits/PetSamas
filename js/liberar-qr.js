@@ -5,17 +5,6 @@ Arquivo: liberar-qr.js
 ==========================================================
 */
 
-// ==========================================================
-// CONFIGURAÇÃO TEMPORÁRIA
-// ==========================================================
-
-// true  = bloqueia geração automática do QR Online
-// false = libera novamente (quando Mercado Pago estiver pronto)
-
-const BLOQUEAR_QR_ONLINE = true;
-
-// ==========================================================
-
 const parametros = new URLSearchParams(window.location.search);
 const petId = Number(parametros.get("id"));
 
@@ -43,7 +32,9 @@ window.onload = async function () {
     if (!petId) {
 
         alert("Pet não identificado.");
+
         window.location.href = "meus-pets.html";
+
         return;
 
     }
@@ -67,27 +58,63 @@ window.onload = async function () {
     if (qrExistente) {
 
         window.location.href = `qr-code.html?id=${petId}`;
+
         return;
 
     }
 
     //--------------------------------------------------
-    // BLOQUEIO TEMPORÁRIO DO QR ONLINE
+    // Busca assinatura / créditos
     //--------------------------------------------------
 
-    if (BLOQUEAR_QR_ONLINE) {
+    const { data: assinatura, error: erroAssinatura } = await banco
 
-        alert(
-            "A geração automática de QR Online está temporariamente indisponível enquanto finalizamos a integração dos pagamentos."
-        );
+        .from("assinaturas")
 
-        window.location.href = "meus-pets.html";
+        .select("*")
+
+        .eq("user_id", user.id)
+
+        .maybeSingle();
+
+    if (erroAssinatura) {
+
+        console.error(erroAssinatura);
+
+        alert("Erro ao verificar seus créditos.");
+
         return;
 
     }
 
     //--------------------------------------------------
-    // Gera QR automaticamente
+    // Não possui cadastro de créditos
+    //--------------------------------------------------
+
+    if (!assinatura) {
+
+        window.location.href = "comprar.html";
+
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Créditos insuficientes
+    //--------------------------------------------------
+
+    const creditos = assinatura.creditos ?? 0;
+
+    if (creditos <= 0) {
+
+        window.location.href = "comprar.html";
+
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Gera novo QR
     //--------------------------------------------------
 
     const { data, error } = await banco.rpc("gerar_qr_pet", {
@@ -101,6 +128,30 @@ window.onload = async function () {
         alert("Erro ao gerar QR.");
 
         return;
+
+    }
+
+    //--------------------------------------------------
+    // Consome 1 crédito
+    //--------------------------------------------------
+
+    const { error: erroCredito } = await banco
+
+        .from("assinaturas")
+
+        .update({
+
+            creditos: creditos - 1
+
+        })
+
+        .eq("id", assinatura.id);
+
+    if (erroCredito) {
+
+        console.error(erroCredito);
+
+        alert("QR gerado, mas ocorreu um erro ao atualizar os créditos.");
 
     }
 
