@@ -1,24 +1,29 @@
 /*
 ==========================================================
-PetSamas
-Arquivo: auth.js
+Safe Samas
+Arquivo: admin-auth.js
 
-Proteção das páginas privadas
-Utiliza a autenticação central do SafeSamas
+Proteção do Painel Administrativo
 ==========================================================
 */
 
-async function verificarLogin() {
+async function verificarAdministrador() {
+
+    console.log("ADMIN AUTH EXECUTOU");
+
+    // ==========================================
+    // Verifica se existe sessão
+    // ==========================================
 
     const { data, error } = await banco.auth.getSession();
 
     if (error) {
 
-        console.error("Erro ao verificar sessão:", error);
+        console.error(error);
 
         window.location.href = "../login.html";
 
-        return;
+        return false;
 
     }
 
@@ -26,8 +31,48 @@ async function verificarLogin() {
 
         window.location.href = "../login.html";
 
-        return;
+        return false;
 
     }
+
+    // ==========================================
+    // Busca o perfil do usuário
+    // ==========================================
+
+    const { data: perfil, error: erroPerfil } = await banco
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", data.session.user.id)
+
+        .single();
+
+    if (erroPerfil) {
+
+        console.error(erroPerfil);
+
+        window.location.href = "../index.html";
+
+        return false;
+
+    }
+
+    // ==========================================
+    // Verifica se é administrador
+    // ==========================================
+
+    if (perfil.role !== "admin") {
+
+        alert("Acesso restrito ao administrador.");
+
+        window.location.href = "../index.html";
+
+        return false;
+
+    }
+
+    return true;
 
 }

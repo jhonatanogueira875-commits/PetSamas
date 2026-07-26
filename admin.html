@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Safe Samas</title>
+
     <link rel="stylesheet" href="css/style.css?v=1.1">
+
     <style>
         .card-dashboard {
             border: 1px solid #ddd;
@@ -17,55 +19,146 @@
         }
     </style>
 </head>
+
 <body>
 
-    <main class="container">
-        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
+<main class="container">
 
-        <h1>🛠 Painel Administrativo</h1>
+    <img
+        src="assets/images/escudo.png"
+        alt="Logo Safe Samas"
+        id="logo"
+        style="max-width:100px; display:block; margin:0 auto 15px auto;">
 
-        <p class="subtitulo">
-            Bem-vindo ao painel administrativo do Safe Samas.
+    <h1>🛠 Painel Administrativo</h1>
+
+    <p class="subtitulo">
+        Bem-vindo ao painel administrativo do Safe Samas.
+    </p>
+
+    <div class="card-dashboard">
+
+        <h3>📊 Dashboard</h3>
+
+        <p>
+            📦 QR Disponíveis:
+            <strong id="qrDisponiveis">...</strong>
         </p>
 
-        <div class="card-dashboard">
-            <h3>📊 Dashboard</h3>
-            <p>📦 QR Disponíveis: <strong id="qrDisponiveis">...</strong></p>
-            <p>✅ QR Ativados: <strong id="qrAtivados">...</strong></p>
-            <p>🐾 Pets/Itens Cadastrados: <strong id="totalPets">...</strong></p>
-            <p>📦 Último Lote: <strong id="ultimoLote">...</strong></p>
-        </div>
+        <p>
+            ✅ QR Ativados:
+            <strong id="qrAtivados">...</strong>
+        </p>
 
-        <button id="btnLotes" class="btn-samas">📦 Gerenciar Lotes</button>
-        <button id="btnGerarOnline" class="btn-samas">🌐 Gerar QR Online</button>
-        <button id="btnPesquisar" class="btn-samas">🔍 Pesquisar QR Code</button>
-        <button id="btnPets" class="btn-samas">🐾 Gerenciar Pets/Itens</button>
-        
-        <a href="admin-usuarios.html">
-            <button class="btn-samas">👥 Gerenciar Usuários</button>
-        </a>
-        
-        <button onclick="sair()" class="btn-samas btn-danger">🚪 Sair</button>
-    </main>
+        <p>
+            🐾 Pets/Itens Cadastrados:
+            <strong id="totalPets">...</strong>
+        </p>
 
-    <div id="modalQR" class="modal">
-        <div class="modal-content">
-            <h3>✅ QR Online Gerado</h3>
-            <p>Código: <strong id="codigoGerado"></strong></p>
-            
-            <div id="qrcodeGerado"></div>
-            
-            <input type="text" id="linkGerado" readonly style="margin: 15px 0; text-align: center; width: 100%; padding: 10px;">
-            
-            <button id="btnCopiarLink" class="btn-samas">📋 Copiar Link</button>
-            <button onclick="fecharModalQR()" class="btn-samas" style="background: #666; margin-top: 10px;">Fechar</button>
-        </div>
+        <p>
+            📦 Último Lote:
+            <strong id="ultimoLote">...</strong>
+        </p>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/logout.js"></script>
-    <script src="js/admin.js"></script>
+    <button id="btnLotes" class="btn-samas">
+        📦 Gerenciar Lotes
+    </button>
+
+    <button id="btnGerarOnline" class="btn-samas">
+        🌐 Gerar QR Online
+    </button>
+
+    <button id="btnPesquisar" class="btn-samas">
+        🔍 Pesquisar QR Code
+    </button>
+
+    <button id="btnPets" class="btn-samas">
+        🐾 Gerenciar Pets/Itens
+    </button>
+
+    <a href="admin-usuarios.html">
+        <button class="btn-samas">
+            👥 Gerenciar Usuários
+        </button>
+    </a>
+
+    <button onclick="sair()" class="btn-samas btn-danger">
+        🚪 Sair
+    </button>
+
+</main>
+
+<!-- Modal QR -->
+
+<div id="modalQR" class="modal">
+
+    <div class="modal-content">
+
+        <h3>✅ QR Online Gerado</h3>
+
+        <p>
+            Código:
+            <strong id="codigoGerado"></strong>
+        </p>
+
+        <div id="qrcodeGerado"></div>
+
+        <input
+            type="text"
+            id="linkGerado"
+            readonly
+            style="margin:15px 0;text-align:center;width:100%;padding:10px;">
+
+        <button id="btnCopiarLink" class="btn-samas">
+            📋 Copiar Link
+        </button>
+
+        <button
+            onclick="fecharModalQR()"
+            class="btn-samas"
+            style="background:#666;margin-top:10px;">
+
+            Fechar
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Bibliotecas -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Sistema -->
+
+<script src="js/supabase.js"></script>
+
+<!-- Proteção do Painel -->
+<script src="js/admin-auth.js"></script>
+
+<!-- Logout -->
+<script src="js/logout.js"></script>
+
+<!-- API -->
+<script src="js/admin-api.js"></script>
+
+<!-- Dashboard -->
+<script src="js/admin.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const autorizado = await verificarAdministrador();
+
+    if (!autorizado) return;
+
+});
+</script>
+
 </body>
 </html>
