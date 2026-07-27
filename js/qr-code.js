@@ -95,9 +95,9 @@ window.onload = async function () {
     // Link público
     //--------------------------------------------------
 
-    const linkPet =
-
-        `https://safesamas.vercel.app/pet-publico.html?codigo=${qr.codigo}`;
+    const linkPet = `https://safesamas.vercel.app/pet-publico.html?codigo=${qr.codigo}`;
+    console.log("QR encontrado:", qr);
+    console.log("Link gerado:", linkPet);
 
     document.getElementById("qrcode").innerHTML = "";
 
