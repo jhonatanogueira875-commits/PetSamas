@@ -1,10 +1,9 @@
 /*
 ==========================================================
 Arquivo: meus-pets.js
+Responsável por: Listar, renderizar e gerenciar os cadastros
 ==========================================================
 */
-
-verificarLogin();
 
 const EMAIL_ADMIN = "nogueira100988@outlook.com";
 const listaPets = document.getElementById("listaPets");
@@ -21,6 +20,7 @@ if (params.get("codigo")) {
 }
 
 async function getUser() {
+    if (typeof banco === "undefined" || !banco.auth) return null;
     const { data } = await banco.auth.getUser();
     return data.user;
 }
@@ -42,7 +42,9 @@ async function carregarPets() {
         return;
     }
 
-    // 1. Busca os itens/pets do usuário
+    console.log("ID do Usuário logado:", user.id);
+
+    // 1. Busca os registros do usuário logado
     const { data: listaPetsBanco, error: errorPets } = await banco
         .from("pets")
         .select("*")
@@ -50,22 +52,27 @@ async function carregarPets() {
 
     if (errorPets) {
         console.error("Erro ao buscar cadastros:", errorPets);
-        listaPets.innerHTML = "<p>Erro ao carregar os cadastros.</p>";
+        listaPets.innerHTML = `<p style="color: red;">Erro ao carregar os cadastros: ${errorPets.message}</p>`;
         return;
     }
 
-    // 2. Busca todos os QRs
-    const { data: listaQR, error: errorQR } = await banco
+    console.log("Registros encontrados no banco:", listaPetsBanco);
+
+    // 2. Busca todos os QRs com tratamento de erro seguro
+    let listaQR = [];
+    const { data: qrData, error: errorQR } = await banco
         .from("qrcodes")
         .select("*");
 
     if (errorQR) {
-        console.error("Erro ao buscar QRs:", errorQR);
+        console.warn("Aviso ao buscar QRs:", errorQR.message);
+    } else {
+        listaQR = qrData || [];
     }
 
     // 3. Vincula o QR no front-end
     pets = (listaPetsBanco || []).map((pet) => {
-        const qrEncontrado = (listaQR || []).find((qr) => {
+        const qrEncontrado = listaQR.find((qr) => {
             return String(qr.pet_id) === String(pet.id);
         });
         
@@ -80,11 +87,11 @@ function renderizarPets() {
     listaPets.innerHTML = "";
     
     if (!pets || pets.length === 0) {
-        if (botaoNovoPet) botaoNovoPet.style.display = "none";
+        if (botaoNovoPet) botaoNovoPet.style.display = "inline-block";
         listaPets.innerHTML = `
-            <p>Você ainda não possui nenhum item ou pet cadastrado.</p>
+            <p>Você ainda não possui nenhum item, pet ou veículo cadastrado.</p>
             <br>
-            <a href="cadastro.html"><button>➕ Cadastrar novo item/pet</button></a>
+            <a href="cadastro.html"><button class="btn-samas">➕ Cadastrar novo item/pet</button></a>
         `;
         return;
     }
@@ -96,51 +103,66 @@ function renderizarPets() {
             ? pet.foto
             : "assets/images/escudo.png";
         
-        // Identificação dinâmica
-        const isItem = pet.tipo === "item";
-        const icone = isItem ? "📦" : "🐶";
-        const rotuloTutor = isItem ? "Proprietário" : "Tutor";
+        // Identificação dinâmica por tipo (Pet, Item ou Veículo)
+        let icone = "🐾";
+        let rotuloTutor = "Tutor";
+
+        if (pet.tipo === "item") {
+            icone = "📦";
+            rotuloTutor = "Proprietário";
+        } else if (pet.tipo === "veiculo") {
+            icone = "🚗";
+            rotuloTutor = "Proprietário";
+        }
         
+        // Exibição de título inteligente (Nome do Pet ou Marca/Modelo do Veículo)
+        let tituloCard = pet.nome_pet || `${pet.marca || ''} ${pet.modelo || ''}`.trim() || "Cadastro sem nome";
+
         let botaoQRCode = "";
 
         if (pet.qr) {
             botaoQRCode = `
                 <a href="qr-code.html?id=${pet.id}">
-                    <button>📱 Meu QR Code</button>
+                    <button class="btn-samas">📱 Meu QR Code</button>
                 </a>
             `;
         } else if (qrPendente) {
             botaoQRCode = `
-                <button onclick="vincularQRCode('${pet.id}')">
+                <button class="btn-samas" onclick="vincularQRCode('${pet.id}')">
                     🔗 Vincular este QR Code
                 </button>
             `;
         } else {
             botaoQRCode = `
                 <a href="liberar-qr.html?id=${pet.id}">
-                    <button>🔓 Liberar QR Code</button>
+                    <button class="btn-samas">🔓 Liberar QR Code</button>
                 </a>
             `;
         }
 
         listaPets.innerHTML += `
-            <div class="card-pet">
-                <img src="${foto}" class="foto-card" alt="${pet.nome_pet}">
-                <h2>${icone} ${pet.nome_pet}</h2>
-                <p><strong>👤 ${rotuloTutor}:</strong> ${pet.nome_tutor}</p>
-                <p><strong>📍 Cidade:</strong> ${pet.cidade}</p>
+            <div class="card-pet" style="background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <img src="${foto}" class="foto-card" alt="Foto" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; display: block; margin: 0 auto 10px auto;">
+                <h2 style="text-align: center; font-size: 1.2rem;">${icone} ${tituloCard}</h2>
+                <p><strong>👤 ${rotuloTutor}:</strong> ${pet.nome_tutor || 'Não informado'}</p>
+                <p><strong>📍 Cidade:</strong> ${pet.cidade || 'Não informada'}</p>
+                ${pet.placa ? `<p><strong>🚗 Placa:</strong> ${pet.placa}</p>` : ''}
                 <br>
-                <a href="pet.html?id=${pet.id}"><button>👁 Ver Perfil</button></a>
-                ${botaoQRCode}
-                <button onclick="editarPet(${pet.id})">✏️ Editar</button>
-                <button onclick="excluirPet(${pet.id})">🗑 Excluir</button>
-                <hr>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="pet.html?id=${pet.id}"><button class="btn-samas">👁 Ver Perfil</button></a>
+                    ${botaoQRCode}
+                    <button class="btn-samas" onclick="editarPet(${pet.id})">✏️ Editar</button>
+                    <button class="btn-samas btn-danger" onclick="excluirPet(${pet.id})">🗑 Excluir</button>
+                </div>
+                <hr style="margin-top: 15px;">
             </div>
         `;
     });
 }
 
-function editarPet(id) { window.location.href = `cadastro.html?id=${id}`; }
+function editarPet(id) { 
+    window.location.href = `cadastro.html?id=${id}`; 
+}
 
 async function excluirPet(id) {
     const confirmar = confirm("Deseja realmente excluir este cadastro? Esta ação é irreversível.");
@@ -203,8 +225,21 @@ async function vincularQRCode(idPet) {
     window.location.href = `qr-code.html?id=${idPet}`;
 }
 
+// Inicialização segura tratada com Try/Catch
 (async function () {
-    const admin = await verificarAdministrador();
-    if (admin) return;
-    await carregarPets();
+    try {
+        if (typeof banco === "undefined") {
+            throw new Error("O objeto 'banco' do Supabase não foi inicializado. Verifique a ordem dos scripts no HTML.");
+        }
+
+        const admin = await verificarAdministrador();
+        if (admin) return;
+        
+        await carregarPets();
+    } catch (erro) {
+        console.error("Erro crítico na inicialização da página:", erro);
+        if (listaPets) {
+            listaPets.innerHTML = `<p style="color: red; font-weight: bold;">Erro ao carregar sistema: ${erro.message}</p>`;
+        }
+    }
 })();

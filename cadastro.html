@@ -175,6 +175,7 @@
             const blocoNome = document.getElementById("blocoNome");
             const labelNome = document.getElementById("labelNome");
             const fotosVeiculo = document.getElementById("fotosVeiculo");
+            const nomePet = document.getElementById("nomePet");
 
             // ===========================
             // VEÍCULO
@@ -183,6 +184,7 @@
             if (tipo.value === "veiculo") {
 
                 blocoNome.style.display = "none";
+                nomePet.required = false;
 
                 blocoCategoria.style.display = "none";
 
@@ -197,8 +199,9 @@
                 return;
             }
 
-            // Mostra novamente o campo nome
+            // Mostra novamente o campo nome e torna obrigatório
             blocoNome.style.display = "block";
+            nomePet.required = true;
 
             fotosVeiculo.style.display = "none";
 

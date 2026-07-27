@@ -4,9 +4,9 @@ PetSamas
 Arquivo: cadastro.js
 
 Responsável por:
-✔ Cadastro de pets/itens
-✔ Edição de pets/itens
-✔ Upload da foto
+✔ Cadastro de pets/itens/veículos
+✔ Edição de pets/itens/veículos
+✔ Upload das fotos
 ==========================================================
 */
 
@@ -50,51 +50,31 @@ campoFoto.addEventListener("change", function () {
 });
 
 if (campoFoto2) {
-
     campoFoto2.addEventListener("change", function () {
-
         const arquivo = campoFoto2.files[0];
-
         if (!arquivo) return;
-
         const leitor = new FileReader();
-
         leitor.onload = function (evento) {
-
             fotoBase642 = evento.target.result;
-
         };
-
         leitor.readAsDataURL(arquivo);
-
     });
-
 }
 
 if (campoFoto3) {
-
     campoFoto3.addEventListener("change", function () {
-
         const arquivo = campoFoto3.files[0];
-
         if (!arquivo) return;
-
         const leitor = new FileReader();
-
         leitor.onload = function (evento) {
-
             fotoBase643 = evento.target.result;
-
         };
-
         leitor.readAsDataURL(arquivo);
-
     });
-
 }
 
 // ======================================================
-// CARREGAR PET (EDIÇÃO)
+// CARREGAR REGISTRO (EDIÇÃO)
 // ======================================================
 
 let pets = [];
@@ -109,10 +89,11 @@ async function carregarPets() {
         if (idEdicao) {
             const pet = pets.find(p => p.id == idEdicao);
             if (pet) {
-                document.getElementById("nomePet").value = pet.nome_pet;
-                document.getElementById("nomeTutor").value = pet.nome_tutor;
-                document.getElementById("cidade").value = pet.cidade;
-                document.getElementById("telefone").value = pet.telefone;
+                // Campos comuns
+                if (document.getElementById("nomePet")) document.getElementById("nomePet").value = pet.nome_pet || "";
+                if (document.getElementById("nomeTutor")) document.getElementById("nomeTutor").value = pet.nome_tutor || "";
+                if (document.getElementById("cidade")) document.getElementById("cidade").value = pet.cidade || "";
+                if (document.getElementById("telefone")) document.getElementById("telefone").value = pet.telefone || "";
                 
                 if (pet.tipo) {
                     campoTipo.value = pet.tipo;
@@ -122,6 +103,14 @@ async function carregarPets() {
                 contatoNome.value = pet.contato_nome || "";
                 contatoTelefone.value = pet.contato_telefone || "";
                 contatoParentesco.value = pet.contato_parentesco || "";
+
+                // Campos específicos de Veículo (caso existam no HTML)
+                if (document.getElementById("marca")) document.getElementById("marca").value = pet.marca || "";
+                if (document.getElementById("modelo")) document.getElementById("modelo").value = pet.modelo || "";
+                if (document.getElementById("cor")) document.getElementById("cor").value = pet.cor || "";
+                if (document.getElementById("placa")) document.getElementById("placa").value = pet.placa || "";
+                if (document.getElementById("tipoSanguineo")) document.getElementById("tipoSanguineo").value = pet.tipo_sanguineo || "";
+                if (document.getElementById("condicaoMedica")) document.getElementById("condicaoMedica").value = pet.condicao_medica || "";
 
                 // Dispara o evento change ou função visual se necessário para atualizar a exibição dos blocos na edição
                 if (typeof atualizarCampos === "function") {
@@ -161,31 +150,45 @@ formulario.addEventListener("submit", async function (event) {
         return;
     }
 
+    // Montagem segura dos dados considerando elementos opcionais/condicionais no HTML
+    const dadosFormulario = {
+        nome_pet: document.getElementById("nomePet") ? document.getElementById("nomePet").value : null,
+        nome_tutor: document.getElementById("nomeTutor") ? document.getElementById("nomeTutor").value : null,
+        cidade: document.getElementById("cidade") ? document.getElementById("cidade").value : null,
+        telefone: document.getElementById("telefone") ? document.getElementById("telefone").value : null,
+        tipo: campoTipo.value,
+        categoria: campoCategoria.value,
+        contato_nome: contatoNome.value,
+        contato_telefone: contatoTelefone.value,
+        contato_parentesco: contatoParentesco.value,
+        
+        // Novos campos para Veículos / Saúde (Certifique-se de que os IDs no HTML batem com estes)
+        marca: document.getElementById("marca") ? document.getElementById("marca").value : null,
+        modelo: document.getElementById("modelo") ? document.getElementById("modelo").value : null,
+        cor: document.getElementById("cor") ? document.getElementById("cor").value : null,
+        placa: document.getElementById("placa") ? document.getElementById("placa").value : null,
+        tipo_sanguineo: document.getElementById("tipoSanguineo") ? document.getElementById("tipoSanguineo").value : null,
+        condicao_medica: document.getElementById("condicaoMedica") ? document.getElementById("condicaoMedica").value : null,
+
+        foto: fotoBase64,
+        foto2: fotoBase642,
+        foto3: fotoBase643,
+        user_id: user.id
+    };
+
     // ==================================================
-    // EDITAR PET / ITEM
+    // EDITAR PET / ITEM / VEÍCULO
     // ==================================================
 
     if (idEdicao) {
         const { error } = await banco
             .from("pets")
-            .update({
-                nome_pet: document.getElementById("nomePet").value,
-                nome_tutor: document.getElementById("nomeTutor").value,
-                cidade: document.getElementById("cidade").value,
-                telefone: document.getElementById("telefone").value,
-                tipo: campoTipo.value,
-                categoria: campoCategoria.value,
-                contato_nome: contatoNome.value,
-                contato_telefone: contatoTelefone.value,
-                contato_parentesco: contatoParentesco.value,
-                foto: fotoBase64,
-                foto2: fotoBase642,
-                foto3: fotoBase643
-            })
+            .update(dadosFormulario)
             .eq("id", idEdicao);
 
         if (error) {
-            alert("Erro ao atualizar.");
+            console.error("Erro ao atualizar:", error);
+            alert("Erro ao atualizar: " + error.message);
             return;
         }
 
@@ -195,31 +198,16 @@ formulario.addEventListener("submit", async function (event) {
     }
 
     // ==================================================
-    // NOVO PET / ITEM
+    // NOVO PET / ITEM / VEÍCULO
     // ==================================================
-
-    const novoItem = {
-        nome_pet: document.getElementById("nomePet").value,
-        nome_tutor: document.getElementById("nomeTutor").value,
-        cidade: document.getElementById("cidade").value,
-        telefone: document.getElementById("telefone").value,
-        tipo: campoTipo.value,
-        categoria: campoCategoria.value,
-        contato_nome: contatoNome.value,
-        contato_telefone: contatoTelefone.value,
-        contato_parentesco: contatoParentesco.value,
-        foto: fotoBase64,
-        foto2: fotoBase642,
-        foto3: fotoBase643,
-        user_id: user.id
-    };
 
     const { error } = await banco
         .from("pets")
-        .insert([novoItem]);
+        .insert([dadosFormulario]);
 
     if (error) {
-        alert("Erro ao cadastrar.");
+        console.error("Erro ao cadastrar:", error);
+        alert("Erro ao cadastrar: " + error.message);
         return;
     }
 
