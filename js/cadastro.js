@@ -50,27 +50,47 @@ campoFoto.addEventListener("change", function () {
 });
 
 if (campoFoto2) {
+
     campoFoto2.addEventListener("change", function () {
+
         const arquivo = campoFoto2.files[0];
+
         if (!arquivo) return;
+
         const leitor = new FileReader();
+
         leitor.onload = function (evento) {
+
             fotoBase642 = evento.target.result;
+
         };
+
         leitor.readAsDataURL(arquivo);
+
     });
+
 }
 
 if (campoFoto3) {
+
     campoFoto3.addEventListener("change", function () {
+
         const arquivo = campoFoto3.files[0];
+
         if (!arquivo) return;
+
         const leitor = new FileReader();
+
         leitor.onload = function (evento) {
+
             fotoBase643 = evento.target.result;
+
         };
+
         leitor.readAsDataURL(arquivo);
+
     });
+
 }
 
 // ======================================================
@@ -189,8 +209,8 @@ formulario.addEventListener("submit", async function (event) {
         contato_telefone: contatoTelefone.value,
         contato_parentesco: contatoParentesco.value,
         foto: fotoBase64,
-        foto2: "",
-        foto3: "",
+        foto2: fotoBase642,
+        foto3: fotoBase643,
         user_id: user.id
     };
 

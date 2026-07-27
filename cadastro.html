@@ -23,6 +23,7 @@
             <select id="tipo" class="input-samas">
                 <option value="pet">🐾 Pet</option>
                 <option value="item">🔑 Item / Objeto</option>
+                <option value="veiculo">🚗 Veículo</option>
             </select>
 
             <div id="categoriaItem" style="display:none;">
@@ -40,8 +41,14 @@
                 </select>
             </div>
 
-            <label for="nomePet">🐾/🔑 Nome do Pet ou Item</label>
-            <input type="text" id="nomePet" placeholder="Digite o nome" required>
+            <div id="blocoNome">
+                <label id="labelNome" for="nomePet">🐾 Nome do Pet</label>
+                <input
+                    type="text"
+                    id="nomePet"
+                    placeholder="Digite o nome"
+                    required>
+            </div>
 
             <label for="nomeTutor">👤 Nome do Proprietário</label>
             <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
@@ -51,6 +58,46 @@
 
             <label for="telefone">📞 WhatsApp</label>
             <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
+
+            <div id="dadosVeiculo" style="display:none;">
+                <hr>
+                <h3>🚗 Dados do Veículo</h3>
+                <label for="marcaVeiculo">Marca</label>
+                <input type="text" id="marcaVeiculo" placeholder="Ex.: Toyota">
+                <label for="modeloVeiculo">Modelo</label>
+                <input type="text" id="modeloVeiculo" placeholder="Ex.: Corolla XEI">
+                <label for="corVeiculo">Cor</label>
+                <input type="text" id="corVeiculo" placeholder="Ex.: Prata">
+                <label for="placaVeiculo">Placa</label>
+                <input type="text" id="placaVeiculo" placeholder="ABC-1234">
+            </div>
+
+            <div id="dadosEmergencia" style="display:none;">
+                <hr>
+                <h3>🚑 Informações do Motorista</h3>
+                <label for="tipoSanguineo">Tipo sanguíneo</label>
+                <select id="tipoSanguineo" class="input-samas">
+                    <option value="">Selecione</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                </select>
+                <label for="condicaoMedica">Condição importante</label>
+                <input type="text" id="condicaoMedica" placeholder="Ex.: Diabetes, Epilepsia ou Nenhuma">
+                <hr>
+                <h3>👤 Contato de Emergência</h3>
+                <label>Nome</label>
+                <input type="text" id="nomeEmergencia" placeholder="Nome do contato">
+                <label>Telefone</label>
+                <input type="tel" id="telefoneEmergencia" placeholder="WhatsApp">
+                <label>Parentesco</label>
+                <input type="text" id="parentescoEmergencia" placeholder="Ex.: Esposa, Pai, Filho">
+            </div>
 
             <div id="contatoConfianca" style="display:none;">
                 <hr>
@@ -80,18 +127,14 @@
 
             <label for="foto">📷 Foto Principal</label>
             <input type="file" id="foto" accept="image/*">
-
-            <!-- Campos de fotos secundárias ocultos -->
-            <!--
-            <label for="foto2">📷 Foto 2 (Opcional)</label>
-            <input type="file" id="foto2" accept="image/*">
-
-            <label for="foto3">📷 Foto 3 (Opcional)</label>
-            <input type="file" id="foto3" accept="image/*">
-            -->
-
-            <p style="font-size:13px; color:#666; margin-top:8px;">
-                Utilize uma foto recente e bem iluminada para facilitar a identificação.
+            <div id="fotosVeiculo" style="display:none;">
+                <label for="foto2">📷 Foto Traseira</label>
+                <input type="file" id="foto2" accept="image/*">
+                <label for="foto3">📷 Foto Lateral</label>
+                <input type="file" id="foto3" accept="image/*">
+            </div>
+            <p style="font-size:13px;color:#666;margin-top:8px;">
+                Utilize fotos recentes e bem iluminadas.
             </p>
 
             <div class="card-termos">
@@ -103,12 +146,10 @@
             </div>
 
             <br>
-            <!-- BOTÃO COM CLASSE btn-samas -->
             <button type="submit" class="btn-samas">💾 Salvar</button>
         </form>
 
         <br>
-        <!-- BOTÕES COM CLASSE btn-samas -->
         <a href="meus-pets.html"><button class="btn-samas">🐾/🔑 Meus Cadastros</button></a>
         <br><br>
         <a href="index.html" style="color: #2c3e50; font-weight: bold;">← Voltar para a Página Inicial</a>
@@ -130,19 +171,81 @@
         categoria.addEventListener("change", atualizarCampos);
 
         function atualizarCampos() {
-            if (tipo.value === "item") {
-                blocoCategoria.style.display = "block";
-            } else {
+
+            const blocoNome = document.getElementById("blocoNome");
+            const labelNome = document.getElementById("labelNome");
+            const fotosVeiculo = document.getElementById("fotosVeiculo");
+
+            // ===========================
+            // VEÍCULO
+            // ===========================
+
+            if (tipo.value === "veiculo") {
+
+                blocoNome.style.display = "none";
+
                 blocoCategoria.style.display = "none";
+
                 blocoContato.style.display = "none";
+
+                document.getElementById("dadosVeiculo").style.display = "block";
+
+                document.getElementById("dadosEmergencia").style.display = "block";
+
+                fotosVeiculo.style.display = "block";
+
                 return;
             }
 
-            if (categoria.value === "celular") {
-                blocoContato.style.display = "block";
+            // Mostra novamente o campo nome
+            blocoNome.style.display = "block";
+
+            fotosVeiculo.style.display = "none";
+
+            // ===========================
+            // ITEM
+            // ===========================
+
+            if (tipo.value === "item") {
+
+                labelNome.innerHTML = "🔑 Nome do Item";
+
+                blocoCategoria.style.display = "block";
+
             } else {
+
+                labelNome.innerHTML = "🐾 Nome do Pet";
+
+                blocoCategoria.style.display = "none";
+
                 blocoContato.style.display = "none";
+
             }
+
+            // ===========================
+            // CELULAR
+            // ===========================
+
+            if (
+
+                tipo.value === "item" &&
+
+                categoria.value === "celular"
+
+            ) {
+
+                blocoContato.style.display = "block";
+
+            } else {
+
+                blocoContato.style.display = "none";
+
+            }
+
+            document.getElementById("dadosVeiculo").style.display = "none";
+
+            document.getElementById("dadosEmergencia").style.display = "none";
+
         }
 
         atualizarCampos();
