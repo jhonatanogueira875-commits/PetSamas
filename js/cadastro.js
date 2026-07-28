@@ -9,11 +9,12 @@ Responsável por:
 ✔ Upload das fotos
 ==========================================================
 */
+console.log("CADASTRO.JS VERSÃO 2026-VEICULO");
+console.log("ARQUIVO CADASTRO.JS -> 27/07 21:35");
 
 // ======================================================
 // ELEMENTOS
 // ======================================================
-
 const formulario = document.getElementById("formCadastro");
 const campoFoto = document.getElementById("foto");
 const campoFoto2 = document.getElementById("foto2");
@@ -24,17 +25,30 @@ const contatoNome = document.getElementById("contatoNome");
 const contatoTelefone = document.getElementById("contatoTelefone");
 const contatoParentesco = document.getElementById("contatoParentesco");
 
+// Elementos específicos centralizados
+const nomePet = document.getElementById("nomePet");
+const nomeTutor = document.getElementById("nomeTutor");
+const cidade = document.getElementById("cidade");
+const telefone = document.getElementById("telefone");
+const marca = document.getElementById("marca");
+const modelo = document.getElementById("modelo");
+const cor = document.getElementById("cor");
+const placa = document.getElementById("placa");
+const tipoSanguineo = document.getElementById("tipoSanguineo");
+const condicaoMedica = document.getElementById("condicaoMedica");
+const nomeEmergencia = document.getElementById("nomeEmergencia");
+const telefoneEmergencia = document.getElementById("telefoneEmergencia");
+const parentescoEmergencia = document.getElementById("parentescoEmergencia");
+
 // ======================================================
 // URL PARAM (EDIÇÃO)
 // ======================================================
-
 const parametros = new URLSearchParams(window.location.search);
 const idEdicao = parametros.get("id");
 
 // ======================================================
 // FOTO
 // ======================================================
-
 let fotoBase64 = "";
 let fotoBase642 = "";
 let fotoBase643 = "";
@@ -76,9 +90,7 @@ if (campoFoto3) {
 // ======================================================
 // CARREGAR REGISTRO (EDIÇÃO)
 // ======================================================
-
 let pets = [];
-
 async function carregarPets() {
     const { data, error } = await banco
         .from("pets")
@@ -90,10 +102,10 @@ async function carregarPets() {
             const pet = pets.find(p => p.id == idEdicao);
             if (pet) {
                 // Campos comuns
-                if (document.getElementById("nomePet")) document.getElementById("nomePet").value = pet.nome_pet || "";
-                if (document.getElementById("nomeTutor")) document.getElementById("nomeTutor").value = pet.nome_tutor || "";
-                if (document.getElementById("cidade")) document.getElementById("cidade").value = pet.cidade || "";
-                if (document.getElementById("telefone")) document.getElementById("telefone").value = pet.telefone || "";
+                if (nomePet) nomePet.value = pet.nome_pet || "";
+                if (nomeTutor) nomeTutor.value = pet.nome_tutor || "";
+                if (cidade) cidade.value = pet.cidade || "";
+                if (telefone) telefone.value = pet.telefone || "";
                 
                 if (pet.tipo) {
                     campoTipo.value = pet.tipo;
@@ -104,15 +116,19 @@ async function carregarPets() {
                 contatoTelefone.value = pet.contato_telefone || "";
                 contatoParentesco.value = pet.contato_parentesco || "";
 
-                // Campos específicos de Veículo (caso existam no HTML)
-                if (document.getElementById("marca")) document.getElementById("marca").value = pet.marca || "";
-                if (document.getElementById("modelo")) document.getElementById("modelo").value = pet.modelo || "";
-                if (document.getElementById("cor")) document.getElementById("cor").value = pet.cor || "";
-                if (document.getElementById("placa")) document.getElementById("placa").value = pet.placa || "";
-                if (document.getElementById("tipoSanguineo")) document.getElementById("tipoSanguineo").value = pet.tipo_sanguineo || "";
-                if (document.getElementById("condicaoMedica")) document.getElementById("condicaoMedica").value = pet.condicao_medica || "";
+                // Campos específicos de Veículo
+                if (marca) marca.value = pet.marca || "";
+                if (modelo) modelo.value = pet.modelo || "";
+                if (cor) cor.value = pet.cor || "";
+                if (placa) placa.value = pet.placa || "";
 
-                // Dispara o evento change ou função visual se necessário para atualizar a exibição dos blocos na edição
+                // Campos de Saúde / Emergência
+                if (tipoSanguineo) tipoSanguineo.value = pet.tipo_sanguineo || "";
+                if (condicaoMedica) condicaoMedica.value = pet.condicao_medica || "";
+                if (nomeEmergencia) nomeEmergencia.value = pet.nome_emergencia || "";
+                if (telefoneEmergencia) telefoneEmergencia.value = pet.telefone_emergencia || "";
+                if (parentescoEmergencia) parentescoEmergencia.value = pet.parentesco_emergencia || "";
+
                 if (typeof atualizarCampos === "function") {
                     atualizarCampos();
                 }
@@ -130,7 +146,6 @@ carregarPets();
 // ======================================================
 // PEGAR USUÁRIO LOGADO
 // ======================================================
-
 async function getUser() {
     const { data } = await banco.auth.getUser();
     return data.user;
@@ -139,7 +154,6 @@ async function getUser() {
 // ======================================================
 // SUBMIT
 // ======================================================
-
 formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -150,25 +164,32 @@ formulario.addEventListener("submit", async function (event) {
         return;
     }
 
-    // Montagem segura dos dados considerando elementos opcionais/condicionais no HTML
+    // Montagem limpa utilizando as constantes do DOM já mapeadas
     const dadosFormulario = {
-        nome_pet: document.getElementById("nomePet") ? document.getElementById("nomePet").value : null,
-        nome_tutor: document.getElementById("nomeTutor") ? document.getElementById("nomeTutor").value : null,
-        cidade: document.getElementById("cidade") ? document.getElementById("cidade").value : null,
-        telefone: document.getElementById("telefone") ? document.getElementById("telefone").value : null,
+        nome_pet: nomePet ? nomePet.value : null,
+        nome_tutor: nomeTutor ? nomeTutor.value : null,
+        cidade: cidade ? cidade.value : null,
+        telefone: telefone ? telefone.value : null,
         tipo: campoTipo.value,
         categoria: campoCategoria.value,
         contato_nome: contatoNome.value,
         contato_telefone: contatoTelefone.value,
         contato_parentesco: contatoParentesco.value,
         
-        // Novos campos para Veículos / Saúde (Certifique-se de que os IDs no HTML batem com estes)
-        marca: document.getElementById("marca") ? document.getElementById("marca").value : null,
-        modelo: document.getElementById("modelo") ? document.getElementById("modelo").value : null,
-        cor: document.getElementById("cor") ? document.getElementById("cor").value : null,
-        placa: document.getElementById("placa") ? document.getElementById("placa").value : null,
-        tipo_sanguineo: document.getElementById("tipoSanguineo") ? document.getElementById("tipoSanguineo").value : null,
-        condicao_medica: document.getElementById("condicaoMedica") ? document.getElementById("condicaoMedica").value : null,
+        // Veículos
+        marca: marca ? marca.value : null,
+        modelo: modelo ? modelo.value : null,
+        cor: cor ? cor.value : null,
+        placa: placa ? placa.value : null,
+        
+        // Saúde
+        tipo_sanguineo: tipoSanguineo ? tipoSanguineo.value : null,
+        condicao_medica: condicaoMedica ? condicaoMedica.value : null,
+
+        // Emergência
+        nome_emergencia: nomeEmergencia ? nomeEmergencia.value : null,
+        telefone_emergencia: telefoneEmergencia ? telefoneEmergencia.value : null,
+        parentesco_emergencia: parentescoEmergencia ? parentescoEmergencia.value : null,
 
         foto: fotoBase64,
         foto2: fotoBase642,
@@ -176,42 +197,40 @@ formulario.addEventListener("submit", async function (event) {
         user_id: user.id
     };
 
-    // ==================================================
-    // EDITAR PET / ITEM / VEÍCULO
-    // ==================================================
+    console.log("DADOS PRONTOS PARA ENVIAR:", dadosFormulario);
 
+    // ==================================================
+    // EXECUÇÃO UNIFICADA (UPDATE OU INSERT)
+    // ==================================================
+    let resposta;
+    
     if (idEdicao) {
-        const { error } = await banco
+        console.log("EXECUTANDO UPDATE...");
+        resposta = await banco
             .from("pets")
             .update(dadosFormulario)
-            .eq("id", idEdicao);
+            .eq("id", idEdicao)
+            .select();
+    } else {
+        console.log("EXECUTANDO INSERT...");
+        resposta = await banco
+            .from("pets")
+            .insert([dadosFormulario])
+            .select();
+    }
 
-        if (error) {
-            console.error("Erro ao atualizar:", error);
-            alert("Erro ao atualizar: " + error.message);
-            return;
-        }
+    console.log("RESPOSTA COMPLETA DO SUPABASE:", resposta);
 
-        alert("Atualizado com sucesso!");
-        window.location.href = "meus-pets.html";
+    if (resposta.error) {
+        console.error("ERRO DO SUPABASE:", resposta.error);
+        alert("Erro ao salvar: " + resposta.error.message);
         return;
     }
 
-    // ==================================================
-    // NOVO PET / ITEM / VEÍCULO
-    // ==================================================
-
-    const { error } = await banco
-        .from("pets")
-        .insert([dadosFormulario]);
-
-    if (error) {
-        console.error("Erro ao cadastrar:", error);
-        alert("Erro ao cadastrar: " + error.message);
-        return;
+    if (!idEdicao) {
+        localStorage.removeItem("ultimoPet");
     }
 
-    localStorage.removeItem("ultimoPet");
-    alert("Cadastrado com sucesso!");
+    alert(idEdicao ? "Atualizado com sucesso!" : "Cadastrado com sucesso!");
     window.location.href = "meus-pets.html";
 });
