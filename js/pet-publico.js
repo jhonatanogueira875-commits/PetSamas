@@ -35,14 +35,42 @@ async function carregarPerfilPublico() {
         foto,
         foto2,
         foto3,
+
         cidade,
         telefone,
         nome_tutor,
+
         tipo,
         categoria,
+
         contato_nome,
         contato_telefone,
-        contato_parentesco
+        contato_parentesco,
+
+        // ======================
+        // VEÍCULO
+        // ======================
+
+        marca,
+        modelo,
+        cor,
+        placa,
+
+        // ======================
+        // SAÚDE
+        // ======================
+
+        tipo_sanguineo,
+        condicao_medica,
+
+        // ======================
+        // CONTATO EMERGÊNCIA
+        // ======================
+
+        nome_emergencia,
+        telefone_emergencia,
+        parentesco_emergencia
+
     } = resposta.pet;
 
     // ==========================================
@@ -152,6 +180,123 @@ async function carregarPerfilPublico() {
         cidade;
 
     // ==========================================
+    // VEÍCULO
+    // ==========================================
+
+    const blocoVeiculo =
+        document.getElementById("blocoVeiculo");
+
+    if (
+
+        blocoVeiculo &&
+        tipo === "veiculo" &&
+        (marca || modelo || cor || placa)
+
+    ){
+
+        blocoVeiculo.style.display = "block";
+
+        if(document.getElementById("infoMarcaModelo")){
+
+            document.getElementById("infoMarcaModelo").innerText =
+                `${marca || ""} ${modelo || ""}`.trim();
+
+        }
+
+        if(document.getElementById("infoCor")){
+
+            document.getElementById("infoCor").innerText =
+                cor || "-";
+
+        }
+
+        if(document.getElementById("infoPlaca")){
+
+            document.getElementById("infoPlaca").innerText =
+                placa || "-";
+
+        }
+
+    }
+
+    // ==========================================
+    // INFORMAÇÕES MÉDICAS
+    // ==========================================
+
+    const blocoSaude =
+        document.getElementById("blocoSaude");
+
+    let possuiInformacaoMedica = false;
+
+    if(
+
+        tipo_sanguineo ||
+        condicao_medica ||
+        telefone_emergencia
+
+    ){
+
+        possuiInformacaoMedica = true;
+
+    }
+
+    if(
+
+        blocoSaude &&
+        possuiInformacaoMedica
+
+    ){
+
+        blocoSaude.style.display = "block";
+
+        if(tipo_sanguineo){
+
+            const itemTipo = document.getElementById("itemTipoSanguineo");
+            if(itemTipo){
+                itemTipo.style.display="block";
+            }
+
+            document.getElementById("valTipoSanguineo").innerText =
+                tipo_sanguineo;
+
+        }
+
+        if(condicao_medica){
+
+            const itemCondicao = document.getElementById("itemCondicaoMedica");
+            if(itemCondicao){
+                itemCondicao.style.display="block";
+            }
+
+            document.getElementById("valCondicaoMedica").innerText =
+                condicao_medica;
+
+        }
+
+        if(telefone_emergencia){
+
+            const itemContato = document.getElementById("itemContatoEmergencia");
+            if(itemContato){
+                itemContato.style.display="block";
+            }
+
+            document.getElementById("valNomeEmergencia").innerText =
+                nome_emergencia || "Contato";
+
+            document.getElementById("valParentescoEmergencia").innerText =
+                parentesco_emergencia || "";
+
+            const telEmergencia =
+                String(telefone_emergencia).replace(/\D/g,"");
+
+            document.getElementById("linkTelEmergencia").href =
+                `tel:+55${telEmergencia}`;
+
+        }
+
+    }
+
+    // ==========================================
     // WHATSAPP
     // ==========================================
 
@@ -165,8 +310,16 @@ async function carregarPerfilPublico() {
     const telefoneLimpo =
         String(telefoneDestino || "").replace(/\D/g, "");
 
+    let descricao = "item";
+
+    if (tipo === "pet")
+        descricao = "pet";
+
+    if (tipo === "veiculo")
+        descricao = "veículo";
+
     const mensagem = encodeURIComponent(
-        `Olá! Encontrei o item "${nome}" e gostaria de devolvê-lo.`
+        `Olá! Encontrei o ${descricao} "${nome}" e gostaria de devolvê-lo.`
     );
 
     document.getElementById("linkWhatsapp").href =
