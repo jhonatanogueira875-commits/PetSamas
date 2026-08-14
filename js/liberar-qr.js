@@ -64,6 +64,56 @@ window.onload = async function () {
     }
 
     //--------------------------------------------------
+    // Busca assinatura / créditos
+    //--------------------------------------------------
+
+    const { data: assinatura, error: erroAssinatura } = await banco
+
+        .from("assinaturas")
+
+        .select("*")
+
+        .eq("user_id", user.id)
+
+        .maybeSingle();
+
+    if (erroAssinatura) {
+
+        console.error(erroAssinatura);
+
+        alert("Erro ao verificar seus créditos.");
+
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Não possui cadastro de créditos
+    //--------------------------------------------------
+
+    if (!assinatura) {
+
+        window.location.href = "comprar.html";
+
+        return;
+
+    }
+
+    //--------------------------------------------------
+    // Créditos insuficientes
+    //--------------------------------------------------
+
+    const creditos = assinatura.creditos ?? 0;
+
+    if (creditos <= 0) {
+
+        window.location.href = "comprar.html";
+
+        return;
+
+    }
+
+    //--------------------------------------------------
     // Gera novo QR
     //--------------------------------------------------
 
@@ -78,6 +128,30 @@ window.onload = async function () {
         alert("Erro ao gerar QR.");
 
         return;
+
+    }
+
+    //--------------------------------------------------
+    // Consome 1 crédito
+    //--------------------------------------------------
+
+    const { error: erroCredito } = await banco
+
+        .from("assinaturas")
+
+        .update({
+
+            creditos: creditos - 1
+
+        })
+
+        .eq("id", assinatura.id);
+
+    if (erroCredito) {
+
+        console.error(erroCredito);
+
+        alert("QR gerado, mas ocorreu um erro ao atualizar os créditos.");
 
     }
 
