@@ -1590,4 +1590,4 @@ async function carregarPerfilPublico() {
    EXECUÇÃO
 ====================================================== */
 
-carregarPerfilPublico();
+carregarPerfilPublico();v
