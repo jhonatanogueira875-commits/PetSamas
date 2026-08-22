@@ -1,153 +1,1103 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>Cadastrar - Safe Samas</title>
-    <!-- Adicionado versionamento de CSS -->
-    <link rel="stylesheet" href="css/style.css?v=1.1">
-    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+    <link
+        rel="stylesheet"
+        href="css/style.css?v=1.1">
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="assets/images/favicon.png">
+
 </head>
+
 <body>
 
-    <main class="container">
-        <!-- LOGO ATUALIZADA -->
-        <img src="assets/images/escudo.png" alt="Logo Safe Samas" id="logo" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
+<main class="container">
 
-        <h1 id="tituloPagina">🐾/🔑 Cadastrar</h1>
-        <p class="subtitulo">Preencha os dados do seu pet ou item para gerar seu perfil.</p>
+    <!-- ===================================================== -->
+    <!-- LOGO -->
+    <!-- ===================================================== -->
 
-        <form id="formCadastro">
-            
-            <label for="tipo">📦 O que você deseja proteger?</label>
-            <select id="tipo" class="input-samas">
-                <option value="pet">🐾 Pet</option>
-                <option value="item">🔑 Item / Objeto</option>
+    <img
+        src="assets/images/escudo.png"
+        alt="Logo Safe Samas"
+        id="logo"
+        style="
+            max-width:100px;
+            display:block;
+            margin:0 auto 15px auto;
+        ">
+
+
+    <!-- ===================================================== -->
+    <!-- TÍTULO -->
+    <!-- ===================================================== -->
+
+    <h1 id="tituloPagina">
+        🐾/🔑 Cadastrar
+    </h1>
+
+    <p class="subtitulo">
+        Preencha os dados para cadastrar aquilo que deseja proteger.
+    </p>
+
+
+    <!-- ===================================================== -->
+    <!-- FORMULÁRIO -->
+    <!-- ===================================================== -->
+
+    <form id="formCadastro">
+
+
+        <!-- ================================================= -->
+        <!-- TIPO DE CADASTRO -->
+        <!-- ================================================= -->
+
+        <label for="tipo">
+            📦 O que você deseja proteger?
+        </label>
+
+        <select
+            id="tipo"
+            class="input-samas">
+
+            <option value="pet">
+                🐾 Pet
+            </option>
+
+            <option value="item">
+                🔑 Item / Objeto
+            </option>
+
+            <option value="humano">
+                👤 Pessoa
+            </option>
+
+            <option value="veiculo">
+                🚗 Veículo
+            </option>
+
+        </select>
+
+
+        <!-- ================================================= -->
+        <!-- CATEGORIA DO ITEM -->
+        <!-- ================================================= -->
+
+        <div
+            id="categoriaItem"
+            style="display:none;">
+
+            <label for="categoria">
+                📦 Categoria do Item
+            </label>
+
+            <select
+                id="categoria"
+                class="input-samas">
+
+                <option value="">
+                    Selecione
+                </option>
+
+                <option value="chaves">
+                    🔑 Chaves
+                </option>
+
+                <option value="carteira">
+                    👛 Carteira
+                </option>
+
+                <option value="mochila">
+                    🎒 Mochila
+                </option>
+
+                <option value="notebook">
+                    💻 Notebook
+                </option>
+
+                <option value="mala">
+                    🧳 Mala
+                </option>
+
+                <option value="documento">
+                    📄 Documento
+                </option>
+
+                <option value="celular">
+                    📱 Celular
+                </option>
+
+                <option value="outro">
+                    📦 Outro
+                </option>
+
             </select>
 
-            <div id="categoriaItem" style="display:none;">
-                <label for="categoria">📦 Categoria do Item</label>
-                <select id="categoria" class="input-samas">
-                    <option value="">Selecione</option>
-                    <option value="chaves">🔑 Chaves</option>
-                    <option value="carteira">👛 Carteira</option>
-                    <option value="mochila">🎒 Mochila</option>
-                    <option value="notebook">💻 Notebook</option>
-                    <option value="mala">🧳 Mala</option>
-                    <option value="documento">📄 Documento</option>
-                    <option value="celular">📱 Celular</option>
-                    <option value="outro">📦 Outro</option>
-                </select>
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- DADOS PRINCIPAIS -->
+        <!-- ================================================= -->
+
+        <label for="nomePet">
+            🐾/🔑 Nome
+        </label>
+
+        <input
+            type="text"
+            id="nomePet"
+            placeholder="Digite o nome"
+            required>
+
+
+        <label for="nomeTutor">
+            👤 Responsável
+        </label>
+
+        <input
+            type="text"
+            id="nomeTutor"
+            placeholder="Digite o nome do responsável"
+            required>
+
+
+        <label for="cidade">
+            📍 Cidade
+        </label>
+
+        <input
+            type="text"
+            id="cidade"
+            placeholder="Digite sua cidade"
+            required>
+
+
+        <label for="telefone">
+            📞 WhatsApp
+        </label>
+
+        <input
+            type="tel"
+            id="telefone"
+            placeholder="Ex.: (42) 99999-9999"
+            required>
+
+
+        <!-- ================================================= -->
+        <!-- INFORMAÇÕES DA PESSOA -->
+        <!-- ================================================= -->
+
+        <div
+            id="grupoHumano"
+            style="display:none;">
+
+            <hr>
+
+            <h3>
+                👤 Informações da Pessoa
+            </h3>
+
+
+            <label for="tipoHumano">
+                👤 Tipo de cadastro
+            </label>
+
+            <select
+                id="tipoHumano"
+                class="input-samas">
+
+                <option value="">
+                    Selecione
+                </option>
+
+                <option value="adulto">
+                    👤 Adulto
+                </option>
+
+                <option value="crianca">
+                    👦 Criança
+                </option>
+
+                <option value="idoso">
+                    👴 Idoso
+                </option>
+
+                <option value="outro">
+                    👤 Outro
+                </option>
+
+            </select>
+
+
+            <label for="dataNascimento">
+                🎂 Data de nascimento
+            </label>
+
+            <input
+                type="date"
+                id="dataNascimento">
+
+
+            <label for="idade">
+                🎂 Idade
+            </label>
+
+            <input
+                type="number"
+                id="idade"
+                min="0"
+                max="150"
+                placeholder="Digite a idade">
+
+
+            <label for="sexo">
+                ⚧ Sexo
+            </label>
+
+            <select
+                id="sexo"
+                class="input-samas">
+
+                <option value="">
+                    Selecione
+                </option>
+
+                <option value="feminino">
+                    Feminino
+                </option>
+
+                <option value="masculino">
+                    Masculino
+                </option>
+
+                <option value="outro">
+                    Outro
+                </option>
+
+                <option value="nao_informar">
+                    Prefiro não informar
+                </option>
+
+            </select>
+
+
+            <label for="informacoesImportantes">
+                ℹ️ Informações importantes
+            </label>
+
+            <textarea
+                id="informacoesImportantes"
+                class="input-samas"
+                rows="4"
+                placeholder="Informe algo importante para a identificação ou atendimento desta pessoa."></textarea>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- INFORMAÇÕES DE SAÚDE -->
+        <!-- ================================================= -->
+
+        <div
+            id="grupoSaude"
+            style="display:none;">
+
+            <hr>
+
+            <h3>
+                🏥 Informações de Saúde
+            </h3>
+
+
+            <label for="tipoSanguineo">
+                🩸 Tipo sanguíneo
+            </label>
+
+            <select
+                id="tipoSanguineo"
+                class="input-samas">
+
+                <option value="">
+                    Selecione
+                </option>
+
+                <option value="A+">
+                    A+
+                </option>
+
+                <option value="A-">
+                    A-
+                </option>
+
+                <option value="B+">
+                    B+
+                </option>
+
+                <option value="B-">
+                    B-
+                </option>
+
+                <option value="AB+">
+                    AB+
+                </option>
+
+                <option value="AB-">
+                    AB-
+                </option>
+
+                <option value="O+">
+                    O+
+                </option>
+
+                <option value="O-">
+                    O-
+                </option>
+
+            </select>
+
+
+            <label for="condicaoMedica">
+                🏥 Condição médica
+            </label>
+
+            <textarea
+                id="condicaoMedica"
+                class="input-samas"
+                rows="3"
+                placeholder="Informe condições médicas relevantes."></textarea>
+
+
+            <label for="usaMedicamentos">
+                💊 Usa medicamentos?
+            </label>
+
+            <select
+                id="usaMedicamentos"
+                class="input-samas">
+
+                <option value="nao">
+                    Não
+                </option>
+
+                <option value="sim">
+                    Sim
+                </option>
+
+            </select>
+
+
+            <!-- MEDICAMENTOS -->
+
+            <div
+                id="grupoMedicamentos"
+                style="display:none;">
+
+                <label for="medicamentos">
+                    💊 Medicamentos
+                </label>
+
+                <textarea
+                    id="medicamentos"
+                    class="input-samas"
+                    rows="3"
+                    placeholder="Informe os medicamentos utilizados."></textarea>
+
             </div>
 
-            <label for="nomePet">🐾/🔑 Nome do Pet ou Item</label>
-            <input type="text" id="nomePet" placeholder="Digite o nome" required>
 
-            <label for="nomeTutor">👤 Nome do Proprietário</label>
-            <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
+            <label for="alergias">
+                ⚠️ Alergias
+            </label>
 
-            <label for="cidade">📍 Cidade</label>
-            <input type="text" id="cidade" placeholder="Digite sua cidade" required>
+            <textarea
+                id="alergias"
+                class="input-samas"
+                rows="3"
+                placeholder="Informe alergias conhecidas."></textarea>
 
-            <label for="telefone">📞 WhatsApp</label>
-            <input type="tel" id="telefone" placeholder="Ex.: (42) 99999-9999" required>
 
-            <div id="contatoConfianca" style="display:none;">
-                <hr>
-                <h3>👤 Contato de confiança</h3>
-                <p style="font-size:13px;color:#666;">
-                    Utilizado apenas caso este item seja um celular.
-                </p>
+            <label for="observacoesMedicas">
+                📝 Observações médicas
+            </label>
 
-                <label>Nome</label>
-                <input
-                    type="text"
-                    id="contatoNome"
-                    placeholder="Nome do contato">
+            <textarea
+                id="observacoesMedicas"
+                class="input-samas"
+                rows="3"
+                placeholder="Outras informações médicas relevantes."></textarea>
 
-                <label>Telefone</label>
-                <input
-                    type="tel"
-                    id="contatoTelefone"
-                    placeholder="WhatsApp">
 
-                <label>Parentesco</label>
-                <input
-                    type="text"
-                    id="contatoParentesco"
-                    placeholder="Ex.: Esposa, Pai, Filho">
-            </div>
+            <!-- CONTATO DE EMERGÊNCIA -->
 
-            <label for="foto">📷 Foto Principal</label>
-            <input type="file" id="foto" accept="image/*">
+            <label for="nomeEmergencia">
+                🚨 Contato de emergência
+            </label>
 
-            <!-- Campos de fotos secundárias ocultos -->
-            <!--
-            <label for="foto2">📷 Foto 2 (Opcional)</label>
-            <input type="file" id="foto2" accept="image/*">
+            <input
+                type="text"
+                id="nomeEmergencia"
+                placeholder="Nome do contato">
 
-            <label for="foto3">📷 Foto 3 (Opcional)</label>
-            <input type="file" id="foto3" accept="image/*">
-            -->
 
-            <p style="font-size:13px; color:#666; margin-top:8px;">
-                Utilize uma foto recente e bem iluminada para facilitar a identificação.
+            <label for="telefoneEmergencia">
+                📞 Telefone de emergência
+            </label>
+
+            <input
+                type="tel"
+                id="telefoneEmergencia"
+                placeholder="WhatsApp">
+
+
+            <label for="parentescoEmergencia">
+                👤 Parentesco
+            </label>
+
+            <input
+                type="text"
+                id="parentescoEmergencia"
+                placeholder="Ex.: Mãe, Pai, Filho, Cônjuge">
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- INFORMAÇÕES DO VEÍCULO -->
+        <!-- ================================================= -->
+
+        <div
+            id="grupoVeiculo"
+            style="display:none;">
+
+            <hr>
+
+            <h3>
+                🚗 Informações do Veículo
+            </h3>
+
+
+            <label for="marca">
+                🏷 Marca
+            </label>
+
+            <input
+                type="text"
+                id="marca"
+                placeholder="Ex.: Volkswagen">
+
+
+            <label for="modelo">
+                🚗 Modelo
+            </label>
+
+            <input
+                type="text"
+                id="modelo"
+                placeholder="Ex.: Gol">
+
+
+            <label for="cor">
+                🎨 Cor
+            </label>
+
+            <input
+                type="text"
+                id="cor"
+                placeholder="Ex.: Preto">
+
+
+            <label for="placa">
+                🔢 Placa
+            </label>
+
+            <input
+                type="text"
+                id="placa"
+                placeholder="Ex.: ABC1D23">
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CONTATO DE CONFIANÇA -->
+        <!-- ================================================= -->
+
+        <div
+            id="contatoConfianca"
+            style="display:none;">
+
+            <hr>
+
+            <h3>
+                👤 Contato de confiança
+            </h3>
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#666;
+                ">
+
+                Utilizado apenas caso este item seja um celular.
+
             </p>
 
+
+            <label for="contatoNome">
+                Nome
+            </label>
+
+            <input
+                type="text"
+                id="contatoNome"
+                placeholder="Nome do contato">
+
+
+            <label for="contatoTelefone">
+                Telefone
+            </label>
+
+            <input
+                type="tel"
+                id="contatoTelefone"
+                placeholder="WhatsApp">
+
+
+            <label for="contatoParentesco">
+                Parentesco
+            </label>
+
+            <input
+                type="text"
+                id="contatoParentesco"
+                placeholder="Ex.: Esposa, Pai, Filho">
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- REVISÃO DE SAÚDE -->
+        <!-- ================================================= -->
+
+        <div
+            id="blocoRevisaoSaude"
+            style="display:none;">
+
+            <hr>
+
+            <h3>
+                🔎 Revisão das informações
+            </h3>
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#666;
+                ">
+
+                Confirme que as informações de saúde
+                e emergência cadastradas estão corretas
+                e atualizadas.
+
+            </p>
+
+
+            <p id="textoUltimaRevisao"></p>
+
+
             <div class="card-termos">
-                <input type="checkbox" id="aceiteTermos" required>
-                <label for="aceiteTermos">
-                    Declaro estar ciente e aceito que a validade do QR Code é de <b>1 (um) ano</b> a partir da ativação. 
-                    <a href="termos.html" target="_blank" style="color: #007bff; text-decoration: underline;">(Ver Termos)</a>
+
+                <input
+                    type="checkbox"
+                    id="confirmarRevisaoSaude">
+
+                <label for="confirmarRevisaoSaude">
+
+                    Confirmo a veracidade e atualidade
+                    das informações fornecidas.
+
                 </label>
+
             </div>
 
-            <br>
-            <!-- BOTÃO COM CLASSE btn-samas -->
-            <button type="submit" class="btn-samas">💾 Salvar</button>
-        </form>
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FOTOS -->
+        <!-- ================================================= -->
+
+        <div id="grupoFotos">
+
+            <!-- ================================================= -->
+            <!-- FOTO PRINCIPAL / FRENTE DO VEÍCULO -->
+            <!-- ================================================= -->
+
+            <label for="foto" id="labelFotoPrincipal">
+                📷 Foto Principal
+            </label>
+
+            <input
+                type="file"
+                id="foto"
+                accept="image/*">
+
+            <p
+                id="descricaoFotoPrincipal"
+                style="
+                    font-size:13px;
+                    color:#666;
+                    margin-top:8px;
+                ">
+
+                Utilize uma foto recente e bem iluminada
+                para facilitar a identificação.
+
+            </p>
+
+
+            <!-- ================================================= -->
+            <!-- FOTOS EXCLUSIVAS DO VEÍCULO -->
+            <!-- ================================================= -->
+
+            <div
+                id="grupoFotosVeiculo"
+                style="display:none;">
+
+                <hr>
+
+                <h3>
+                    🚗 Fotos do Veículo
+                </h3>
+
+                <p
+                    style="
+                        font-size:13px;
+                        color:#666;
+                    ">
+
+                    Para veículos, informe três imagens:
+                    frente, traseira e lateral.
+
+                </p>
+
+
+                <!-- ================================================= -->
+                <!-- FOTO 2 = TRASEIRA -->
+                <!-- ================================================= -->
+
+                <label for="foto2">
+                    📷 Traseira do veículo
+                </label>
+
+                <input
+                    type="file"
+                    id="foto2"
+                    accept="image/*">
+
+                <p
+                    style="
+                        font-size:13px;
+                        color:#666;
+                        margin-top:8px;
+                    ">
+
+                    Fotografe o veículo pela traseira,
+                    preferencialmente mostrando a placa.
+
+                </p>
+
+
+                <!-- ================================================= -->
+                <!-- FOTO 3 = LATERAL -->
+                <!-- ================================================= -->
+
+                <label for="foto3">
+                    📷 Lateral do veículo
+                </label>
+
+                <input
+                    type="file"
+                    id="foto3"
+                    accept="image/*">
+
+                <p
+                    style="
+                        font-size:13px;
+                        color:#666;
+                        margin-top:8px;
+                    ">
+
+                    Fotografe uma das laterais do veículo,
+                    mostrando seu formato e características.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- TERMOS -->
+        <!-- ================================================= -->
+
+        <div class="card-termos">
+
+            <input
+                type="checkbox"
+                id="aceiteTermos"
+                required>
+
+            <label for="aceiteTermos">
+
+                Declaro estar ciente e aceito que a validade
+                do QR Code é de <b>1 (um) ano</b>
+                a partir da ativação.
+
+                <a
+                    href="termos.html"
+                    target="_blank"
+                    style="
+                        color:#007bff;
+                        text-decoration:underline;
+                    ">
+
+                    (Ver Termos)
+
+                </a>
+
+            </label>
+
+        </div>
+
 
         <br>
-        <!-- BOTÕES COM CLASSE btn-samas -->
-        <a href="meus-pets.html"><button class="btn-samas">🐾/🔑 Meus Cadastros</button></a>
-        <br><br>
-        <a href="index.html" style="color: #2c3e50; font-weight: bold;">← Voltar para a Página Inicial</a>
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/assinatura.js"></script>
-    <script>
-        console.log("CADASTRO.HTML ATUALIZADO");
 
-        const tipo = document.getElementById("tipo");
-        const categoria = document.getElementById("categoria");
-        const blocoCategoria = document.getElementById("categoriaItem");
-        const blocoContato = document.getElementById("contatoConfianca");
+        <!-- ================================================= -->
+        <!-- SALVAR -->
+        <!-- ================================================= -->
 
-        tipo.addEventListener("change", atualizarCampos);
-        categoria.addEventListener("change", atualizarCampos);
+        <button
+            type="submit"
+            class="btn-samas">
 
-        function atualizarCampos() {
-            if (tipo.value === "item") {
-                blocoCategoria.style.display = "block";
-            } else {
-                blocoCategoria.style.display = "none";
-                blocoContato.style.display = "none";
-                return;
+            💾 Salvar
+
+        </button>
+
+    </form>
+
+
+    <br>
+
+
+    <!-- ===================================================== -->
+    <!-- NAVEGAÇÃO -->
+    <!-- ===================================================== -->
+
+    <a href="meus-pets.html">
+
+        <button
+            type="button"
+            class="btn-samas">
+
+            🐾/🔑 Meus Cadastros
+
+        </button>
+
+    </a>
+
+
+    <br><br>
+
+
+    <a
+        href="index.html"
+        style="
+            color:#2c3e50;
+            font-weight:bold;
+        ">
+
+        ← Voltar para a Página Inicial
+
+    </a>
+
+</main>
+
+
+<!-- ===================================================== -->
+<!-- SCRIPTS -->
+<!-- ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/assinatura.js"></script>
+
+
+<script>
+
+    // ==================================================
+    // ELEMENTOS
+    // ==================================================
+
+    const tipoCadastro =
+        document.getElementById("tipo");
+
+    const categoriaCadastro =
+        document.getElementById("categoria");
+
+    const blocoCategoria =
+        document.getElementById("categoriaItem");
+
+    const blocoContato =
+        document.getElementById("contatoConfianca");
+
+    const grupoHumano =
+        document.getElementById("grupoHumano");
+
+    const grupoVeiculo =
+        document.getElementById("grupoVeiculo");
+
+    const grupoSaude =
+        document.getElementById("grupoSaude");
+
+    const campoMedicamentos =
+        document.getElementById("usaMedicamentos");
+
+    const grupoMedicamentos =
+        document.getElementById("grupoMedicamentos");
+
+    const grupoFotosVeiculo =
+        document.getElementById("grupoFotosVeiculo");
+
+    const blocoRevisaoSaude =
+        document.getElementById("blocoRevisaoSaude");
+
+    const labelFotoPrincipal =
+        document.getElementById("labelFotoPrincipal");
+
+    const descricaoFotoPrincipal =
+        document.getElementById("descricaoFotoPrincipal");
+
+
+    // ==================================================
+    // EVENTOS
+    // ==================================================
+
+    tipoCadastro.addEventListener(
+        "change",
+        atualizarCampos
+    );
+
+    categoriaCadastro.addEventListener(
+        "change",
+        atualizarCampos
+    );
+
+    campoMedicamentos.addEventListener(
+        "change",
+        atualizarMedicamentos
+    );
+
+
+    // ==================================================
+    // ATUALIZAÇÃO DOS CAMPOS
+    // ==================================================
+
+    function atualizarCampos() {
+
+        // ----------------------------------------------
+        // ESCONDE CAMPOS ESPECÍFICOS
+        // ----------------------------------------------
+
+        blocoCategoria.style.display =
+            "none";
+
+        blocoContato.style.display =
+            "none";
+
+        grupoHumano.style.display =
+            "none";
+
+        grupoVeiculo.style.display =
+            "none";
+
+        grupoSaude.style.display =
+            "none";
+
+        grupoFotosVeiculo.style.display =
+            "none";
+
+        blocoRevisaoSaude.style.display =
+            "none";
+
+
+        // ----------------------------------------------
+        // ITEM
+        // ----------------------------------------------
+
+        if (
+            tipoCadastro.value ===
+            "item"
+        ) {
+
+            blocoCategoria.style.display =
+                "block";
+
+
+            if (
+                categoriaCadastro.value ===
+                "celular"
+            ) {
+
+                blocoContato.style.display =
+                    "block";
+
             }
 
-            if (categoria.value === "celular") {
-                blocoContato.style.display = "block";
-            } else {
-                blocoContato.style.display = "none";
-            }
         }
 
-        atualizarCampos();
-    </script>
-    <script src="js/cadastro.js"></script>
+
+        // ----------------------------------------------
+        // HUMANO
+        // ----------------------------------------------
+
+        if (
+            tipoCadastro.value ===
+            "humano"
+        ) {
+
+            grupoHumano.style.display =
+                "block";
+
+            grupoSaude.style.display =
+                "block";
+
+        }
+
+
+        // ----------------------------------------------
+        // VEÍCULO
+        // ----------------------------------------------
+
+        if (
+            tipoCadastro.value ===
+            "veiculo"
+        ) {
+
+            grupoVeiculo.style.display =
+                "block";
+
+            grupoSaude.style.display =
+                "block";
+
+            grupoFotosVeiculo.style.display =
+                "block";
+
+            blocoRevisaoSaude.style.display =
+                "block";
+
+
+            // O campo foto passa a representar
+            // a frente do veículo.
+
+            labelFotoPrincipal.textContent =
+                "📷 Frente do veículo";
+
+            descricaoFotoPrincipal.textContent =
+                "Fotografe o veículo de frente, preferencialmente mostrando a placa.";
+
+        } else {
+
+            // Para pet, item e humano,
+            // existe somente a foto principal.
+
+            labelFotoPrincipal.textContent =
+                "📷 Foto Principal";
+
+            descricaoFotoPrincipal.textContent =
+                "Utilize uma foto recente e bem iluminada para facilitar a identificação.";
+
+        }
+
+    }
+
+
+    // ==================================================
+    // MEDICAMENTOS
+    // ==================================================
+
+    function atualizarMedicamentos() {
+
+        if (
+            campoMedicamentos.value ===
+            "sim"
+        ) {
+
+            grupoMedicamentos.style.display =
+                "block";
+
+        } else {
+
+            grupoMedicamentos.style.display =
+                "none";
+
+
+            const campo =
+                document.getElementById(
+                    "medicamentos"
+                );
+
+
+            if (campo) {
+
+                campo.value =
+                    "";
+
+            }
+
+        }
+
+    }
+
+
+    // ==================================================
+    // INICIALIZAÇÃO
+    // ==================================================
+
+    atualizarCampos();
+
+    atualizarMedicamentos();
+
+</script>
+
+
+<!-- ===================================================== -->
+<!-- CADASTRO.JS -->
+<!-- ===================================================== -->
+
+<script src="js/cadastro.js"></script>
+
 
 </body>
+
 </html>

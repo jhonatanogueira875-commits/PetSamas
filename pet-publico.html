@@ -1,15 +1,498 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+<meta charset="UTF-8">
 
-    <title>Encontrei um item - Safe Samas</title>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <link rel="stylesheet" href="css/style.css?v=1.1">
-    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+<title>
+    Safe Samas - Perfil Protegido
+</title>
+
+<link
+    rel="stylesheet"
+    href="css/style.css?v=1.1"
+>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="assets/images/favicon.png"
+>
+
+<style>
+
+    /* ==================================================
+       PERFIL PÚBLICO
+    ================================================== */
+
+    .perfil-publico {
+
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+
+    }
+
+
+    /* ==================================================
+       CABEÇALHO
+    ================================================== */
+
+    .cabecalho-perfil {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        text-align: center;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .cabecalho-perfil img.logo {
+
+        width: 90px;
+        max-width: 90px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .tipo-perfil {
+
+        display: inline-block;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-size: 13px;
+        font-weight: bold;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .tipo-pet {
+        background: #eef7ee;
+    }
+
+
+    .tipo-item {
+        background: #fff7e8;
+    }
+
+
+    .tipo-veiculo {
+        background: #eef3f8;
+    }
+
+
+    .tipo-humano {
+        background: #f5f0f8;
+    }
+
+
+    /* ==================================================
+       GALERIA
+    ================================================== */
+
+    .galeria-publica {
+
+        width: 100%;
+        margin-bottom: 20px;
+
+    }
+
+
+    .foto-principal {
+
+        width: 100%;
+        max-width: 420px;
+        max-height: 420px;
+
+        object-fit: cover;
+
+        display: block;
+
+        margin: 0 auto 15px auto;
+
+        border-radius: 18px;
+
+        cursor: pointer;
+
+    }
+
+
+    .galeria-veiculo {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 10px;
+
+    }
+
+
+    .foto-veiculo {
+
+        width: 100%;
+        height: 130px;
+
+        object-fit: cover;
+
+        border-radius: 12px;
+
+        cursor: pointer;
+
+    }
+
+
+    /* ==================================================
+       IDENTIFICAÇÃO
+    ================================================== */
+
+    .identificacao {
+
+        text-align: center;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    .identificacao h1 {
+        margin-bottom: 5px;
+    }
+
+
+    .identificacao .subidentificacao {
+
+        color: #666;
+        font-size: 15px;
+
+    }
+
+
+    /* ==================================================
+       CARDS
+    ================================================== */
+
+    .secao-publica {
+
+        margin-top: 20px;
+
+        padding: 18px;
+
+        border-radius: 15px;
+
+        background: #f8f8f8;
+
+        text-align: left;
+
+    }
+
+
+    .secao-publica h3 {
+
+        margin-top: 0;
+        margin-bottom: 15px;
+
+    }
+
+
+    .campo-publico {
+
+        margin-bottom: 12px;
+
+    }
+
+
+    .campo-publico:last-child {
+        margin-bottom: 0;
+    }
+
+
+    .campo-label {
+
+        display: block;
+
+        font-size: 13px;
+        color: #777;
+
+        margin-bottom: 3px;
+
+    }
+
+
+    .campo-valor {
+
+        font-size: 16px;
+
+        font-weight: 500;
+
+        color: #222;
+
+        word-break: break-word;
+
+    }
+
+
+    /* ==================================================
+       VEÍCULO
+    ================================================== */
+
+    .identificacao-veiculo {
+        text-align: center;
+    }
+
+
+    .placa-veiculo {
+
+        display: inline-block;
+
+        padding: 8px 18px;
+
+        border: 2px solid #333;
+
+        border-radius: 8px;
+
+        font-weight: bold;
+
+        font-size: 20px;
+
+        letter-spacing: 2px;
+
+        margin-top: 10px;
+
+    }
+
+
+    /* ==================================================
+       SAÚDE
+    ================================================== */
+
+    .secao-saude {
+        background: #fff8f0;
+    }
+
+
+    .aviso-revisao {
+
+        margin-top: 18px;
+
+        padding: 12px;
+
+        border-radius: 10px;
+
+        background: #f1f1f1;
+
+        font-size: 13px;
+
+        color: #555;
+
+    }
+
+
+    .aviso-revisao.atualizado {
+
+        background: #edf7ed;
+        color: #286428;
+
+    }
+
+
+    .aviso-revisao.atencao {
+
+        background: #fff3cd;
+        color: #795900;
+
+    }
+
+
+    .aviso-revisao.antigo {
+
+        background: #f8d7da;
+        color: #842029;
+
+    }
+
+
+    /* ==================================================
+       EMERGÊNCIA
+    ================================================== */
+
+    .secao-emergencia {
+        background: #fff0f0;
+    }
+
+
+    /* ==================================================
+       CONTATO
+    ================================================== */
+
+    .area-contato {
+
+        text-align: center;
+
+        margin-top: 25px;
+
+    }
+
+
+    .btn-contato-publico {
+
+        width: 100%;
+
+        max-width: 420px;
+
+        padding: 14px 20px;
+
+        border: none;
+
+        border-radius: 12px;
+
+        cursor: pointer;
+
+        font-size: 16px;
+
+    }
+
+
+    /* ==================================================
+       RODAPÉ
+    ================================================== */
+
+    .rodape-publico {
+
+        text-align: center;
+
+        margin-top: 30px;
+
+        padding-bottom: 20px;
+
+    }
+
+
+    .rodape-publico a {
+
+        color: #666;
+
+        font-size: 14px;
+
+        text-decoration: underline;
+
+    }
+
+
+    .rodape-publico p {
+
+        color: #777;
+
+        font-size: 13px;
+
+    }
+
+
+    /* ==================================================
+       MODAL
+    ================================================== */
+
+    .modal-foto {
+
+        display: none;
+
+        position: fixed;
+
+        z-index: 9999;
+
+        inset: 0;
+
+        background: rgba(0, 0, 0, 0.88);
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 20px;
+
+    }
+
+
+    .modal-foto.ativo {
+        display: flex;
+    }
+
+
+    .imagem-modal {
+
+        max-width: 95%;
+
+        max-height: 90vh;
+
+        object-fit: contain;
+
+        border-radius: 10px;
+
+    }
+
+
+    #fecharModal {
+
+        position: absolute;
+
+        top: 15px;
+
+        right: 25px;
+
+        color: white;
+
+        font-size: 42px;
+
+        cursor: pointer;
+
+        line-height: 1;
+
+    }
+
+
+    /* ==================================================
+       RESPONSIVO
+    ================================================== */
+
+    @media (max-width: 600px) {
+
+        .galeria-veiculo {
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+        }
+
+
+        .foto-veiculo {
+            height: 110px;
+        }
+
+    }
+
+</style>
+```
 
 </head>
 
@@ -17,91 +500,282 @@
 
 <main class="container">
 
-    <!-- GALERIA -->
-    <div id="galeriaFotos"></div>
+```
+<div
+    id="perfilPublico"
+    class="perfil-publico"
+>
 
-    <!-- NOME -->
-    <h1 id="nomePet">Carregando...</h1>
+    <!-- ==================================================
+         CABEÇALHO
+    ================================================== -->
 
-    <!-- STATUS -->
-    <p id="statusPet">
-        🔍 Buscando responsável ❤️
-    </p>
+    <div class="cabecalho-perfil">
 
-    <!-- MENSAGEM -->
-    <p id="mensagemPet">
-        Se você encontrou este item, entre em contato com o responsável.
-    </p>
+        <img
+            src="assets/images/escudo.png"
+            alt="Safe Samas"
+            class="logo"
+        >
 
-    <br>
+        <div
+            id="tipoPerfil"
+            class="tipo-perfil"
+        ></div>
 
-    <!-- RESPONSÁVEL -->
-    <h3 id="labelTutor">
-        👤 Responsável
-    </h3>
-
-    <p id="nomeTutor"></p>
-
-    <br>
-
-    <!-- CIDADE -->
-    <h3>
-        📍 Cidade
-    </h3>
-
-    <p id="cidadePet"></p>
-
-    <br>
-
-    <!-- BOTÃO -->
-    <a id="linkWhatsapp" href="#" target="_blank">
-
-        <button id="btnContato" class="btn-samas">
-            💬 Falar com o responsável
-        </button>
-
-    </a>
-
-    <!-- LINK DISCRETO ADICIONADO -->
-    <div style="margin-top: 30px; text-align: center;">
-        <a href="https://jhonatanogueira875-commits.github.io/PetSamas/index.html" 
-           style="color: #666; font-size: 14px; text-decoration: underline; opacity: 0.8;">
-            Conheça o Safe Samas e proteja seus objetos
-        </a>
     </div>
 
-    <br><br>
 
-    <strong>
-        ❤️ Muito obrigado por ajudar!
-    </strong>
+    <!-- ==================================================
+         GALERIA
+    ================================================== -->
 
-    <br><br>
+    <div
+        id="galeriaFotos"
+        class="galeria-publica"
+    ></div>
 
-    <p style="color:#777;font-size:14px;">
-        Protegido por Safe Samas
-    </p>
+
+    <!-- ==================================================
+         IDENTIFICAÇÃO
+    ================================================== -->
+
+    <div
+        id="identificacao"
+        class="identificacao"
+    >
+
+        <h1 id="nomePet">
+            Carregando...
+        </h1>
+
+        <p
+            id="subIdentificacao"
+            class="subidentificacao"
+        ></p>
+
+    </div>
+
+
+    <!-- ==================================================
+         VEÍCULO
+    ================================================== -->
+
+    <section
+        id="secaoVeiculo"
+        class="secao-publica identificacao-veiculo"
+        style="display:none;"
+    >
+
+        <h3>
+            🚗 Veículo
+        </h3>
+
+        <div id="dadosVeiculo"></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         RESPONSÁVEL
+    ================================================== -->
+
+    <section
+        id="secaoResponsavel"
+        class="secao-publica"
+    >
+
+        <h3 id="tituloResponsavel">
+            👤 Responsável
+        </h3>
+
+        <div id="dadosResponsavel"></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         LOCALIZAÇÃO
+    ================================================== -->
+
+    <section
+        id="secaoLocalizacao"
+        class="secao-publica"
+    >
+
+        <h3>
+            📍 Localização
+        </h3>
+
+        <div id="dadosLocalizacao"></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         SAÚDE
+    ================================================== -->
+
+    <section
+        id="secaoSaude"
+        class="secao-publica secao-saude"
+        style="display:none;"
+    >
+
+        <h3>
+            🏥 Informações de saúde
+        </h3>
+
+        <div id="dadosSaude"></div>
+
+        <div
+            id="avisoRevisao"
+            class="aviso-revisao"
+            style="display:none;"
+        ></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         EMERGÊNCIA
+    ================================================== -->
+
+    <section
+        id="secaoEmergencia"
+        class="secao-publica secao-emergencia"
+        style="display:none;"
+    >
+
+        <h3>
+            🚨 Contato de emergência
+        </h3>
+
+        <div id="dadosEmergencia"></div>
+
+    </section>
+
+
+    <!-- ==================================================
+         CONTATO
+    ================================================== -->
+
+    <div
+        id="areaContato"
+        class="area-contato"
+    >
+
+        <a
+            id="linkWhatsapp"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+
+            <button
+                id="btnContato"
+                class="btn-samas btn-contato-publico"
+            >
+                💬 Falar com o responsável
+            </button>
+
+        </a>
+
+
+        <div
+            id="areaContatoConfianca"
+            style="display:none; margin-top:15px;"
+        >
+
+            <a
+                id="linkContatoConfianca"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+
+                <button
+                    id="btnContatoConfianca"
+                    class="btn-samas btn-contato-publico"
+                >
+                    📞 Contatar contato de confiança
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         RODAPÉ
+    ================================================== -->
+
+    <div class="rodape-publico">
+
+        <strong>
+            ❤️ Muito obrigado por ajudar!
+        </strong>
+
+        <br>
+        <br>
+
+        <a
+            href="https://jhonatanogueira875-commits.github.io/PetSamas/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Conheça o Safe Samas e proteja seus objetos
+        </a>
+
+        <p>
+            Protegido por Safe Samas
+        </p>
+
+    </div>
+
+</div>
+```
 
 </main>
 
-<!-- ========================================= -->
-<!-- MODAL DE VISUALIZAÇÃO DA FOTO             -->
-<!-- ========================================= -->
-<div id="modalFoto" class="modal-foto">
+<!-- ==================================================
+     MODAL
+================================================== -->
 
-    <span id="fecharModal">&times;</span>
+<div
+    id="modalFoto"
+    class="modal-foto"
+>
 
-    <img
-        id="imagemModal"
-        class="imagem-modal"
-        src=""
-        alt="Foto ampliada">
+```
+<span id="fecharModal">
+    &times;
+</span>
+
+<img
+    id="imagemModal"
+    class="imagem-modal"
+    src=""
+    alt="Foto ampliada"
+>
+```
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ==================================================
+     SCRIPTS
+================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
 <script src="js/supabase.js"></script>
+
 <script src="js/pet-publico.js"></script>
 
 </body>
+
 </html>
