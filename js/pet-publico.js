@@ -11,7 +11,7 @@ Responsável por:
 ✔ Exibir uma foto para pet/item/humano
 ✔ Exibir até 3 fotos para veículo
 ✔ Exibir dados específicos do veículo
-✔ Exibir responsável/proprietário
+✔ Exibir responsável/proprietário e telefone
 ✔ Exibir localização
 ✔ Exibir informações médicas para humanos e veículos
 ✔ Exibir contato de emergência
@@ -574,22 +574,45 @@ function montarResponsavel(
 
 
     if (
-        pet.nome_tutor
+        pet.nome_tutor ||
+        pet.telefone
     ) {
 
-        dados.innerHTML = `
-            <div class="campo-publico">
-                <span class="campo-label">
-                    Nome
-                </span>
+        let html = "";
 
-                <span class="campo-valor">
-                    ${escaparHTML(
-                        pet.nome_tutor
-                    )}
-                </span>
-            </div>
-        `;
+        if (pet.nome_tutor) {
+            html += `
+                <div class="campo-publico">
+                    <span class="campo-label">
+                        Nome
+                    </span>
+
+                    <span class="campo-valor">
+                        ${escaparHTML(
+                            pet.nome_tutor
+                        )}
+                    </span>
+                </div>
+            `;
+        }
+
+        if (pet.telefone) {
+            html += `
+                <div class="campo-publico">
+                    <span class="campo-label">
+                        Telefone
+                    </span>
+
+                    <span class="campo-valor">
+                        ${escaparHTML(
+                            pet.telefone
+                        )}
+                    </span>
+                </div>
+            `;
+        }
+
+        dados.innerHTML = html;
 
     } else {
 
@@ -1251,131 +1274,116 @@ function montarContatos(
 
     /*
     ------------------------------------------------------
-    CONTATO PRINCIPAL
+    CONTATO PRINCIPAL VIA WHATSAPP
     ------------------------------------------------------
     */
 
+    const telefone =
+        somenteNumeros(
+            pet.telefone
+        );
+
+
     if (
-        pet.tipo === "item"
+        telefone &&
+        linkWhatsapp &&
+        btnContato
     ) {
 
-        /*
-        O proprietário não recebe contato
-        diretamente por este botão.
-
-        O item/celular utiliza o contato
-        de confiança quando disponível.
-        */
-
-        if (linkWhatsapp) {
-
-            linkWhatsapp.style.display =
-                "none";
-
-        }
-
-    } else {
-
-        const telefone =
-            somenteNumeros(
-                pet.telefone
-            );
+        let descricao =
+            "item";
 
 
         if (
-            telefone &&
-            linkWhatsapp &&
-            btnContato
+            pet.tipo === "pet"
         ) {
 
-            let descricao =
-                "item";
-
-
-            if (
-                pet.tipo === "pet"
-            ) {
-
-                descricao =
-                    "pet";
-
-            } else if (
-                pet.tipo === "veiculo"
-            ) {
-
-                descricao =
-                    "veículo";
-
-            } else if (
-                pet.tipo === "humano"
-            ) {
-
-                descricao =
-                    "pessoa";
-
-            }
-
-
-            const mensagem =
-                encodeURIComponent(
-                    `Olá! Encontrei o(a) ${descricao} "${pet.nome}" e gostaria de falar com você.`
-                );
-
-
-            linkWhatsapp.href =
-                `https://wa.me/55${telefone}?text=${mensagem}`;
-
-
-            linkWhatsapp.style.display =
-                "inline";
-
-
-            btnContato.style.display =
-                "inline-block";
+            descricao =
+                "pet";
 
         } else if (
-            linkWhatsapp
+            pet.tipo === "veiculo"
         ) {
 
-            linkWhatsapp.style.display =
-                "none";
+            descricao =
+                "veículo";
+
+        } else if (
+            pet.tipo === "humano"
+        ) {
+
+            descricao =
+                "pessoa";
 
         }
+
+
+        const mensagem =
+            encodeURIComponent(
+                `Olá! Encontrei o(a) ${descricao} "${pet.nome || ""}" e gostaria de falar com você.`
+            );
+
+
+        linkWhatsapp.href =
+            `https://wa.me/55${telefone}?text=${mensagem}`;
+
+
+        linkWhatsapp.style.display =
+            "inline";
+
+
+        btnContato.style.display =
+            "inline-block";
+
+    } else if (
+        linkWhatsapp
+    ) {
+
+        linkWhatsapp.style.display =
+            "none";
 
     }
 
 
     /*
     ------------------------------------------------------
-    CONTATO DE CONFIANÇA
+    CONTATO DE CONFIANÇA (CASO EXISTA)
     ------------------------------------------------------
     */
 
     if (
-        pet.tipo === "item" &&
         pet.contato_telefone &&
         areaConfianca &&
         linkConfianca
     ) {
 
-        const telefone =
+        const telConfianca =
             somenteNumeros(
                 pet.contato_telefone
             );
 
 
-        const mensagem =
-            encodeURIComponent(
-                `Olá! Encontrei o item "${pet.nome}" cadastrado no Safe Samas e gostaria de falar com você.`
-            );
+        if (telConfianca) {
+
+            const msgConfianca =
+                encodeURIComponent(
+                    `Olá! Encontrei o item/registro "${pet.nome || ""}" cadastrado no Safe Samas e gostaria de falar com você.`
+                );
 
 
-        linkConfianca.href =
-            `https://wa.me/55${telefone}?text=${mensagem}`;
+            linkConfianca.href =
+                `https://wa.me/55${telConfianca}?text=${msgConfianca}`;
 
 
-        areaConfianca.style.display =
-            "block";
+            areaConfianca.style.display =
+                "block";
+
+        } else {
+
+            areaConfianca.style.display =
+                "none";
+
+        }
 
     } else if (
         areaConfianca
