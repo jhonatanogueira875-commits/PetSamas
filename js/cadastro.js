@@ -1756,7 +1756,16 @@ IMPORTANTE:
                         .update({
 
                             pet_id:
-                                cadastroSalvo.id
+                                cadastroSalvo.id,
+
+                            status:
+                                "ativado",
+
+                            qr_liberado:
+                                true,
+
+                            activated_at:
+                                new Date().toISOString()
 
                         })
                         .eq(
