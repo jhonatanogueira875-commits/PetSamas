@@ -1,6 +1,6 @@
 /*
 ==========================================================
-Safe Samas
+Safe Samas / PetSamas
 Arquivo: cadastro.js
 
 Responsável por:
@@ -9,38 +9,53 @@ Responsável por:
 ✔ Cadastro de veículos
 ✔ Cadastro de humanos
 ✔ Edição de cadastros
-✔ Upload e compressão de imagens
-✔ Persistência no Supabase
+✔ Upload das fotos com compressão
+✔ Informações médicas
+✔ Medicamentos
+✔ Alergias
+✔ Contato de emergência
+✔ Privacidade dos dados médicos
+✔ Revisão das informações médicas
+✔ Integração com Supabase
+✔ Vínculo do QR Code original ao cadastro
 
 IMPORTANTE:
-Este arquivo NÃO altera a estrutura do banco.
-O payload utiliza os campos já definidos no projeto.
+- Este arquivo é totalmente encapsulado.
+- Não declara variáveis no escopo global.
+- Não redefine variáveis declaradas no HTML.
+- O HTML continua responsável pela exibição/ocultação
+  dos campos.
+- Quando o cadastro é iniciado através de:
+      cadastro.html?codigo=PET-000481
+  o MESMO QR Code é vinculado ao cadastro criado.
+- Nenhum novo QR Code é gerado neste processo.
 ==========================================================
 */
 
 (() => {
 
-    console.log("==========================================");
-    console.log("CADASTRO.JS CARREGADO");
-    console.log("VERSÃO: 2026-08-21-CORRIGIDA");
-    console.log("==========================================");
+    "use strict";
 
 
     // ======================================================
-    // ELEMENTOS PRINCIPAIS
+    // INICIALIZAÇÃO
+    // ======================================================
+
+    console.log(
+        "CADASTRO.JS -> VERSÃO FINAL 2026"
+    );
+
+    console.log(
+        "CADASTRO.JS -> INICIANDO..."
+    );
+
+
+    // ======================================================
+    // ELEMENTOS
     // ======================================================
 
     const formulario =
         document.getElementById("formCadastro");
-
-    const campoFoto =
-        document.getElementById("foto");
-
-    const campoFoto2 =
-        document.getElementById("foto2");
-
-    const campoFoto3 =
-        document.getElementById("foto3");
 
     const campoTipo =
         document.getElementById("tipo");
@@ -49,9 +64,9 @@ O payload utiliza os campos já definidos no projeto.
         document.getElementById("categoria");
 
 
-    // ======================================================
-    // CAMPOS COMUNS
-    // ======================================================
+    // ------------------------------------------------------
+    // Dados comuns
+    // ------------------------------------------------------
 
     const nomePet =
         document.getElementById("nomePet");
@@ -66,9 +81,9 @@ O payload utiliza os campos já definidos no projeto.
         document.getElementById("telefone");
 
 
-    // ======================================================
-    // CONTATO DE CONFIANÇA
-    // ======================================================
+    // ------------------------------------------------------
+    // Contato de confiança
+    // ------------------------------------------------------
 
     const contatoNome =
         document.getElementById("contatoNome");
@@ -80,9 +95,9 @@ O payload utiliza os campos já definidos no projeto.
         document.getElementById("contatoParentesco");
 
 
-    // ======================================================
-    // VEÍCULO
-    // ======================================================
+    // ------------------------------------------------------
+    // Veículo
+    // ------------------------------------------------------
 
     const marca =
         document.getElementById("marca");
@@ -97,20 +112,29 @@ O payload utiliza os campos já definidos no projeto.
         document.getElementById("placa");
 
 
-    // ======================================================
-    // HUMANO
-    // ======================================================
+    // ------------------------------------------------------
+    // Humano
+    // ------------------------------------------------------
 
     const tipoHumano =
         document.getElementById("tipoHumano");
 
-    const grupoHumano =
-        document.getElementById("grupoHumano");
+    const dataNascimento =
+        document.getElementById("dataNascimento");
+
+    const idade =
+        document.getElementById("idade");
+
+    const sexo =
+        document.getElementById("sexo");
+
+    const informacoesImportantes =
+        document.getElementById("informacoesImportantes");
 
 
-    // ======================================================
-    // SAÚDE
-    // ======================================================
+    // ------------------------------------------------------
+    // Saúde
+    // ------------------------------------------------------
 
     const tipoSanguineo =
         document.getElementById("tipoSanguineo");
@@ -118,579 +142,227 @@ O payload utiliza os campos já definidos no projeto.
     const condicaoMedica =
         document.getElementById("condicaoMedica");
 
-    const campoUsaMedicamentos =
-        document.getElementById("usaMedicamentos");
+    const alergias =
+        document.getElementById("alergias");
+
+    const usaMedicamentosCampo =
+        document.getElementById(
+            "usaMedicamentos"
+        );
 
     const medicamentos =
         document.getElementById("medicamentos");
 
-    const alergias =
-        document.getElementById("alergias");
-
     const observacoesMedicas =
-        document.getElementById("observacoesMedicas");
+        document.getElementById(
+            "observacoesMedicas"
+        );
 
 
-    // ======================================================
-    // EMERGÊNCIA
-    // ======================================================
+    // ------------------------------------------------------
+    // Emergência
+    // ------------------------------------------------------
 
     const nomeEmergencia =
-        document.getElementById("nomeEmergencia");
+        document.getElementById(
+            "nomeEmergencia"
+        );
 
     const telefoneEmergencia =
-        document.getElementById("telefoneEmergencia");
+        document.getElementById(
+            "telefoneEmergencia"
+        );
 
     const parentescoEmergencia =
-        document.getElementById("parentescoEmergencia");
+        document.getElementById(
+            "parentescoEmergencia"
+        );
 
 
-    // ======================================================
-    // ELEMENTOS DE INTERFACE
-    // ======================================================
+    // ------------------------------------------------------
+    // Privacidade
+    // ------------------------------------------------------
 
-    const blocoCategoria =
-        document.getElementById("categoriaItem");
-
-    const blocoContato =
-        document.getElementById("contatoConfianca");
-
-    const grupoVeiculo =
-        document.getElementById("grupoVeiculo");
-
-    const grupoSaude =
-        document.getElementById("grupoSaude");
-
-    const blocoRevisaoSaude =
-        document.getElementById("blocoRevisaoSaude");
-
-    const grupoMedicamentos =
-        document.getElementById("grupoMedicamentos");
+    const dadosMedicosPublicos =
+        document.getElementById(
+            "dadosMedicosPublicos"
+        );
 
 
-    // ======================================================
-    // REVISÃO DE SAÚDE
-    // ======================================================
+    // ------------------------------------------------------
+    // Revisão
+    // ------------------------------------------------------
 
     const confirmarRevisaoSaude =
-        document.getElementById("confirmarRevisaoSaude");
+        document.getElementById(
+            "confirmarRevisaoSaude"
+        );
 
     const textoUltimaRevisao =
-        document.getElementById("textoUltimaRevisao");
-
-    let ultimaRevisaoAnterior = null;
-
-
-    // ======================================================
-    // REVISÃO HUMANA
-    // ======================================================
-
-    const confirmarRevisaoHumana =
-        document.getElementById("confirmarRevisaoHumana");
-
-    const textoUltimaRevisaoHumana =
-        document.getElementById("textoUltimaRevisaoHumana");
-
-    let ultimaRevisaoHumanaAnterior = null;
+        document.getElementById(
+            "textoUltimaRevisao"
+        );
 
 
-    // ======================================================
-    // PARÂMETRO DE EDIÇÃO
-    // ======================================================
+    // ------------------------------------------------------
+    // Fotos
+    // ------------------------------------------------------
 
-    const parametros =
-        new URLSearchParams(window.location.search);
+    const campoFoto =
+        document.getElementById("foto");
 
-    const idEdicao =
-        parametros.get("id");
+    const campoFoto2 =
+        document.getElementById("foto2");
+
+    const campoFoto3 =
+        document.getElementById("foto3");
 
 
     // ======================================================
-    // FOTOS
-    // ======================================================
-
-    let fotoBase64 = "";
-    let fotoBase642 = "";
-    let fotoBase643 = "";
-
-
-    // ======================================================
-    // VERIFICAÇÃO INICIAL
+    // VERIFICAÇÃO DO FORMULÁRIO
     // ======================================================
 
     if (!formulario) {
 
         console.error(
-            "ERRO: #formCadastro não foi encontrado."
+            "CADASTRO.JS -> ERRO: #formCadastro não encontrado."
         );
 
         return;
     }
 
-    if (typeof banco === "undefined") {
 
-        console.error(
-            "ERRO: objeto 'banco' não está disponível."
+    // ======================================================
+    // URL / EDIÇÃO / QR
+    // ======================================================
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
         );
 
-        return;
-    }
+    const idEdicao =
+        parametros.get("id");
+
+    /*
+    ----------------------------------------------------------
+    QR ORIGINAL RECEBIDO PELA URL
+
+    Exemplo:
+
+    cadastro.html?codigo=PET-000481
+
+    Esse código será preservado durante todo o cadastro.
+
+    IMPORTANTE:
+    Não geramos outro QR.
+
+    O QR que iniciou o cadastro será o QR definitivo
+    daquele cadastro.
+    ----------------------------------------------------------
+    */
+
+    const codigoQR =
+        parametros.get("codigo")
+            ? parametros.get("codigo").trim().toUpperCase()
+            : null;
+
 
     console.log(
-        "✅ Formulário encontrado."
-    );
-
-    console.log(
-        "✅ Supabase disponível."
+        "CADASTRO.JS -> QR recebido pela URL:",
+        codigoQR
     );
 
 
     // ======================================================
-    // COMPRESSÃO DE IMAGEM
+    // FOTOS EM MEMÓRIA
     // ======================================================
 
-    function comprimirImagem(
-        arquivo,
-        limiteMaximo = 1000,
-        qualidade = 0.75
-    ) {
+    let fotoBase64 = "";
 
-        return new Promise(
-            (resolve, reject) => {
+    let fotoBase642 = "";
 
-                const leitor =
-                    new FileReader();
-
-                leitor.onerror =
-                    () => reject(
-                        new Error(
-                            "Não foi possível ler a imagem."
-                        )
-                    );
-
-                leitor.onload =
-                    evento => {
-
-                        const img =
-                            new Image();
-
-                        img.onerror =
-                            () => reject(
-                                new Error(
-                                    "Não foi possível processar a imagem."
-                                )
-                            );
-
-                        img.onload =
-                            () => {
-
-                                let largura =
-                                    img.width;
-
-                                let altura =
-                                    img.height;
-
-
-                                if (
-                                    largura <= limiteMaximo &&
-                                    altura <= limiteMaximo
-                                ) {
-
-                                    resolve(
-                                        evento.target.result
-                                    );
-
-                                    return;
-                                }
-
-
-                                if (
-                                    largura > altura
-                                ) {
-
-                                    altura =
-                                        Math.round(
-                                            (
-                                                altura *
-                                                limiteMaximo
-                                            ) /
-                                            largura
-                                        );
-
-                                    largura =
-                                        limiteMaximo;
-
-                                } else {
-
-                                    largura =
-                                        Math.round(
-                                            (
-                                                largura *
-                                                limiteMaximo
-                                            ) /
-                                            altura
-                                        );
-
-                                    altura =
-                                        limiteMaximo;
-                                }
-
-
-                                const canvas =
-                                    document.createElement(
-                                        "canvas"
-                                    );
-
-                                canvas.width =
-                                    largura;
-
-                                canvas.height =
-                                    altura;
-
-
-                                const ctx =
-                                    canvas.getContext(
-                                        "2d"
-                                    );
-
-                                ctx.drawImage(
-                                    img,
-                                    0,
-                                    0,
-                                    largura,
-                                    altura
-                                );
-
-
-                                const tipoSaida =
-                                    arquivo.type ===
-                                    "image/png"
-                                        ? "image/png"
-                                        : "image/jpeg";
-
-
-                                const resultado =
-                                    canvas.toDataURL(
-                                        tipoSaida,
-                                        qualidade
-                                    );
-
-
-                                resolve(resultado);
-                            };
-
-
-                        img.src =
-                            evento.target.result;
-                    };
-
-
-                leitor.readAsDataURL(
-                    arquivo
-                );
-            }
-        );
-    }
+    let fotoBase643 = "";
 
 
     // ======================================================
-    // PREPARAR UPLOAD
+    // ÚLTIMA REVISÃO ANTERIOR
     // ======================================================
 
-    function prepararUpload(
-        input,
-        callback
-    ) {
-
-        if (!input) return;
-
-
-        input.addEventListener(
-            "change",
-            async () => {
-
-                const arquivo =
-                    input.files &&
-                    input.files[0];
-
-
-                if (!arquivo) {
-                    return;
-                }
-
-
-                try {
-
-                    console.log(
-                        "⏳ Otimizando imagem..."
-                    );
-
-
-                    const resultado =
-                        await comprimirImagem(
-                            arquivo
-                        );
-
-
-                    callback(
-                        resultado
-                    );
-
-
-                    console.log(
-                        "✅ Imagem otimizada."
-                    );
-
-                } catch (erro) {
-
-                    console.error(
-                        "Erro ao processar imagem:",
-                        erro
-                    );
-
-                    alert(
-                        "Não foi possível processar a imagem."
-                    );
-                }
-            }
-        );
-    }
+    let ultimaRevisaoAnterior = null;
 
 
     // ======================================================
-    // ATIVAR UPLOAD
+    // FUNÇÃO: OBTER VALOR DE CAMPO
     // ======================================================
 
-    prepararUpload(
-        campoFoto,
-        resultado => {
-            fotoBase64 = resultado;
+    function obterValor(campo) {
+
+        if (!campo) {
+            return null;
         }
-    );
-
-    prepararUpload(
-        campoFoto2,
-        resultado => {
-            fotoBase642 = resultado;
-        }
-    );
-
-    prepararUpload(
-        campoFoto3,
-        resultado => {
-            fotoBase643 = resultado;
-        }
-    );
-
-
-    // ======================================================
-    // ATUALIZAR CAMPOS VISUAIS
-    // ======================================================
-
-    function atualizarCampos() {
-
-        const tipo =
-            campoTipo
-                ? campoTipo.value
-                : "";
-
-
-        // --------------------------------------------------
-        // ESCONDER
-        // --------------------------------------------------
-
-        if (blocoCategoria)
-            blocoCategoria.style.display =
-                "none";
-
-        if (blocoContato)
-            blocoContato.style.display =
-                "none";
-
-        if (grupoHumano)
-            grupoHumano.style.display =
-                "none";
-
-        if (grupoVeiculo)
-            grupoVeiculo.style.display =
-                "none";
-
-        if (grupoSaude)
-            grupoSaude.style.display =
-                "none";
-
-        if (blocoRevisaoSaude)
-            blocoRevisaoSaude.style.display =
-                "none";
-
-
-        // --------------------------------------------------
-        // ITEM
-        // --------------------------------------------------
-
-        if (tipo === "item") {
-
-            if (blocoCategoria)
-                blocoCategoria.style.display =
-                    "block";
-
-
-            if (
-                campoCategoria &&
-                campoCategoria.value ===
-                    "celular"
-            ) {
-
-                if (blocoContato)
-                    blocoContato.style.display =
-                        "block";
-            }
-        }
-
-
-        // --------------------------------------------------
-        // HUMANO
-        // --------------------------------------------------
 
         if (
-            tipo === "humano" ||
-            tipo === "pessoa"
+            typeof campo.value !==
+            "string"
         ) {
-
-            if (grupoHumano)
-                grupoHumano.style.display =
-                    "block";
-
-
-            if (grupoSaude)
-                grupoSaude.style.display =
-                    "block";
+            return campo.value;
         }
 
+        const valor =
+            campo.value.trim();
 
-        // --------------------------------------------------
-        // VEÍCULO
-        // --------------------------------------------------
-
-        if (tipo === "veiculo") {
-
-            if (grupoVeiculo)
-                grupoVeiculo.style.display =
-                    "block";
-
-
-            if (grupoSaude)
-                grupoSaude.style.display =
-                    "block";
-
-
-            if (blocoRevisaoSaude)
-                blocoRevisaoSaude.style.display =
-                    "block";
-        }
-
-
-        atualizarMedicamentos();
+        return valor || null;
     }
 
 
     // ======================================================
-    // MEDICAMENTOS
+    // FUNÇÃO: OBTER USUÁRIO
     // ======================================================
 
-    function atualizarMedicamentos() {
-
-        if (
-            !campoUsaMedicamentos ||
-            !grupoMedicamentos
-        ) {
-            return;
-        }
-
-
-        if (
-            campoUsaMedicamentos.value ===
-            "sim"
-        ) {
-
-            grupoMedicamentos.style.display =
-                "block";
-
-        } else {
-
-            grupoMedicamentos.style.display =
-                "none";
-
-            if (medicamentos) {
-                medicamentos.value = "";
-            }
-        }
-    }
-
-
-    // ======================================================
-    // EVENTOS DA INTERFACE
-    // ======================================================
-
-    if (campoTipo) {
-
-        campoTipo.addEventListener(
-            "change",
-            atualizarCampos
-        );
-    }
-
-
-    if (campoCategoria) {
-
-        campoCategoria.addEventListener(
-            "change",
-            atualizarCampos
-        );
-    }
-
-
-    if (campoUsaMedicamentos) {
-
-        campoUsaMedicamentos.addEventListener(
-            "change",
-            atualizarMedicamentos
-        );
-    }
-
-
-    // ======================================================
-    // USUÁRIO LOGADO
-    // ======================================================
-
-    async function getUser() {
+    async function obterUsuario() {
 
         try {
 
-            const {
-                data,
-                error
-            } =
-                await banco.auth.getUser();
-
-
-            if (error) {
+            if (
+                typeof banco ===
+                "undefined"
+            ) {
 
                 console.error(
-                    "Erro ao obter usuário:",
-                    error
+                    "CADASTRO.JS -> variável 'banco' não encontrada."
                 );
 
                 return null;
             }
 
 
-            return data.user || null;
+            const resultado =
+                await banco.auth.getUser();
+
+
+            if (resultado.error) {
+
+                console.error(
+                    "CADASTRO.JS -> erro ao obter usuário:",
+                    resultado.error
+                );
+
+                return null;
+            }
+
+
+            return (
+                resultado.data &&
+                resultado.data.user
+            )
+                ? resultado.data.user
+                : null;
 
         } catch (erro) {
 
             console.error(
-                "Erro inesperado ao obter usuário:",
+                "CADASTRO.JS -> exceção ao obter usuário:",
                 erro
             );
 
@@ -700,434 +372,870 @@ O payload utiliza os campos já definidos no projeto.
 
 
     // ======================================================
-    // CARREGAR CADASTROS
+    // COMPRESSÃO DE IMAGEM
     // ======================================================
 
-    async function carregarPets() {
+    function comprimirImagem(
+        arquivo,
+        limiteMaximo,
+        qualidade,
+        callback
+    ) {
 
-        console.log(
-            "⏳ Carregando cadastros..."
-        );
-
-
-        const {
-            data,
-            error
-        } =
-            await banco
-                .from("pets")
-                .select("*");
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao carregar cadastros:",
-                error
-            );
-
+        if (!arquivo) {
             return;
         }
 
 
-        const pets =
-            data || [];
+        const leitor =
+            new FileReader();
 
 
-        console.log(
-            "✅ Cadastros carregados:",
-            pets.length
-        );
+        leitor.onload =
+            function (evento) {
 
+                const imagem =
+                    new Image();
 
-        if (!idEdicao) {
 
-            return;
-        }
+                imagem.onload =
+                    function () {
 
+                        let largura =
+                            imagem.width;
 
-        const pet =
-            pets.find(
-                item =>
-                    String(item.id) ===
-                    String(idEdicao)
-            );
+                        let altura =
+                            imagem.height;
 
 
-        if (!pet) {
+                        // ----------------------------------
+                        // Já está dentro do limite
+                        // ----------------------------------
 
-            console.error(
-                "Cadastro não encontrado:",
-                idEdicao
-            );
+                        if (
+                            largura <=
+                                limiteMaximo &&
+                            altura <=
+                                limiteMaximo
+                        ) {
 
-            return;
-        }
+                            callback(
+                                evento.target.result
+                            );
 
-
-        console.log(
-            "✏️ Editando cadastro:",
-            pet
-        );
-
-
-        // --------------------------------------------------
-        // CAMPOS COMUNS
-        // --------------------------------------------------
-
-        if (nomePet)
-            nomePet.value =
-                pet.nome_pet || "";
-
-        if (nomeTutor)
-            nomeTutor.value =
-                pet.nome_tutor || "";
-
-        if (cidade)
-            cidade.value =
-                pet.cidade || "";
-
-        if (telefone)
-            telefone.value =
-                pet.telefone || "";
-
-
-        if (campoTipo)
-            campoTipo.value =
-                pet.tipo || "pet";
-
-
-        if (campoCategoria)
-            campoCategoria.value =
-                pet.categoria || "";
-
-
-        // --------------------------------------------------
-        // CONTATO
-        // --------------------------------------------------
-
-        if (contatoNome)
-            contatoNome.value =
-                pet.contato_nome || "";
-
-        if (contatoTelefone)
-            contatoTelefone.value =
-                pet.contato_telefone || "";
-
-        if (contatoParentesco)
-            contatoParentesco.value =
-                pet.contato_parentesco || "";
-
-
-        // --------------------------------------------------
-        // VEÍCULO
-        // --------------------------------------------------
-
-        if (marca)
-            marca.value =
-                pet.marca || "";
-
-        if (modelo)
-            modelo.value =
-                pet.modelo || "";
-
-        if (cor)
-            cor.value =
-                pet.cor || "";
-
-        if (placa)
-            placa.value =
-                pet.placa || "";
-
-
-        // --------------------------------------------------
-        // HUMANO
-        // --------------------------------------------------
-
-        if (tipoHumano)
-            tipoHumano.value =
-                pet.tipo_humano || "";
-
-
-        // --------------------------------------------------
-        // SAÚDE
-        // --------------------------------------------------
-
-        if (tipoSanguineo)
-            tipoSanguineo.value =
-                pet.tipo_sanguineo || "";
-
-        if (condicaoMedica)
-            condicaoMedica.value =
-                pet.condicao_medica || "";
-
-
-        /*
-        O HTML usa SELECT:
-
-        <option value="nao">Não</option>
-        <option value="sim">Sim</option>
-
-        Portanto não usamos .checked.
-        */
-
-        if (campoUsaMedicamentos) {
-
-            campoUsaMedicamentos.value =
-                pet.usa_medicamentos
-                    ? "sim"
-                    : "nao";
-        }
-
-
-        if (medicamentos)
-            medicamentos.value =
-                pet.medicamentos || "";
-
-        if (alergias)
-            alergias.value =
-                pet.alergias || "";
-
-        if (observacoesMedicas)
-            observacoesMedicas.value =
-                pet.observacoes_medicas || "";
-
-
-        // --------------------------------------------------
-        // EMERGÊNCIA
-        // --------------------------------------------------
-
-        if (nomeEmergencia)
-            nomeEmergencia.value =
-                pet.nome_emergencia || "";
-
-        if (telefoneEmergencia)
-            telefoneEmergencia.value =
-                pet.telefone_emergencia || "";
-
-        if (parentescoEmergencia)
-            parentescoEmergencia.value =
-                pet.parentesco_emergencia || "";
-
-
-        // --------------------------------------------------
-        // REVISÃO SAÚDE
-        // --------------------------------------------------
-
-        ultimaRevisaoAnterior =
-            pet.ultima_revisao_saude ||
-            null;
-
-
-        if (confirmarRevisaoSaude) {
-
-            confirmarRevisaoSaude.checked =
-                Boolean(
-                    pet.responsabilidade_confirmada
-                );
-        }
-
-
-        if (textoUltimaRevisao) {
-
-            if (pet.ultima_revisao_saude) {
-
-                const data =
-                    new Date(
-                        pet.ultima_revisao_saude
-                    );
-
-
-                textoUltimaRevisao.innerHTML =
-                    `<strong>Última revisão:</strong><br>
-                    ${data.toLocaleDateString("pt-BR")}
-                    às
-                    ${data.toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
+                            return;
                         }
-                    )}`;
-
-            } else {
-
-                textoUltimaRevisao.innerHTML =
-                    "<strong>Este cadastro ainda não possui revisão registrada.</strong>";
-            }
-        }
 
 
-        // --------------------------------------------------
-        // REVISÃO HUMANA
-        // --------------------------------------------------
+                        // ----------------------------------
+                        // Redimensionamento proporcional
+                        // ----------------------------------
 
-        ultimaRevisaoHumanaAnterior =
-            pet.ultima_revisao_humana ||
-            null;
+                        if (
+                            largura >
+                            altura
+                        ) {
 
+                            altura =
+                                Math.round(
+                                    altura *
+                                    (
+                                        limiteMaximo /
+                                        largura
+                                    )
+                                );
 
-        if (confirmarRevisaoHumana) {
+                            largura =
+                                limiteMaximo;
 
-            confirmarRevisaoHumana.checked =
-                Boolean(
-                    pet.responsabilidade_confirmada_humana
-                );
-        }
+                        } else {
 
+                            largura =
+                                Math.round(
+                                    largura *
+                                    (
+                                        limiteMaximo /
+                                        altura
+                                    )
+                                );
 
-        if (textoUltimaRevisaoHumana) {
-
-            if (pet.ultima_revisao_humana) {
-
-                const data =
-                    new Date(
-                        pet.ultima_revisao_humana
-                    );
-
-
-                textoUltimaRevisaoHumana.innerHTML =
-                    `<strong>Última revisão:</strong><br>
-                    ${data.toLocaleDateString("pt-BR")}
-                    às
-                    ${data.toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
+                            altura =
+                                limiteMaximo;
                         }
-                    )}`;
-
-            } else {
-
-                textoUltimaRevisaoHumana.innerHTML =
-                    "<strong>Este cadastro ainda não possui revisão registrada.</strong>";
-            }
-        }
 
 
-        // --------------------------------------------------
-        // FOTOS
-        // --------------------------------------------------
+                        // ----------------------------------
+                        // Canvas
+                        // ----------------------------------
 
-        fotoBase64 =
-            pet.foto || "";
+                        const canvas =
+                            document.createElement(
+                                "canvas"
+                            );
 
-        fotoBase642 =
-            pet.foto2 || "";
+                        canvas.width =
+                            largura;
 
-        fotoBase643 =
-            pet.foto3 || "";
+                        canvas.height =
+                            altura;
 
 
-        // --------------------------------------------------
-        // ATUALIZAR INTERFACE
-        // --------------------------------------------------
+                        const contexto =
+                            canvas.getContext(
+                                "2d"
+                            );
 
-        atualizarCampos();
 
-        atualizarMedicamentos();
+                        contexto.drawImage(
+                            imagem,
+                            0,
+                            0,
+                            largura,
+                            altura
+                        );
+
+
+                        const resultado =
+                            canvas.toDataURL(
+                                "image/jpeg",
+                                qualidade
+                            );
+
+
+                        callback(
+                            resultado
+                        );
+                    };
+
+
+                imagem.onerror =
+                    function () {
+
+                        console.error(
+                            "CADASTRO.JS -> erro ao carregar imagem."
+                        );
+
+                    };
+
+
+                imagem.src =
+                    evento.target.result;
+            };
+
+
+        leitor.onerror =
+            function () {
+
+                console.error(
+                    "CADASTRO.JS -> erro ao ler imagem."
+                );
+
+            };
+
+
+        leitor.readAsDataURL(
+            arquivo
+        );
     }
 
 
     // ======================================================
-    // SUBMIT
+    // FOTO PRINCIPAL
+    // ======================================================
+
+    if (campoFoto) {
+
+        campoFoto.addEventListener(
+            "change",
+            function () {
+
+                const arquivo =
+                    campoFoto.files &&
+                    campoFoto.files[0];
+
+
+                if (!arquivo) {
+                    return;
+                }
+
+
+                comprimirImagem(
+                    arquivo,
+                    1200,
+                    0.80,
+                    function (resultado) {
+
+                        fotoBase64 =
+                            resultado;
+
+
+                        console.log(
+                            "CADASTRO.JS -> foto principal preparada."
+                        );
+
+                    }
+                );
+            }
+        );
+    }
+
+
+    // ======================================================
+    // FOTO 2
+    // ======================================================
+
+    if (campoFoto2) {
+
+        campoFoto2.addEventListener(
+            "change",
+            function () {
+
+                const arquivo =
+                    campoFoto2.files &&
+                    campoFoto2.files[0];
+
+
+                if (!arquivo) {
+                    return;
+                }
+
+
+                comprimirImagem(
+                    arquivo,
+                    1200,
+                    0.80,
+                    function (resultado) {
+
+                        fotoBase642 =
+                            resultado;
+
+
+                        console.log(
+                            "CADASTRO.JS -> foto 2 preparada."
+                        );
+
+                    }
+                );
+            }
+        );
+    }
+
+
+    // ======================================================
+    // FOTO 3
+    // ======================================================
+
+    if (campoFoto3) {
+
+        campoFoto3.addEventListener(
+            "change",
+            function () {
+
+                const arquivo =
+                    campoFoto3.files &&
+                    campoFoto3.files[0];
+
+
+                if (!arquivo) {
+                    return;
+                }
+
+
+                comprimirImagem(
+                    arquivo,
+                    1200,
+                    0.80,
+                    function (resultado) {
+
+                        fotoBase643 =
+                            resultado;
+
+
+                        console.log(
+                            "CADASTRO.JS -> foto 3 preparada."
+                        );
+
+                    }
+                );
+            }
+        );
+    }
+
+
+    // ======================================================
+    // BUSCAR CADASTRO PARA EDIÇÃO
+    // ======================================================
+
+    async function carregarCadastro() {
+
+        if (!idEdicao) {
+            return;
+        }
+
+
+        console.log(
+            "CADASTRO.JS -> carregando cadastro:",
+            idEdicao
+        );
+
+
+        try {
+
+            const resposta =
+                await banco
+                    .from("pets")
+                    .select("*")
+                    .eq(
+                        "id",
+                        idEdicao
+                    )
+                    .single();
+
+
+            if (resposta.error) {
+
+                console.error(
+                    "CADASTRO.JS -> erro ao carregar cadastro:",
+                    resposta.error
+                );
+
+                alert(
+                    "Não foi possível carregar o cadastro."
+                );
+
+                return;
+            }
+
+
+            const pet =
+                resposta.data;
+
+
+            if (!pet) {
+
+                alert(
+                    "Cadastro não encontrado."
+                );
+
+                return;
+            }
+
+
+            // ==================================================
+            // DADOS COMUNS
+            // ==================================================
+
+            if (nomePet) {
+
+                nomePet.value =
+                    pet.nome_pet || "";
+            }
+
+
+            if (nomeTutor) {
+
+                nomeTutor.value =
+                    pet.nome_tutor || "";
+            }
+
+
+            if (cidade) {
+
+                cidade.value =
+                    pet.cidade || "";
+            }
+
+
+            if (telefone) {
+
+                telefone.value =
+                    pet.telefone || "";
+            }
+
+
+            // ==================================================
+            // TIPO
+            // ==================================================
+
+            if (campoTipo) {
+
+                campoTipo.value =
+                    pet.tipo || "";
+
+                campoTipo.dispatchEvent(
+                    new Event("change")
+                );
+            }
+
+
+            // ==================================================
+            // CATEGORIA
+            // ==================================================
+
+            if (campoCategoria) {
+
+                campoCategoria.value =
+                    pet.categoria || "";
+
+                campoCategoria.dispatchEvent(
+                    new Event("change")
+                );
+            }
+
+
+            // ==================================================
+            // CONTATO DE CONFIANÇA
+            // ==================================================
+
+            if (contatoNome) {
+
+                contatoNome.value =
+                    pet.contato_nome || "";
+            }
+
+
+            if (contatoTelefone) {
+
+                contatoTelefone.value =
+                    pet.contato_telefone || "";
+            }
+
+
+            if (contatoParentesco) {
+
+                contatoParentesco.value =
+                    pet.contato_parentesco || "";
+            }
+
+
+            // ==================================================
+            // VEÍCULO
+            // ==================================================
+
+            if (marca) {
+
+                marca.value =
+                    pet.marca || "";
+            }
+
+
+            if (modelo) {
+
+                modelo.value =
+                    pet.modelo || "";
+            }
+
+
+            if (cor) {
+
+                cor.value =
+                    pet.cor || "";
+            }
+
+
+            if (placa) {
+
+                placa.value =
+                    pet.placa || "";
+            }
+
+
+            // ==================================================
+            // HUMANO
+            // ==================================================
+
+            if (tipoHumano) {
+
+                tipoHumano.value =
+                    pet.tipo_humano || "";
+            }
+
+
+            // --------------------------------------------------
+            // Data de nascimento
+            // --------------------------------------------------
+
+            if (dataNascimento) {
+
+                dataNascimento.value =
+                    pet.data_nascimento || "";
+            }
+
+
+            // --------------------------------------------------
+            // Idade
+            // --------------------------------------------------
+
+            if (idade) {
+
+                idade.value =
+                    pet.idade ?? "";
+            }
+
+
+            // --------------------------------------------------
+            // Sexo
+            // --------------------------------------------------
+
+            if (sexo) {
+
+                sexo.value =
+                    pet.sexo || "";
+            }
+
+
+            // --------------------------------------------------
+            // Informações importantes
+            // --------------------------------------------------
+
+            if (informacoesImportantes) {
+
+                informacoesImportantes.value =
+                    pet.informacoes_importantes || "";
+            }
+
+
+            // ==================================================
+            // SAÚDE
+            // ==================================================
+
+            if (tipoSanguineo) {
+
+                tipoSanguineo.value =
+                    pet.tipo_sanguineo || "";
+            }
+
+
+            if (condicaoMedica) {
+
+                condicaoMedica.value =
+                    pet.condicao_medica || "";
+            }
+
+
+            if (alergias) {
+
+                alergias.value =
+                    pet.alergias || "";
+            }
+
+
+            // ==================================================
+            // MEDICAMENTOS
+            // ==================================================
+
+            if (
+                usaMedicamentosCampo
+            ) {
+
+                if (
+                    pet.usa_medicamentos ===
+                    true
+                ) {
+
+                    usaMedicamentosCampo.value =
+                        "true";
+
+                } else if (
+                    pet.usa_medicamentos ===
+                    false
+                ) {
+
+                    usaMedicamentosCampo.value =
+                        "false";
+
+                } else {
+
+                    usaMedicamentosCampo.value =
+                        "";
+                }
+            }
+
+
+            if (medicamentos) {
+
+                medicamentos.value =
+                    pet.medicamentos || "";
+            }
+
+
+            if (
+                observacoesMedicas
+            ) {
+
+                observacoesMedicas.value =
+                    pet.observacoes_medicas || "";
+            }
+
+
+            // ==================================================
+            // CONTATO DE EMERGÊNCIA
+            // ==================================================
+
+            if (nomeEmergencia) {
+
+                nomeEmergencia.value =
+                    pet.nome_emergencia || "";
+            }
+
+
+            if (
+                telefoneEmergencia
+            ) {
+
+                telefoneEmergencia.value =
+                    pet.telefone_emergencia || "";
+            }
+
+
+            if (
+                parentescoEmergencia
+            ) {
+
+                parentescoEmergencia.value =
+                    pet.parentesco_emergencia || "";
+            }
+
+
+            // ==================================================
+            // PRIVACIDADE
+            // ==================================================
+
+            if (
+                dadosMedicosPublicos
+            ) {
+
+                dadosMedicosPublicos.checked =
+                    pet.dados_medicos_publicos !==
+                    false;
+            }
+
+
+            // ==================================================
+            // REVISÃO
+            // ==================================================
+
+            ultimaRevisaoAnterior =
+                pet.ultima_revisao_saude ||
+                null;
+
+
+            if (
+                confirmarRevisaoSaude
+            ) {
+
+                confirmarRevisaoSaude.checked =
+                    pet.responsabilidade_confirmada ===
+                    true;
+            }
+
+
+            atualizarTextoUltimaRevisao(
+                pet.ultima_revisao_saude
+            );
+
+
+            // ==================================================
+            // FOTOS
+            // ==================================================
+
+            fotoBase64 =
+                pet.foto || "";
+
+            fotoBase642 =
+                pet.foto2 || "";
+
+            fotoBase643 =
+                pet.foto3 || "";
+
+
+            // ==================================================
+            // ATUALIZAR INTERFACE
+            // ==================================================
+
+            if (
+                typeof atualizarCampos ===
+                "function"
+            ) {
+
+                atualizarCampos();
+            }
+
+
+            atualizarMedicamentos();
+
+
+            console.log(
+                "CADASTRO.JS -> cadastro carregado com sucesso."
+            );
+
+
+        } catch (erro) {
+
+            console.error(
+                "CADASTRO.JS -> erro inesperado ao carregar cadastro:",
+                erro
+            );
+
+            alert(
+                "Ocorreu um erro ao carregar o cadastro."
+            );
+        }
+    }
+
+
+    // ======================================================
+    // FORMATAÇÃO DA DATA DA ÚLTIMA REVISÃO
+    // ======================================================
+
+    function atualizarTextoUltimaRevisao(
+        data
+    ) {
+
+        if (!textoUltimaRevisao) {
+            return;
+        }
+
+
+        if (!data) {
+
+            textoUltimaRevisao.textContent =
+                "Ainda não há uma revisão registrada.";
+
+            return;
+        }
+
+
+        const dataFormatada =
+            new Date(data);
+
+
+        if (
+            Number.isNaN(
+                dataFormatada.getTime()
+            )
+        ) {
+
+            textoUltimaRevisao.textContent =
+                "Ainda não há uma revisão registrada.";
+
+            return;
+        }
+
+
+        textoUltimaRevisao.textContent =
+            "Última revisão registrada em " +
+            dataFormatada.toLocaleDateString(
+                "pt-BR"
+            ) +
+            ".";
+    }
+
+
+    // ======================================================
+    // VALIDAÇÃO DO HUMANO
+    // ======================================================
+
+    function validarDadosHumano() {
+
+        if (
+            !campoTipo ||
+            campoTipo.value !==
+            "humano"
+        ) {
+
+            return true;
+        }
+
+
+        /*
+        ------------------------------------------------------
+        Os campos humanos são específicos do cadastro de
+        pessoa.
+
+        Não são exigidos para:
+        - pet
+        - item
+        - veículo
+
+        A validação ocorre somente quando o tipo selecionado
+        é "humano".
+        ------------------------------------------------------
+        */
+
+
+        if (
+            tipoHumano &&
+            !obterValor(tipoHumano)
+        ) {
+
+            alert(
+                "Selecione o tipo de pessoa."
+            );
+
+            tipoHumano.focus();
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // ======================================================
+    // EVENTO SUBMIT
     // ======================================================
 
     formulario.addEventListener(
         "submit",
-        async event => {
+        async function (event) {
 
             event.preventDefault();
 
 
             console.log(
-                "=========================================="
+                "CADASTRO.JS -> formulário enviado."
             );
+
+
+            // ==================================================
+            // TIPO ATUAL
+            // ==================================================
+
+            const tipoAtual =
+                campoTipo
+                    ? campoTipo.value
+                    : null;
+
 
             console.log(
-                "🚀 SUBMIT DO CADASTRO DISPARADO"
-            );
-
-            console.log(
-                "=========================================="
+                "CADASTRO.JS -> tipo:",
+                tipoAtual
             );
 
 
-            // ------------------------------------------------
-            // VALIDAÇÃO DA REVISÃO DO VEÍCULO
-            // ------------------------------------------------
+            // ==================================================
+            // VALIDAÇÃO HUMANO
+            // ==================================================
 
             if (
-                campoTipo &&
-                campoTipo.value === "veiculo"
+                !validarDadosHumano()
             ) {
 
-                if (
-                    !confirmarRevisaoSaude ||
-                    !confirmarRevisaoSaude.checked
-                ) {
-
-                    alert(
-                        "Por favor, confirme a veracidade das informações médicas e de emergência."
-                    );
-
-                    if (confirmarRevisaoSaude) {
-
-                        confirmarRevisaoSaude.focus();
-                    }
-
-                    return;
-                }
+                return;
             }
 
 
-            // ------------------------------------------------
-            // VALIDAÇÃO DA REVISÃO HUMANA
-            // ------------------------------------------------
-
-            if (
-                campoTipo &&
-                (
-                    campoTipo.value === "humano" ||
-                    campoTipo.value === "pessoa"
-                )
-            ) {
-
-                if (
-                    confirmarRevisaoHumana &&
-                    !confirmarRevisaoHumana.checked
-                ) {
-
-                    alert(
-                        "Por favor, confirme a veracidade e atualidade das informações da pessoa cadastrada."
-                    );
-
-                    confirmarRevisaoHumana.focus();
-
-                    return;
-                }
-            }
-
-
-            // ------------------------------------------------
+            // ==================================================
             // USUÁRIO
-            // ------------------------------------------------
-
-            console.log(
-                "⏳ Obtendo usuário autenticado..."
-            );
-
+            // ==================================================
 
             const user =
-                await getUser();
+                await obterUsuario();
 
 
             if (!user) {
-
-                console.error(
-                    "Usuário não autenticado."
-                );
 
                 alert(
                     "Usuário não autenticado."
@@ -1141,212 +1249,385 @@ O payload utiliza os campos já definidos no projeto.
 
 
             console.log(
-                "✅ Usuário:",
+                "Usuário autenticado:",
                 user.id
             );
 
 
-            // ------------------------------------------------
-            // REVISÕES
-            // ------------------------------------------------
+            // ==================================================
+            // DADOS MÉDICOS
+            // ==================================================
 
-            const revisaoHumanaConfirmada =
-                confirmarRevisaoHumana
-                    ? confirmarRevisaoHumana.checked
-                    : false;
+            let tipoSanguineoFinal =
+                null;
 
+            let condicaoMedicaFinal =
+                null;
 
-            const dataRevisaoHumana =
-                revisaoHumanaConfirmada
-                    ? new Date().toISOString()
-                    : ultimaRevisaoHumanaAnterior;
+            let alergiasFinal =
+                null;
 
+            let usaMedicamentosFinal =
+                null;
 
-            const revisaoSaudeConfirmada =
-                confirmarRevisaoSaude
-                    ? confirmarRevisaoSaude.checked
-                    : false;
+            let medicamentosFinal =
+                null;
 
-
-            const dataRevisaoSaude =
-                revisaoSaudeConfirmada
-                    ? new Date().toISOString()
-                    : ultimaRevisaoAnterior;
+            let observacoesMedicasFinal =
+                null;
 
 
-            // ------------------------------------------------
-            // MEDICAMENTOS
-            // ------------------------------------------------
+            /*
+            ------------------------------------------------------
+            SOMENTE HUMANO E VEÍCULO POSSUEM DADOS DE SAÚDE.
 
-            const usaMedicamentosValor =
-                campoUsaMedicamentos
-                    ? campoUsaMedicamentos.value === "sim"
-                    : false;
+            PET E ITEM:
+            todos os campos médicos permanecem NULL.
+
+            Isso é proposital e NÃO deve ser alterado.
+            ------------------------------------------------------
+            */
+
+            if (
+                tipoAtual === "humano" ||
+                tipoAtual === "veiculo"
+            ) {
+
+                tipoSanguineoFinal =
+                    obterValor(
+                        tipoSanguineo
+                    );
 
 
-            // ------------------------------------------------
+                condicaoMedicaFinal =
+                    obterValor(
+                        condicaoMedica
+                    );
+
+
+                alergiasFinal =
+                    obterValor(
+                        alergias
+                    );
+
+
+                // ----------------------------------------------
+                // Medicamentos
+                // ----------------------------------------------
+
+                if (
+                    usaMedicamentosCampo
+                ) {
+
+                    if (
+                        usaMedicamentosCampo.value ===
+                        "true"
+                    ) {
+
+                        usaMedicamentosFinal =
+                            true;
+
+                    } else if (
+                        usaMedicamentosCampo.value ===
+                        "false"
+                    ) {
+
+                        usaMedicamentosFinal =
+                            false;
+
+                    } else {
+
+                        usaMedicamentosFinal =
+                            null;
+                    }
+                }
+
+
+                medicamentosFinal =
+                    obterValor(
+                        medicamentos
+                    );
+
+
+                observacoesMedicasFinal =
+                    obterValor(
+                        observacoesMedicas
+                    );
+            }
+
+
+            // ==================================================
+            // PRIVACIDADE
+            // ==================================================
+
+            let dadosMedicosPublicosFinal =
+                true;
+
+
+            if (
+                dadosMedicosPublicos
+            ) {
+
+                dadosMedicosPublicosFinal =
+                    dadosMedicosPublicos.checked;
+            }
+
+
+            // ==================================================
+            // REVISÃO
+            // ==================================================
+
+            let responsabilidadeConfirmadaFinal =
+                false;
+
+            let ultimaRevisaoFinal =
+                ultimaRevisaoAnterior;
+
+
+            /*
+            ------------------------------------------------------
+            REVISÃO MÉDICA:
+
+            Somente:
+            - humano
+            - veículo
+
+            possuem essa confirmação.
+
+            Pet e item não entram neste fluxo.
+            ------------------------------------------------------
+            */
+
+            if (
+                tipoAtual === "humano" ||
+                tipoAtual === "veiculo"
+            ) {
+
+                responsabilidadeConfirmadaFinal =
+                    confirmarRevisaoSaude
+                        ? confirmarRevisaoSaude.checked
+                        : false;
+
+
+                if (
+                    responsabilidadeConfirmadaFinal
+                ) {
+
+                    ultimaRevisaoFinal =
+                        new Date().toISOString();
+                }
+            }
+
+
+            // ==================================================
             // PAYLOAD
-            // ------------------------------------------------
+            // ==================================================
 
             const dadosFormulario = {
 
+                // ----------------------------------------------
+                // Dados comuns
+                // ----------------------------------------------
+
                 nome_pet:
-                    nomePet
-                        ? nomePet.value.trim()
-                        : null,
+                    obterValor(
+                        nomePet
+                    ),
 
                 nome_tutor:
-                    nomeTutor
-                        ? nomeTutor.value.trim()
-                        : null,
+                    obterValor(
+                        nomeTutor
+                    ),
 
                 cidade:
-                    cidade
-                        ? cidade.value.trim()
-                        : null,
+                    obterValor(
+                        cidade
+                    ),
 
                 telefone:
-                    telefone
-                        ? telefone.value.trim()
-                        : null,
+                    obterValor(
+                        telefone
+                    ),
 
                 tipo:
-                    campoTipo
-                        ? campoTipo.value
-                        : null,
+                    tipoAtual,
 
                 categoria:
-                    campoCategoria
-                        ? campoCategoria.value || null
-                        : null,
+                    obterValor(
+                        campoCategoria
+                    ),
 
 
-                // CONTATO
+                // ----------------------------------------------
+                // Contato de confiança
+                // ----------------------------------------------
 
                 contato_nome:
-                    contatoNome
-                        ? contatoNome.value.trim() || null
-                        : null,
+                    obterValor(
+                        contatoNome
+                    ),
 
                 contato_telefone:
-                    contatoTelefone
-                        ? contatoTelefone.value.trim() || null
-                        : null,
+                    obterValor(
+                        contatoTelefone
+                    ),
 
                 contato_parentesco:
-                    contatoParentesco
-                        ? contatoParentesco.value.trim() || null
-                        : null,
+                    obterValor(
+                        contatoParentesco
+                    ),
 
 
-                // VEÍCULO
+                // ----------------------------------------------
+                // Veículo
+                // ----------------------------------------------
 
                 marca:
-                    marca
-                        ? marca.value.trim() || null
-                        : null,
+                    obterValor(
+                        marca
+                    ),
 
                 modelo:
-                    modelo
-                        ? modelo.value.trim() || null
-                        : null,
+                    obterValor(
+                        modelo
+                    ),
 
                 cor:
-                    cor
-                        ? cor.value.trim() || null
-                        : null,
+                    obterValor(
+                        cor
+                    ),
 
                 placa:
-                    placa
-                        ? placa.value.trim() || null
-                        : null,
+                    obterValor(
+                        placa
+                    ),
 
 
-                // HUMANO
+                // ----------------------------------------------
+                // Humano
+                // ----------------------------------------------
 
                 tipo_humano:
-                    tipoHumano
-                        ? tipoHumano.value || null
+                    tipoAtual === "humano"
+                        ? obterValor(
+                            tipoHumano
+                        )
                         : null,
 
-                responsabilidade_confirmada_humana:
-                    revisaoHumanaConfirmada,
+                data_nascimento:
+                    tipoAtual === "humano"
+                        ? obterValor(
+                            dataNascimento
+                        )
+                        : null,
 
-                ultima_revisao_humana:
-                    dataRevisaoHumana,
+                idade:
+                    tipoAtual === "humano"
+                        ? (
+                            obterValor(
+                                idade
+                            ) !== null
+                                ? Number(
+                                    idade.value
+                                )
+                                : null
+                        )
+                        : null,
+
+                sexo:
+                    tipoAtual === "humano"
+                        ? obterValor(
+                            sexo
+                        )
+                        : null,
+
+                informacoes_importantes:
+                    tipoAtual === "humano"
+                        ? obterValor(
+                            informacoesImportantes
+                        )
+                        : null,
 
 
-                // SAÚDE
+                // ----------------------------------------------
+                // Saúde
+                // ----------------------------------------------
 
                 tipo_sanguineo:
-                    tipoSanguineo
-                        ? tipoSanguineo.value || null
-                        : null,
+                    tipoSanguineoFinal,
 
                 condicao_medica:
-                    condicaoMedica
-                        ? condicaoMedica.value.trim() || null
-                        : null,
-
-                usa_medicamentos:
-                    usaMedicamentosValor,
-
-                medicamentos:
-                    medicamentos
-                        ? medicamentos.value.trim() || null
-                        : null,
+                    condicaoMedicaFinal,
 
                 alergias:
-                    alergias
-                        ? alergias.value.trim() || null
-                        : null,
+                    alergiasFinal,
+
+                usa_medicamentos:
+                    usaMedicamentosFinal,
+
+                medicamentos:
+                    medicamentosFinal,
 
                 observacoes_medicas:
-                    observacoesMedicas
-                        ? observacoesMedicas.value.trim() || null
-                        : null,
+                    observacoesMedicasFinal,
 
 
-                // EMERGÊNCIA
+                // ----------------------------------------------
+                // Emergência
+                // ----------------------------------------------
 
                 nome_emergencia:
-                    nomeEmergencia
-                        ? nomeEmergencia.value.trim() || null
-                        : null,
+                    obterValor(
+                        nomeEmergencia
+                    ),
 
                 telefone_emergencia:
-                    telefoneEmergencia
-                        ? telefoneEmergencia.value.trim() || null
-                        : null,
+                    obterValor(
+                        telefoneEmergencia
+                    ),
 
                 parentesco_emergencia:
-                    parentescoEmergencia
-                        ? parentescoEmergencia.value.trim() || null
-                        : null,
+                    obterValor(
+                        parentescoEmergencia
+                    ),
 
 
-                // REVISÃO
+                // ----------------------------------------------
+                // Revisão
+                // ----------------------------------------------
 
                 responsabilidade_confirmada:
-                    revisaoSaudeConfirmada,
+                    responsabilidadeConfirmadaFinal,
 
                 ultima_revisao_saude:
-                    dataRevisaoSaude,
+                    ultimaRevisaoFinal,
 
 
-                // FOTOS
+                // ----------------------------------------------
+                // Privacidade
+                // ----------------------------------------------
+
+                dados_medicos_publicos:
+                    dadosMedicosPublicosFinal,
+
+
+                // ----------------------------------------------
+                // Fotos
+                // ----------------------------------------------
 
                 foto:
-                    fotoBase64 || null,
+                    fotoBase64,
 
                 foto2:
-                    fotoBase642 || null,
+                    fotoBase642,
 
                 foto3:
-                    fotoBase643 || null,
+                    fotoBase643,
 
 
-                // USUÁRIO
+                // ----------------------------------------------
+                // Usuário
+                // ----------------------------------------------
 
                 user_id:
                     user.id
@@ -1354,37 +1635,26 @@ O payload utiliza os campos já definidos no projeto.
 
 
             console.log(
-                "=========================================="
-            );
-
-            console.log(
-                "📦 PAYLOAD FINAL:"
-            );
-
-            console.log(
+                "CADASTRO.JS -> dados preparados:",
                 dadosFormulario
             );
 
-            console.log(
-                "=========================================="
-            );
 
+            // ==================================================
+            // EDIÇÃO OU NOVO CADASTRO
+            // ==================================================
 
-            // ------------------------------------------------
-            // INSERT / UPDATE
-            // ------------------------------------------------
-
-            let resposta;
+            let resultadoCadastro;
 
 
             if (idEdicao) {
 
                 console.log(
-                    "✏️ EXECUTANDO UPDATE"
+                    "CADASTRO.JS -> modo EDIÇÃO."
                 );
 
 
-                resposta =
+                resultadoCadastro =
                     await banco
                         .from("pets")
                         .update(
@@ -1393,83 +1663,45 @@ O payload utiliza os campos já definidos no projeto.
                         .eq(
                             "id",
                             idEdicao
-                        );
+                        )
+                        .select()
+                        .single();
 
             } else {
 
                 console.log(
-                    "➕ EXECUTANDO INSERT"
+                    "CADASTRO.JS -> modo NOVO CADASTRO."
                 );
 
 
-                resposta =
+                resultadoCadastro =
                     await banco
                         .from("pets")
                         .insert(
-                            [dadosFormulario]
+                            dadosFormulario
                         )
-                        .select();
+                        .select()
+                        .single();
             }
 
 
-            // ------------------------------------------------
-            // RESPOSTA
-            // ------------------------------------------------
+            // ==================================================
+            // ERRO NO CADASTRO
+            // ==================================================
 
-            console.log(
-                "=========================================="
-            );
-
-            console.log(
-                "📡 RESPOSTA DO SUPABASE:"
-            );
-
-            console.log(
-                resposta
-            );
-
-            console.log(
-                "=========================================="
-            );
-
-
-            // ------------------------------------------------
-            // ERRO
-            // ------------------------------------------------
-
-            if (resposta.error) {
+            if (
+                resultadoCadastro.error
+            ) {
 
                 console.error(
-                    "❌ ERRO SUPABASE:",
-                    resposta.error
-                );
-
-
-                console.error(
-                    "Mensagem:",
-                    resposta.error.message
-                );
-
-
-                console.error(
-                    "Detalhes:",
-                    resposta.error.details
-                );
-
-
-                console.error(
-                    "Código:",
-                    resposta.error.code
+                    "CADASTRO.JS -> erro ao salvar:",
+                    resultadoCadastro.error
                 );
 
 
                 alert(
-                    "Erro ao salvar:\n\n" +
-                    (
-                        resposta.error.message ||
-                        resposta.error.details ||
-                        "Erro desconhecido"
-                    )
+                    "Não foi possível salvar o cadastro.\n\n" +
+                    resultadoCadastro.error.message
                 );
 
 
@@ -1477,29 +1709,102 @@ O payload utiliza os campos já definidos no projeto.
             }
 
 
-            // ------------------------------------------------
-            // SUCESSO
-            // ------------------------------------------------
+            // ==================================================
+            // CADASTRO SALVO
+            // ==================================================
+
+            const cadastroSalvo =
+                resultadoCadastro.data;
+
 
             console.log(
-                "✅ CADASTRO SALVO COM SUCESSO!"
+                "CADASTRO.JS -> cadastro salvo:",
+                cadastroSalvo
             );
 
 
-            if (!idEdicao) {
+            // ==================================================
+            // VÍNCULO DO QR CODE
+            // ==================================================
 
-                localStorage.removeItem(
-                    "ultimoPet"
+            /*
+            ------------------------------------------------------
+            Se o cadastro foi iniciado por um QR Code existente,
+            vinculamos esse QR ao cadastro salvo.
+
+            Exemplo:
+
+            cadastro.html?codigo=PET-000481
+
+            O código PET-000481 continua sendo o QR definitivo.
+
+            NÃO criamos um novo QR.
+            ------------------------------------------------------
+            */
+
+            if (codigoQR) {
+
+                console.log(
+                    "CADASTRO.JS -> vinculando QR:",
+                    codigoQR
+                );
+
+
+                const resultadoQR =
+                    await banco
+                        .from("qrcodes")
+                        .update({
+
+                            pet_id:
+                                cadastroSalvo.id
+
+                        })
+                        .eq(
+                            "codigo",
+                            codigoQR
+                        );
+
+
+                if (
+                    resultadoQR.error
+                ) {
+
+                    console.error(
+                        "CADASTRO.JS -> erro ao vincular QR:",
+                        resultadoQR.error
+                    );
+
+
+                    alert(
+                        "O cadastro foi salvo, mas houve um problema ao vincular o QR Code.\n\n" +
+                        resultadoQR.error.message
+                    );
+
+
+                    return;
+                }
+
+
+                console.log(
+                    "CADASTRO.JS -> QR vinculado com sucesso."
                 );
             }
 
 
+            // ==================================================
+            // SUCESSO
+            // ==================================================
+
             alert(
                 idEdicao
-                    ? "Atualizado com sucesso!"
-                    : "Cadastrado com sucesso!"
+                    ? "Cadastro atualizado com sucesso!"
+                    : "Cadastro realizado com sucesso!"
             );
 
+
+            // ==================================================
+            // REDIRECIONAMENTO
+            // ==================================================
 
             window.location.href =
                 "meus-pets.html";
@@ -1511,19 +1816,7 @@ O payload utiliza os campos já definidos no projeto.
     // INICIALIZAÇÃO
     // ======================================================
 
-    atualizarCampos();
+    carregarCadastro();
 
-    atualizarMedicamentos();
-
-    carregarPets();
-
-
-    // ======================================================
-    // TESTE FINAL
-    // ======================================================
-
-    console.log(
-        "✅ cadastro.js inicializado completamente."
-    );
 
 })();

@@ -13,7 +13,7 @@ Responsável por:
 ✔ Exibir dados específicos do veículo
 ✔ Exibir responsável/proprietário
 ✔ Exibir localização
-✔ Exibir informações médicas disponíveis
+✔ Exibir informações médicas para humanos e veículos
 ✔ Exibir contato de emergência
 ✔ Exibir contato de confiança para itens/celulares
 ✔ Gerar contato via WhatsApp
@@ -329,6 +329,7 @@ function montarGaleria(
 
 
     ativarModalFotos();
+
 
 }
 
@@ -818,16 +819,16 @@ function montarSaude(
     REGRA:
 
     INFORMAÇÕES MÉDICAS PÚBLICAS SOMENTE PARA
-    PETS E HUMANOS.
+    HUMANOS E VEÍCULOS.
 
-    ITENS, CELULARES E VEÍCULOS NÃO DEVEM
-    EXIBIR ESTA SEÇÃO.
+    PETS, ITENS E CELULARES NÃO EXIBEM
+    INFORMAÇÕES MÉDICAS.
     ------------------------------------------------------
     */
 
     if (
-        pet.tipo !== "pet" &&
-        pet.tipo !== "humano"
+        pet.tipo !== "humano" &&
+        pet.tipo !== "veiculo"
     ) {
 
         return;
@@ -1590,4 +1591,4 @@ async function carregarPerfilPublico() {
    EXECUÇÃO
 ====================================================== */
 
-carregarPerfilPublico();v
+carregarPerfilPublico();
