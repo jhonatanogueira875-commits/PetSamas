@@ -658,3 +658,100 @@ footer {
     background: #295378;
     transform: translateY(-2px);
 }
+
+/* ======================================================
+   CORREÇÃO MOBILE — PERFIL PÚBLICO
+====================================================== */
+
+@media (max-width: 600px) {
+
+    html,
+    body {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        display: block;
+        min-height: 100vh;
+        padding: 15px 0;
+    }
+
+    .container {
+        width: calc(100% - 20px);
+        max-width: none;
+        margin: 0 auto;
+        padding: 20px 15px;
+        border-radius: 16px;
+    }
+
+    .perfil-publico {
+        width: 100%;
+        max-width: none;
+        margin: 0 auto;
+    }
+
+    .cabecalho-perfil {
+        width: 100%;
+    }
+
+    .cabecalho-perfil img.logo {
+        width: 75px;
+        max-width: 75px;
+    }
+
+    .identificacao h1,
+    .perfil-publico .identificacao h1 {
+        font-size: 26px;
+        line-height: 1.2;
+        word-break: break-word;
+    }
+
+    .identificacao .subidentificacao {
+        font-size: 14px;
+    }
+
+    .foto-principal {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        max-height: 360px;
+        object-fit: cover;
+    }
+
+    .secao-publica {
+        width: 100%;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .secao-publica h3 {
+        font-size: 18px;
+    }
+
+    .campo-valor {
+        font-size: 15px;
+    }
+
+    .btn-contato-publico {
+        width: 100%;
+        max-width: 100%;
+        font-size: 15px;
+    }
+
+    .rodape-publico {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .galeria-veiculo {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px;
+    }
+
+    .foto-veiculo {
+        height: 120px;
+    }
+}
