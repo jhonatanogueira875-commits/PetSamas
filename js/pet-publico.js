@@ -1,6 +1,7 @@
 /*
 ==========================================================
 Safe Samas
+
 Arquivo: js/pet-publico.js
 
 Responsável por:
@@ -8,36 +9,55 @@ Responsável por:
 ✔ Receber o código do QR pela URL
 ✔ Consultar o perfil público via RPC
 ✔ Identificar o tipo de cadastro
-✔ Exibir uma foto para pet/item/humano
-✔ Exibir até 3 fotos para veículo
+✔ Exibir foto pública via Supabase Storage
+✔ Exibir até 3 fotos para veículos
+✔ Suportar imagens antigas em Base64
+✔ Converter caminhos do Storage em URLs públicas
 ✔ Exibir dados específicos do veículo
-✔ Exibir responsável/proprietário e telefone
+✔ Exibir responsável/proprietário
 ✔ Exibir localização
-✔ Exibir informações médicas para humanos e veículos
+✔ Exibir informações médicas
 ✔ Exibir contato de emergência
-✔ Exibir contato de confiança para itens/celulares
+✔ Exibir contato de confiança
 ✔ Gerar contato via WhatsApp
 ✔ Exibir status da revisão médica
 ✔ Permitir ampliação das fotos
+
+BUCKET:
+
+pet-images
+
+Exemplo armazenado no banco:
+
+170/foto.jpg
+170/foto2.jpg
+170/foto3.jpg
+
 ==========================================================
 */
 
-
 "use strict";
+
+console.log("==================================================");
+console.log("SAFE SAMAS - PET PUBLICO");
+console.log("PET-PUBLICO -> iniciando...");
+console.log("==================================================");
 
 
 /* ======================================================
    PARÂMETRO DO QR CODE
 ====================================================== */
 
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
+const parametros = new URLSearchParams(
+    window.location.search
+);
 
+const codigo = parametros.get("codigo");
 
-const codigo =
-    parametros.get("codigo");
+console.log(
+    "PET-PUBLICO -> código:",
+    codigo
+);
 
 
 /* ======================================================
@@ -45,9 +65,7 @@ const codigo =
 ====================================================== */
 
 function elemento(id) {
-
     return document.getElementById(id);
-
 }
 
 
@@ -57,9 +75,7 @@ function escaparHTML(valor) {
         valor === null ||
         valor === undefined
     ) {
-
         return "";
-
     }
 
     return String(valor)
@@ -68,7 +84,6 @@ function escaparHTML(valor) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
 }
 
 
@@ -76,7 +91,210 @@ function somenteNumeros(valor) {
 
     return String(valor || "")
         .replace(/\D/g, "");
+}
 
+
+/* ======================================================
+   SUPABASE STORAGE
+====================================================== */
+
+/*
+----------------------------------------------------------
+OBTER URL PÚBLICA DA FOTO
+----------------------------------------------------------
+
+Aceita:
+
+170/foto.jpg
+
+pet-images/170/foto.jpg
+
+https://...supabase.co/storage/v1/object/public/...
+
+data:image/jpeg;base64,...
+
+----------------------------------------------------------
+*/
+
+function obterUrlPublicaFoto(caminho) {
+
+    if (
+        caminho === null ||
+        caminho === undefined
+    ) {
+        return "";
+    }
+
+    if (
+        typeof caminho !== "string"
+    ) {
+        return "";
+    }
+
+    const valor = caminho.trim();
+
+    if (!valor) {
+        return "";
+    }
+
+
+    /*
+    ------------------------------------------------------
+    BASE64
+    ------------------------------------------------------
+
+    Cadastros antigos podem ainda possuir a imagem
+    diretamente no banco.
+
+    Nesse caso NÃO devemos tentar mandar o Base64
+    para o Storage.
+    ------------------------------------------------------
+    */
+
+    if (
+        valor.startsWith("data:image/")
+    ) {
+
+        console.log(
+            "PET-PUBLICO -> imagem Base64 detectada."
+        );
+
+        return valor;
+    }
+
+
+    /*
+    ------------------------------------------------------
+    URL COMPLETA
+    ------------------------------------------------------
+    */
+
+    if (
+        valor.startsWith("http://") ||
+        valor.startsWith("https://")
+    ) {
+
+        console.log(
+            "PET-PUBLICO -> URL completa detectada:",
+            valor
+        );
+
+        return valor;
+    }
+
+
+    /*
+    ------------------------------------------------------
+    VERIFICAR SUPABASE
+    ------------------------------------------------------
+    */
+
+    if (
+        typeof banco === "undefined" ||
+        !banco ||
+        !banco.storage
+    ) {
+
+        console.error(
+            "PET-PUBLICO -> Supabase Storage não está disponível."
+        );
+
+        return "";
+    }
+
+
+    /*
+    ------------------------------------------------------
+    NORMALIZAR CAMINHO
+    ------------------------------------------------------
+    */
+
+    let caminhoStorage = valor;
+
+    caminhoStorage = caminhoStorage.replace(
+        /^\/+/,
+        ""
+    );
+
+    caminhoStorage = caminhoStorage.replace(
+        /^pet-images\/+/i,
+        ""
+    );
+
+
+    console.log(
+        "PET-PUBLICO -> caminho Storage:",
+        caminhoStorage
+    );
+
+
+    /*
+    ------------------------------------------------------
+    GERAR URL PÚBLICA
+    ------------------------------------------------------
+    */
+
+    try {
+
+        const resultado = banco
+            .storage
+            .from("pet-images")
+            .getPublicUrl(
+                caminhoStorage
+            );
+
+
+        console.log(
+            "PET-PUBLICO -> resultado Storage:",
+            resultado
+        );
+
+
+        if (
+            resultado &&
+            resultado.data &&
+            resultado.data.publicUrl
+        ) {
+
+            console.log(
+                "PET-PUBLICO -> URL pública gerada:",
+                resultado.data.publicUrl
+            );
+
+            return resultado.data.publicUrl;
+        }
+
+
+        console.error(
+            "PET-PUBLICO -> Não foi possível gerar URL pública:",
+            caminhoStorage
+        );
+
+        return "";
+
+    } catch (erro) {
+
+        console.error(
+            "PET-PUBLICO -> Erro ao gerar URL pública:",
+            erro
+        );
+
+        return "";
+    }
+}
+
+
+/*
+----------------------------------------------------------
+PREPARAR FOTO PARA EXIBIÇÃO
+----------------------------------------------------------
+*/
+
+function prepararFotoParaExibicao(caminho) {
+
+    return obterUrlPublicaFoto(
+        caminho
+    );
 }
 
 
@@ -90,17 +308,20 @@ function obterTipoPerfil(
     tipoHumano
 ) {
 
-    if (tipo === "veiculo") {
+    if (
+        tipo === "veiculo"
+    ) {
 
         return {
             texto: "🚗 Veículo protegido",
             classe: "tipo-veiculo"
         };
-
     }
 
 
-    if (tipo === "humano") {
+    if (
+        tipo === "humano"
+    ) {
 
         const categorias = {
 
@@ -118,25 +339,24 @@ function obterTipoPerfil(
 
             outro:
                 "👤 Pessoa"
-
         };
 
 
         return {
 
             texto:
-                categorias[tipoHumano]
-                || "👤 Pessoa protegida",
+                categorias[tipoHumano] ||
+                "👤 Pessoa protegida",
 
             classe:
                 "tipo-humano"
-
         };
-
     }
 
 
-    if (tipo === "item") {
+    if (
+        tipo === "item"
+    ) {
 
         return {
 
@@ -147,9 +367,7 @@ function obterTipoPerfil(
 
             classe:
                 "tipo-item"
-
         };
-
     }
 
 
@@ -160,9 +378,7 @@ function obterTipoPerfil(
 
         classe:
             "tipo-pet"
-
     };
-
 }
 
 
@@ -170,39 +386,54 @@ function obterTipoPerfil(
    GALERIA
 ====================================================== */
 
-function montarGaleria(
-    pet
-) {
+function montarGaleria(pet) {
 
     const galeria =
         elemento("galeriaFotos");
 
-
     if (!galeria) {
-
         return;
-
     }
 
 
     galeria.innerHTML = "";
 
+    galeria.classList.remove(
+        "galeria-veiculo"
+    );
+
 
     const fotos = [];
 
 
+    /*
+    ------------------------------------------------------
+    FOTO PRINCIPAL
+    ------------------------------------------------------
+    */
+
     if (pet.foto) {
 
-        fotos.push(pet.foto);
+        const urlFoto =
+            prepararFotoParaExibicao(
+                pet.foto
+            );
 
+        if (urlFoto) {
+
+            fotos.push(
+                urlFoto
+            );
+        }
     }
 
 
     /*
     ------------------------------------------------------
-    REGRA DEFINITIVA:
+    FOTO 2 E FOTO 3
+    ------------------------------------------------------
 
-    SOMENTE VEÍCULO UTILIZA FOTO 2 E FOTO 3.
+    Somente veículos.
     ------------------------------------------------------
     */
 
@@ -212,16 +443,34 @@ function montarGaleria(
 
         if (pet.foto2) {
 
-            fotos.push(pet.foto2);
+            const urlFoto2 =
+                prepararFotoParaExibicao(
+                    pet.foto2
+                );
 
+            if (urlFoto2) {
+
+                fotos.push(
+                    urlFoto2
+                );
+            }
         }
+
 
         if (pet.foto3) {
 
-            fotos.push(pet.foto3);
+            const urlFoto3 =
+                prepararFotoParaExibicao(
+                    pet.foto3
+                );
 
+            if (urlFoto3) {
+
+                fotos.push(
+                    urlFoto3
+                );
+            }
         }
-
     }
 
 
@@ -231,13 +480,20 @@ function montarGaleria(
     ------------------------------------------------------
     */
 
-    if (fotos.length === 0) {
+    if (
+        fotos.length === 0
+    ) {
 
         fotos.push(
             "assets/images/escudo.png"
         );
-
     }
+
+
+    console.log(
+        "PET-PUBLICO -> fotos finais:",
+        fotos
+    );
 
 
     /*
@@ -281,13 +537,30 @@ function montarGaleria(
                     foto;
 
 
+                imagem.onerror =
+                    function () {
+
+                        console.warn(
+                            "PET-PUBLICO -> Erro ao carregar:",
+                            foto
+                        );
+
+                        imagem.onerror =
+                            null;
+
+                        imagem.src =
+                            "assets/images/escudo.png";
+
+                        imagem.dataset.foto =
+                            "assets/images/escudo.png";
+                    };
+
+
                 galeria.appendChild(
                     imagem
                 );
-
             }
         );
-
 
     } else {
 
@@ -296,11 +569,6 @@ function montarGaleria(
         PET / ITEM / HUMANO
         --------------------------------------------------
         */
-
-        galeria.classList.remove(
-            "galeria-veiculo"
-        );
-
 
         const imagem =
             document.createElement(
@@ -321,16 +589,32 @@ function montarGaleria(
             fotos[0];
 
 
+        imagem.onerror =
+            function () {
+
+                console.warn(
+                    "PET-PUBLICO -> Erro ao carregar imagem:",
+                    imagem.src
+                );
+
+                imagem.onerror =
+                    null;
+
+                imagem.src =
+                    "assets/images/escudo.png";
+
+                imagem.dataset.foto =
+                    "assets/images/escudo.png";
+            };
+
+
         galeria.appendChild(
             imagem
         );
-
     }
 
 
     ativarModalFotos();
-
-
 }
 
 
@@ -355,9 +639,7 @@ function ativarModalFotos() {
         !imagemModal ||
         !fechar
     ) {
-
         return;
-
     }
 
 
@@ -377,9 +659,7 @@ function ativarModalFotos() {
                         modal.classList.add(
                             "ativo"
                         );
-
                     };
-
             }
         );
 
@@ -391,8 +671,8 @@ function ativarModalFotos() {
                 "ativo"
             );
 
-            imagemModal.src = "";
-
+            imagemModal.src =
+                "";
         };
 
 
@@ -407,32 +687,37 @@ function ativarModalFotos() {
                     "ativo"
                 );
 
-                imagemModal.src = "";
-
+                imagemModal.src =
+                    "";
             }
-
         };
 
 
-    document.addEventListener(
-        "keydown",
-        function (evento) {
+    if (
+        !window.__safeSamasModalEsc
+    ) {
 
-            if (
-                evento.key === "Escape"
-            ) {
+        window.__safeSamasModalEsc =
+            true;
 
-                modal.classList.remove(
-                    "ativo"
-                );
+        document.addEventListener(
+            "keydown",
+            function (evento) {
 
-                imagemModal.src = "";
+                if (
+                    evento.key === "Escape"
+                ) {
 
+                    modal.classList.remove(
+                        "ativo"
+                    );
+
+                    imagemModal.src =
+                        "";
+                }
             }
-
-        }
-    );
-
+        );
+    }
 }
 
 
@@ -440,9 +725,7 @@ function ativarModalFotos() {
    IDENTIFICAÇÃO
 ====================================================== */
 
-function montarIdentificacao(
-    pet
-) {
+function montarIdentificacao(pet) {
 
     const nome =
         elemento("nomePet");
@@ -457,8 +740,8 @@ function montarIdentificacao(
     if (nome) {
 
         nome.textContent =
-            pet.nome || "Sem identificação";
-
+            pet.nome ||
+            "Sem identificação";
     }
 
 
@@ -475,10 +758,8 @@ function montarIdentificacao(
         tipoPerfil.textContent =
             perfil.texto;
 
-
         tipoPerfil.className =
             `tipo-perfil ${perfil.classe}`;
-
     }
 
 
@@ -514,15 +795,12 @@ function montarIdentificacao(
 
             texto =
                 "Identificação do pet";
-
         }
 
 
         subtitulo.textContent =
             texto;
-
     }
-
 }
 
 
@@ -530,9 +808,7 @@ function montarIdentificacao(
    RESPONSÁVEL
 ====================================================== */
 
-function montarResponsavel(
-    pet
-) {
+function montarResponsavel(pet) {
 
     const titulo =
         elemento("tituloResponsavel");
@@ -545,13 +821,12 @@ function montarResponsavel(
         !titulo ||
         !dados
     ) {
-
         return;
-
     }
 
 
-    dados.innerHTML = "";
+    dados.innerHTML =
+        "";
 
 
     let tituloTexto =
@@ -565,7 +840,6 @@ function montarResponsavel(
 
         tituloTexto =
             "👤 Proprietário";
-
     }
 
 
@@ -578,9 +852,14 @@ function montarResponsavel(
         pet.telefone
     ) {
 
-        let html = "";
+        let html =
+            "";
 
-        if (pet.nome_tutor) {
+
+        if (
+            pet.nome_tutor
+        ) {
+
             html += `
                 <div class="campo-publico">
                     <span class="campo-label">
@@ -596,7 +875,11 @@ function montarResponsavel(
             `;
         }
 
-        if (pet.telefone) {
+
+        if (
+            pet.telefone
+        ) {
+
             html += `
                 <div class="campo-publico">
                     <span class="campo-label">
@@ -612,7 +895,9 @@ function montarResponsavel(
             `;
         }
 
-        dados.innerHTML = html;
+
+        dados.innerHTML =
+            html;
 
     } else {
 
@@ -623,9 +908,7 @@ function montarResponsavel(
                 </span>
             </div>
         `;
-
     }
-
 }
 
 
@@ -633,18 +916,14 @@ function montarResponsavel(
    LOCALIZAÇÃO
 ====================================================== */
 
-function montarLocalizacao(
-    pet
-) {
+function montarLocalizacao(pet) {
 
     const dados =
         elemento("dadosLocalizacao");
 
 
     if (!dados) {
-
         return;
-
     }
 
 
@@ -657,13 +936,13 @@ function montarLocalizacao(
 
             <span class="campo-valor">
                 ${escaparHTML(
-                    pet.cidade || "Não informada"
+                    pet.cidade ||
+                    "Não informada"
                 )}
             </span>
 
         </div>
     `;
-
 }
 
 
@@ -671,9 +950,7 @@ function montarLocalizacao(
    VEÍCULO
 ====================================================== */
 
-function montarVeiculo(
-    pet
-) {
+function montarVeiculo(pet) {
 
     const secao =
         elemento("secaoVeiculo");
@@ -686,29 +963,26 @@ function montarVeiculo(
         !secao ||
         !dados
     ) {
-
         return;
-
     }
 
 
     secao.style.display =
         "none";
 
-
-    dados.innerHTML = "";
+    dados.innerHTML =
+        "";
 
 
     if (
         pet.tipo !== "veiculo"
     ) {
-
         return;
-
     }
 
 
-    const partes = [];
+    const partes =
+        [];
 
 
     if (
@@ -731,11 +1005,12 @@ function montarVeiculo(
 
             </div>
         `);
-
     }
 
 
-    if (pet.cor) {
+    if (
+        pet.cor
+    ) {
 
         partes.push(`
             <div class="campo-publico">
@@ -752,11 +1027,12 @@ function montarVeiculo(
 
             </div>
         `);
-
     }
 
 
-    if (pet.placa) {
+    if (
+        pet.placa
+    ) {
 
         partes.push(`
             <div class="campo-publico">
@@ -773,14 +1049,13 @@ function montarVeiculo(
 
             </div>
         `);
-
     }
 
 
-    if (partes.length === 0) {
-
+    if (
+        partes.length === 0
+    ) {
         return;
-
     }
 
 
@@ -790,7 +1065,6 @@ function montarVeiculo(
 
     secao.style.display =
         "block";
-
 }
 
 
@@ -798,9 +1072,7 @@ function montarVeiculo(
    SAÚDE
 ====================================================== */
 
-function montarSaude(
-    pet
-) {
+function montarSaude(pet) {
 
     const secao =
         elemento("secaoSaude");
@@ -817,15 +1089,12 @@ function montarSaude(
         !dados ||
         !aviso
     ) {
-
         return;
-
     }
 
 
     secao.style.display =
         "none";
-
 
     dados.innerHTML =
         "";
@@ -837,36 +1106,17 @@ function montarSaude(
         "none";
 
 
-    /*
-    ------------------------------------------------------
-    REGRA:
-
-    INFORMAÇÕES MÉDICAS PÚBLICAS SOMENTE PARA
-    HUMANOS E VEÍCULOS.
-
-    PETS, ITENS E CELULARES NÃO EXIBEM
-    INFORMAÇÕES MÉDICAS.
-    ------------------------------------------------------
-    */
-
     if (
         pet.tipo !== "humano" &&
         pet.tipo !== "veiculo"
     ) {
-
         return;
-
     }
 
 
-    const campos = [];
+    const campos =
+        [];
 
-
-    /*
-    ------------------------------------------------------
-    TIPO SANGUÍNEO
-    ------------------------------------------------------
-    */
 
     if (
         pet.tipo_sanguineo
@@ -887,15 +1137,8 @@ function montarSaude(
 
             </div>
         `);
-
     }
 
-
-    /*
-    ------------------------------------------------------
-    CONDIÇÃO MÉDICA
-    ------------------------------------------------------
-    */
 
     if (
         pet.condicao_medica
@@ -916,21 +1159,8 @@ function montarSaude(
 
             </div>
         `);
-
     }
 
-
-    /*
-    ------------------------------------------------------
-    CAMPOS OPCIONAIS
-    ------------------------------------------------------
-
-    Se a RPC atual retornar esses campos,
-    eles serão exibidos.
-
-    Se não retornar, nada acontece.
-    ------------------------------------------------------
-    */
 
     if (
         pet.alergias
@@ -951,7 +1181,6 @@ function montarSaude(
 
             </div>
         `);
-
     }
 
 
@@ -974,23 +1203,12 @@ function montarSaude(
 
             </div>
         `);
-
     }
 
-
-    /*
-    ------------------------------------------------------
-    SEM INFORMAÇÕES
-    ------------------------------------------------------
-    */
 
     if (
         campos.length === 0
     ) {
-
-        /*
-        Ainda podemos exibir a revisão caso exista.
-        */
 
         montarAvisoRevisao(
             pet,
@@ -999,7 +1217,6 @@ function montarSaude(
         );
 
         return;
-
     }
 
 
@@ -1016,7 +1233,6 @@ function montarSaude(
         aviso,
         secao
     );
-
 }
 
 
@@ -1030,12 +1246,8 @@ function montarAvisoRevisao(
     secao
 ) {
 
-    if (
-        !aviso
-    ) {
-
+    if (!aviso) {
         return;
-
     }
 
 
@@ -1052,6 +1264,34 @@ function montarAvisoRevisao(
             new Date(
                 pet.ultima_revisao_saude
             );
+
+
+        if (
+            Number.isNaN(
+                data.getTime()
+            )
+        ) {
+
+            aviso.className =
+                "aviso-revisao atencao";
+
+            aviso.innerHTML = `
+                🟡 Recomenda-se confirmar
+                as informações médicas.
+
+                <br>
+
+                <small>
+                    Não foi possível determinar
+                    a data da última revisão.
+                </small>
+            `;
+
+            secao.style.display =
+                "block";
+
+            return;
+        }
 
 
         const dias =
@@ -1077,11 +1317,12 @@ function montarAvisoRevisao(
             aviso.className =
                 "aviso-revisao atualizado";
 
-
             aviso.innerHTML = `
                 🟢 Informações médicas
                 revisadas pelo responsável.
+
                 <br>
+
                 <small>
                     Última revisão:
                     ${dataFormatada}
@@ -1093,17 +1334,17 @@ function montarAvisoRevisao(
             aviso.className =
                 "aviso-revisao atencao";
 
-
             aviso.innerHTML = `
                 🟡 Recomenda-se confirmar
                 as informações médicas.
+
                 <br>
+
                 <small>
                     Última revisão:
                     ${dataFormatada}
                 </small>
             `;
-
         }
 
     } else {
@@ -1111,23 +1352,22 @@ function montarAvisoRevisao(
         aviso.className =
             "aviso-revisao atencao";
 
-
         aviso.innerHTML = `
             🟡 Recomenda-se confirmar
             as informações médicas.
+
             <br>
+
             <small>
                 Este cadastro ainda não possui
                 revisão registrada.
             </small>
         `;
-
     }
 
 
     secao.style.display =
         "block";
-
 }
 
 
@@ -1135,9 +1375,7 @@ function montarAvisoRevisao(
    EMERGÊNCIA
 ====================================================== */
 
-function montarEmergencia(
-    pet
-) {
+function montarEmergencia(pet) {
 
     const secao =
         elemento("secaoEmergencia");
@@ -1150,15 +1388,12 @@ function montarEmergencia(
         !secao ||
         !dados
     ) {
-
         return;
-
     }
 
 
     secao.style.display =
         "none";
-
 
     dados.innerHTML =
         "";
@@ -1167,9 +1402,7 @@ function montarEmergencia(
     if (
         !pet.telefone_emergencia
     ) {
-
         return;
-
     }
 
 
@@ -1177,6 +1410,11 @@ function montarEmergencia(
         somenteNumeros(
             pet.telefone_emergencia
         );
+
+
+    if (!telefone) {
+        return;
+    }
 
 
     dados.innerHTML = `
@@ -1189,7 +1427,8 @@ function montarEmergencia(
 
             <span class="campo-valor">
                 ${escaparHTML(
-                    pet.nome_emergencia || "Contato"
+                    pet.nome_emergencia ||
+                    "Contato"
                 )}
             </span>
 
@@ -1225,9 +1464,7 @@ function montarEmergencia(
 
             <span class="campo-valor">
 
-                <a
-                    href="tel:+55${telefone}"
-                >
+                <a href="tel:+55${telefone}">
                     📞
                     ${escaparHTML(
                         pet.telefone_emergencia
@@ -1237,13 +1474,11 @@ function montarEmergencia(
             </span>
 
         </div>
-
     `;
 
 
     secao.style.display =
         "block";
-
 }
 
 
@@ -1251,19 +1486,13 @@ function montarEmergencia(
    CONTATOS
 ====================================================== */
 
-function montarContatos(
-    pet
-) {
-
-    const areaContato =
-        elemento("areaContato");
+function montarContatos(pet) {
 
     const linkWhatsapp =
         elemento("linkWhatsapp");
 
     const btnContato =
         elemento("btnContato");
-
 
     const areaConfianca =
         elemento("areaContatoConfianca");
@@ -1274,7 +1503,7 @@ function montarContatos(
 
     /*
     ------------------------------------------------------
-    CONTATO PRINCIPAL VIA WHATSAPP
+    CONTATO PRINCIPAL
     ------------------------------------------------------
     */
 
@@ -1314,7 +1543,6 @@ function montarContatos(
 
             descricao =
                 "pessoa";
-
         }
 
 
@@ -1341,13 +1569,12 @@ function montarContatos(
 
         linkWhatsapp.style.display =
             "none";
-
     }
 
 
     /*
     ------------------------------------------------------
-    CONTATO DE CONFIANÇA (CASO EXISTA)
+    CONTATO DE CONFIANÇA
     ------------------------------------------------------
     */
 
@@ -1363,7 +1590,9 @@ function montarContatos(
             );
 
 
-        if (telConfianca) {
+        if (
+            telConfianca
+        ) {
 
             const msgConfianca =
                 encodeURIComponent(
@@ -1382,7 +1611,6 @@ function montarContatos(
 
             areaConfianca.style.display =
                 "none";
-
         }
 
     } else if (
@@ -1391,9 +1619,7 @@ function montarContatos(
 
         areaConfianca.style.display =
             "none";
-
     }
-
 }
 
 
@@ -1404,20 +1630,7 @@ function montarContatos(
 async function carregarPerfilPublico() {
 
     console.log(
-        "=========================================="
-    );
-
-    console.log(
-        "SAFE SAMAS - PERFIL PÚBLICO"
-    );
-
-    console.log(
-        "Código QR:",
-        codigo
-    );
-
-    console.log(
-        "=========================================="
+        "PET-PUBLICO -> carregando perfil..."
     );
 
 
@@ -1437,12 +1650,10 @@ async function carregarPerfilPublico() {
 
             nome.textContent =
                 "QR Code inválido.";
-
         }
 
 
         return;
-
     }
 
 
@@ -1457,7 +1668,7 @@ async function carregarPerfilPublico() {
     ) {
 
         console.error(
-            "❌ Supabase não disponível."
+            "PET-PUBLICO -> Supabase não disponível."
         );
 
 
@@ -1469,49 +1680,201 @@ async function carregarPerfilPublico() {
 
             nome.textContent =
                 "Não foi possível carregar o cadastro.";
-
         }
 
 
         return;
-
     }
 
 
     /*
     ------------------------------------------------------
-    CONSULTA PÚBLICA
+    CONSULTA RPC
     ------------------------------------------------------
     */
 
-    const {
-        data: resposta,
-        error
-    } =
-        await banco.rpc(
-            "obter_pet_publico",
-            {
-                codigo_qr:
-                    codigo
-            }
+    try {
+
+        const {
+            data: resposta,
+            error
+        } =
+            await banco.rpc(
+                "obter_pet_publico",
+                {
+                    codigo_qr:
+                        codigo
+                }
+            );
+
+
+        console.log(
+            "PET-PUBLICO -> perfil recebido:",
+            resposta
         );
 
 
-    console.log(
-        "Resposta da RPC:",
-        resposta
-    );
+        if (
+            error ||
+            !resposta ||
+            !resposta.pet
+        ) {
+
+            console.error(
+                "PET-PUBLICO -> Cadastro público não encontrado:",
+                error
+            );
 
 
-    if (
-        error ||
-        !resposta ||
-        !resposta.pet
-    ) {
+            const nome =
+                elemento("nomePet");
+
+
+            if (nome) {
+
+                nome.textContent =
+                    "Item não encontrado.";
+            }
+
+
+            return;
+        }
+
+
+        /*
+        --------------------------------------------------
+        DADOS
+        --------------------------------------------------
+        */
+
+        const pet =
+            resposta.pet;
+
+
+        console.log(
+            "PET-PUBLICO -> dados do perfil:",
+            pet
+        );
+
+
+        console.log(
+            "PET-PUBLICO -> foto recebida:",
+            pet.foto
+        );
+
+
+        console.log(
+            "PET-PUBLICO -> foto2 recebida:",
+            pet.foto2
+        );
+
+
+        console.log(
+            "PET-PUBLICO -> foto3 recebida:",
+            pet.foto3
+        );
+
+
+        /*
+        --------------------------------------------------
+        TESTE DA CONVERSÃO
+        --------------------------------------------------
+        */
+
+        if (pet.foto) {
+
+            console.log(
+                "PET-PUBLICO -> URL foto principal:",
+                obterUrlPublicaFoto(
+                    pet.foto
+                )
+            );
+        }
+
+
+        if (
+            pet.foto2 &&
+            pet.tipo === "veiculo"
+        ) {
+
+            console.log(
+                "PET-PUBLICO -> URL foto2:",
+                obterUrlPublicaFoto(
+                    pet.foto2
+                )
+            );
+        }
+
+
+        if (
+            pet.foto3 &&
+            pet.tipo === "veiculo"
+        ) {
+
+            console.log(
+                "PET-PUBLICO -> URL foto3:",
+                obterUrlPublicaFoto(
+                    pet.foto3
+                )
+            );
+        }
+
+
+        /*
+        --------------------------------------------------
+        MONTAR PÁGINA
+        --------------------------------------------------
+        */
+
+        montarIdentificacao(
+            pet
+        );
+
+
+        montarGaleria(
+            pet
+        );
+
+
+        montarResponsavel(
+            pet
+        );
+
+
+        montarLocalizacao(
+            pet
+        );
+
+
+        montarVeiculo(
+            pet
+        );
+
+
+        montarSaude(
+            pet
+        );
+
+
+        montarEmergencia(
+            pet
+        );
+
+
+        montarContatos(
+            pet
+        );
+
+
+        console.log(
+            "PET-PUBLICO -> perfil montado com sucesso."
+        );
+
+    } catch (erro) {
 
         console.error(
-            "❌ Cadastro público não encontrado:",
-            error
+            "PET-PUBLICO -> erro inesperado:",
+            erro
         );
 
 
@@ -1522,76 +1885,9 @@ async function carregarPerfilPublico() {
         if (nome) {
 
             nome.textContent =
-                "Item não encontrado.";
-
+                "Não foi possível carregar o cadastro.";
         }
-
-
-        return;
-
     }
-
-
-    /*
-    ------------------------------------------------------
-    DADOS
-    ------------------------------------------------------
-    */
-
-    const pet =
-        resposta.pet;
-
-
-    /*
-    ------------------------------------------------------
-    CONSTRUÇÃO DA PÁGINA
-    ------------------------------------------------------
-    */
-
-    montarIdentificacao(
-        pet
-    );
-
-
-    montarGaleria(
-        pet
-    );
-
-
-    montarResponsavel(
-        pet
-    );
-
-
-    montarLocalizacao(
-        pet
-    );
-
-
-    montarVeiculo(
-        pet
-    );
-
-
-    montarSaude(
-        pet
-    );
-
-
-    montarEmergencia(
-        pet
-    );
-
-
-    montarContatos(
-        pet
-    );
-
-
-    console.log(
-        "✅ Perfil público carregado."
-    );
-
 }
 
 
