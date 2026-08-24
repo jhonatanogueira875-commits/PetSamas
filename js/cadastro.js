@@ -3,13 +3,17 @@
 Safe Samas / PetSamas
 Arquivo: cadastro.js
 
+VERSÃO:
+STORAGE 2026 - CANÔNICA
+
 Responsável por:
 ✔ Cadastro de pets
 ✔ Cadastro de itens
 ✔ Cadastro de veículos
 ✔ Cadastro de humanos
 ✔ Edição de cadastros
-✔ Upload das fotos com compressão
+✔ Upload das fotos para Supabase Storage
+✔ Compressão das fotos
 ✔ Informações médicas
 ✔ Medicamentos
 ✔ Alergias
@@ -19,16 +23,37 @@ Responsável por:
 ✔ Integração com Supabase
 ✔ Vínculo do QR Code original ao cadastro
 
+ARMAZENAMENTO DE IMAGENS:
+
+As imagens NÃO são armazenadas em Base64
+na tabela public.pets.
+
+Elas são enviadas para o bucket:
+
+pet-images
+
+Com os seguintes caminhos:
+
+{pet_id}/foto.jpg
+{pet_id}/foto2.jpg
+{pet_id}/foto3.jpg
+
+A tabela public.pets armazena SOMENTE o caminho:
+
+foto
+foto2
+foto3
+
+Exemplo:
+
+foto = "169/foto.jpg"
+
 IMPORTANTE:
-- Este arquivo é totalmente encapsulado.
+- Este arquivo é encapsulado em IIFE.
 - Não declara variáveis no escopo global.
 - Não redefine variáveis declaradas no HTML.
 - O HTML continua responsável pela exibição/ocultação
   dos campos.
-- Quando o cadastro é iniciado através de:
-      cadastro.html?codigo=PET-000481
-  o MESMO QR Code é vinculado ao cadastro criado.
-- Nenhum novo QR Code é gerado neste processo.
 ==========================================================
 */
 
@@ -42,7 +67,7 @@ IMPORTANTE:
     // ======================================================
 
     console.log(
-        "CADASTRO.JS -> VERSÃO FINAL 2026"
+        "CADASTRO.JS -> VERSÃO STORAGE 2026"
     );
 
     console.log(
@@ -64,9 +89,9 @@ IMPORTANTE:
         document.getElementById("categoria");
 
 
-    // ------------------------------------------------------
-    // Dados comuns
-    // ------------------------------------------------------
+    // ======================================================
+    // DADOS COMUNS
+    // ======================================================
 
     const nomePet =
         document.getElementById("nomePet");
@@ -81,9 +106,9 @@ IMPORTANTE:
         document.getElementById("telefone");
 
 
-    // ------------------------------------------------------
-    // Contato de confiança
-    // ------------------------------------------------------
+    // ======================================================
+    // CONTATO DE CONFIANÇA
+    // ======================================================
 
     const contatoNome =
         document.getElementById("contatoNome");
@@ -95,9 +120,9 @@ IMPORTANTE:
         document.getElementById("contatoParentesco");
 
 
-    // ------------------------------------------------------
-    // Veículo
-    // ------------------------------------------------------
+    // ======================================================
+    // VEÍCULO
+    // ======================================================
 
     const marca =
         document.getElementById("marca");
@@ -112,9 +137,9 @@ IMPORTANTE:
         document.getElementById("placa");
 
 
-    // ------------------------------------------------------
-    // Humano
-    // ------------------------------------------------------
+    // ======================================================
+    // HUMANO
+    // ======================================================
 
     const tipoHumano =
         document.getElementById("tipoHumano");
@@ -132,9 +157,9 @@ IMPORTANTE:
         document.getElementById("informacoesImportantes");
 
 
-    // ------------------------------------------------------
-    // Saúde
-    // ------------------------------------------------------
+    // ======================================================
+    // SAÚDE
+    // ======================================================
 
     const tipoSanguineo =
         document.getElementById("tipoSanguineo");
@@ -159,9 +184,9 @@ IMPORTANTE:
         );
 
 
-    // ------------------------------------------------------
-    // Emergência
-    // ------------------------------------------------------
+    // ======================================================
+    // EMERGÊNCIA
+    // ======================================================
 
     const nomeEmergencia =
         document.getElementById(
@@ -179,9 +204,9 @@ IMPORTANTE:
         );
 
 
-    // ------------------------------------------------------
-    // Privacidade
-    // ------------------------------------------------------
+    // ======================================================
+    // PRIVACIDADE
+    // ======================================================
 
     const dadosMedicosPublicos =
         document.getElementById(
@@ -189,9 +214,9 @@ IMPORTANTE:
         );
 
 
-    // ------------------------------------------------------
-    // Revisão
-    // ------------------------------------------------------
+    // ======================================================
+    // REVISÃO
+    // ======================================================
 
     const confirmarRevisaoSaude =
         document.getElementById(
@@ -204,9 +229,9 @@ IMPORTANTE:
         );
 
 
-    // ------------------------------------------------------
-    // Fotos
-    // ------------------------------------------------------
+    // ======================================================
+    // FOTOS
+    // ======================================================
 
     const campoFoto =
         document.getElementById("foto");
@@ -233,7 +258,7 @@ IMPORTANTE:
 
 
     // ======================================================
-    // URL / EDIÇÃO / QR
+    // URL / EDIÇÃO / QR CODE
     // ======================================================
 
     const parametros =
@@ -244,27 +269,13 @@ IMPORTANTE:
     const idEdicao =
         parametros.get("id");
 
-    /*
-    ----------------------------------------------------------
-    QR ORIGINAL RECEBIDO PELA URL
-
-    Exemplo:
-
-    cadastro.html?codigo=PET-000481
-
-    Esse código será preservado durante todo o cadastro.
-
-    IMPORTANTE:
-    Não geramos outro QR.
-
-    O QR que iniciou o cadastro será o QR definitivo
-    daquele cadastro.
-    ----------------------------------------------------------
-    */
 
     const codigoQR =
         parametros.get("codigo")
-            ? parametros.get("codigo").trim().toUpperCase()
+            ? parametros
+                .get("codigo")
+                .trim()
+                .toUpperCase()
             : null;
 
 
@@ -278,11 +289,35 @@ IMPORTANTE:
     // FOTOS EM MEMÓRIA
     // ======================================================
 
-    let fotoBase64 = "";
+    /*
+    ----------------------------------------------------------
+    As imagens selecionadas ficam temporariamente em memória.
 
-    let fotoBase642 = "";
+    Elas são convertidas para Blob JPEG comprimido.
 
-    let fotoBase643 = "";
+    NÃO são convertidas para Base64 para serem armazenadas
+    no banco.
+
+    null = nenhuma foto nova selecionada.
+    ----------------------------------------------------------
+    */
+
+    let fotoArquivo = null;
+
+    let fotoArquivo2 = null;
+
+    let fotoArquivo3 = null;
+
+
+    // ======================================================
+    // CAMINHOS DAS FOTOS EXISTENTES
+    // ======================================================
+
+    let fotoExistente = "";
+
+    let fotoExistente2 = "";
+
+    let fotoExistente3 = "";
 
 
     // ======================================================
@@ -306,6 +341,7 @@ IMPORTANTE:
             typeof campo.value !==
             "string"
         ) {
+
             return campo.value;
         }
 
@@ -378,163 +414,219 @@ IMPORTANTE:
     function comprimirImagem(
         arquivo,
         limiteMaximo,
-        qualidade,
-        callback
+        qualidade
     ) {
 
-        if (!arquivo) {
-            return;
-        }
+        return new Promise(
+            function (resolve, reject) {
+
+                if (!arquivo) {
+
+                    reject(
+                        new Error(
+                            "Nenhum arquivo de imagem foi selecionado."
+                        )
+                    );
+
+                    return;
+                }
 
 
-        const leitor =
-            new FileReader();
+                const leitor =
+                    new FileReader();
 
 
-        leitor.onload =
-            function (evento) {
+                leitor.onload =
+                    function (evento) {
 
-                const imagem =
-                    new Image();
-
-
-                imagem.onload =
-                    function () {
-
-                        let largura =
-                            imagem.width;
-
-                        let altura =
-                            imagem.height;
+                        const imagem =
+                            new Image();
 
 
-                        // ----------------------------------
-                        // Já está dentro do limite
-                        // ----------------------------------
+                        imagem.onload =
+                            function () {
 
-                        if (
-                            largura <=
-                                limiteMaximo &&
-                            altura <=
-                                limiteMaximo
-                        ) {
+                                let largura =
+                                    imagem.width;
 
-                            callback(
-                                evento.target.result
-                            );
-
-                            return;
-                        }
+                                let altura =
+                                    imagem.height;
 
 
-                        // ----------------------------------
-                        // Redimensionamento proporcional
-                        // ----------------------------------
+                                // ----------------------------------
+                                // Redimensionamento proporcional
+                                // ----------------------------------
 
-                        if (
-                            largura >
-                            altura
-                        ) {
+                                if (
+                                    largura >
+                                    limiteMaximo ||
+                                    altura >
+                                    limiteMaximo
+                                ) {
 
-                            altura =
-                                Math.round(
-                                    altura *
-                                    (
-                                        limiteMaximo /
-                                        largura
-                                    )
-                                );
-
-                            largura =
-                                limiteMaximo;
-
-                        } else {
-
-                            largura =
-                                Math.round(
-                                    largura *
-                                    (
-                                        limiteMaximo /
+                                    if (
+                                        largura >
                                         altura
-                                    )
+                                    ) {
+
+                                        altura =
+                                            Math.round(
+                                                altura *
+                                                (
+                                                    limiteMaximo /
+                                                    largura
+                                                )
+                                            );
+
+                                        largura =
+                                            limiteMaximo;
+
+                                    } else {
+
+                                        largura =
+                                            Math.round(
+                                                largura *
+                                                (
+                                                    limiteMaximo /
+                                                    altura
+                                                )
+                                            );
+
+                                        altura =
+                                            limiteMaximo;
+                                    }
+                                }
+
+
+                                // ----------------------------------
+                                // Canvas
+                                // ----------------------------------
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    largura;
+
+                                canvas.height =
+                                    altura;
+
+
+                                const contexto =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                if (!contexto) {
+
+                                    reject(
+                                        new Error(
+                                            "Não foi possível criar o contexto do canvas."
+                                        )
+                                    );
+
+                                    return;
+                                }
+
+
+                                contexto.drawImage(
+                                    imagem,
+                                    0,
+                                    0,
+                                    largura,
+                                    altura
                                 );
 
-                            altura =
-                                limiteMaximo;
-                        }
+
+                                // ----------------------------------
+                                // Blob JPEG
+                                // ----------------------------------
+
+                                canvas.toBlob(
+                                    function (blob) {
+
+                                        if (!blob) {
+
+                                            reject(
+                                                new Error(
+                                                    "Não foi possível comprimir a imagem."
+                                                )
+                                            );
+
+                                            return;
+                                        }
 
 
-                        // ----------------------------------
-                        // Canvas
-                        // ----------------------------------
+                                        resolve(
+                                            blob
+                                        );
 
-                        const canvas =
-                            document.createElement(
-                                "canvas"
-                            );
-
-                        canvas.width =
-                            largura;
-
-                        canvas.height =
-                            altura;
+                                    },
+                                    "image/jpeg",
+                                    qualidade
+                                );
+                            };
 
 
-                        const contexto =
-                            canvas.getContext(
-                                "2d"
-                            );
+                        imagem.onerror =
+                            function () {
+
+                                console.error(
+                                    "CADASTRO.JS -> erro ao carregar imagem."
+                                );
+
+                                reject(
+                                    new Error(
+                                        "Erro ao carregar a imagem."
+                                    )
+                                );
+                            };
 
 
-                        contexto.drawImage(
-                            imagem,
-                            0,
-                            0,
-                            largura,
-                            altura
-                        );
-
-
-                        const resultado =
-                            canvas.toDataURL(
-                                "image/jpeg",
-                                qualidade
-                            );
-
-
-                        callback(
-                            resultado
-                        );
+                        imagem.src =
+                            evento.target.result;
                     };
 
 
-                imagem.onerror =
+                leitor.onerror =
                     function () {
 
                         console.error(
-                            "CADASTRO.JS -> erro ao carregar imagem."
+                            "CADASTRO.JS -> erro ao ler imagem."
                         );
 
+                        reject(
+                            new Error(
+                                "Erro ao ler a imagem."
+                            )
+                        );
                     };
 
 
-                imagem.src =
-                    evento.target.result;
-            };
-
-
-        leitor.onerror =
-            function () {
-
-                console.error(
-                    "CADASTRO.JS -> erro ao ler imagem."
+                leitor.readAsDataURL(
+                    arquivo
                 );
+            }
+        );
+    }
 
-            };
 
+    // ======================================================
+    // PREPARAR FOTO
+    // ======================================================
 
-        leitor.readAsDataURL(
-            arquivo
+    async function prepararFoto(
+        arquivo
+    ) {
+
+        return await comprimirImagem(
+            arquivo,
+            1200,
+            0.80
         );
     }
 
@@ -547,7 +639,7 @@ IMPORTANTE:
 
         campoFoto.addEventListener(
             "change",
-            function () {
+            async function () {
 
                 const arquivo =
                     campoFoto.files &&
@@ -555,26 +647,41 @@ IMPORTANTE:
 
 
                 if (!arquivo) {
+
+                    fotoArquivo =
+                        null;
+
                     return;
                 }
 
 
-                comprimirImagem(
-                    arquivo,
-                    1200,
-                    0.80,
-                    function (resultado) {
+                try {
 
-                        fotoBase64 =
-                            resultado;
-
-
-                        console.log(
-                            "CADASTRO.JS -> foto principal preparada."
+                    fotoArquivo =
+                        await prepararFoto(
+                            arquivo
                         );
 
-                    }
-                );
+
+                    console.log(
+                        "CADASTRO.JS -> foto principal preparada para Storage."
+                    );
+
+                } catch (erro) {
+
+                    fotoArquivo =
+                        null;
+
+                    console.error(
+                        "CADASTRO.JS -> erro ao preparar foto principal:",
+                        erro
+                    );
+
+
+                    alert(
+                        "Não foi possível preparar a foto principal."
+                    );
+                }
             }
         );
     }
@@ -588,7 +695,7 @@ IMPORTANTE:
 
         campoFoto2.addEventListener(
             "change",
-            function () {
+            async function () {
 
                 const arquivo =
                     campoFoto2.files &&
@@ -596,26 +703,41 @@ IMPORTANTE:
 
 
                 if (!arquivo) {
+
+                    fotoArquivo2 =
+                        null;
+
                     return;
                 }
 
 
-                comprimirImagem(
-                    arquivo,
-                    1200,
-                    0.80,
-                    function (resultado) {
+                try {
 
-                        fotoBase642 =
-                            resultado;
-
-
-                        console.log(
-                            "CADASTRO.JS -> foto 2 preparada."
+                    fotoArquivo2 =
+                        await prepararFoto(
+                            arquivo
                         );
 
-                    }
-                );
+
+                    console.log(
+                        "CADASTRO.JS -> foto 2 preparada para Storage."
+                    );
+
+                } catch (erro) {
+
+                    fotoArquivo2 =
+                        null;
+
+                    console.error(
+                        "CADASTRO.JS -> erro ao preparar foto 2:",
+                        erro
+                    );
+
+
+                    alert(
+                        "Não foi possível preparar a foto 2."
+                    );
+                }
             }
         );
     }
@@ -629,7 +751,7 @@ IMPORTANTE:
 
         campoFoto3.addEventListener(
             "change",
-            function () {
+            async function () {
 
                 const arquivo =
                     campoFoto3.files &&
@@ -637,28 +759,200 @@ IMPORTANTE:
 
 
                 if (!arquivo) {
+
+                    fotoArquivo3 =
+                        null;
+
                     return;
                 }
 
 
-                comprimirImagem(
-                    arquivo,
-                    1200,
-                    0.80,
-                    function (resultado) {
+                try {
 
-                        fotoBase643 =
-                            resultado;
-
-
-                        console.log(
-                            "CADASTRO.JS -> foto 3 preparada."
+                    fotoArquivo3 =
+                        await prepararFoto(
+                            arquivo
                         );
 
-                    }
-                );
+
+                    console.log(
+                        "CADASTRO.JS -> foto 3 preparada para Storage."
+                    );
+
+                } catch (erro) {
+
+                    fotoArquivo3 =
+                        null;
+
+                    console.error(
+                        "CADASTRO.JS -> erro ao preparar foto 3:",
+                        erro
+                    );
+
+
+                    alert(
+                        "Não foi possível preparar a foto 3."
+                    );
+                }
             }
         );
+    }
+
+
+    // ======================================================
+    // UPLOAD PARA SUPABASE STORAGE
+    // ======================================================
+
+    async function enviarFotoStorage(
+        arquivo,
+        caminho
+    ) {
+
+        if (!arquivo) {
+
+            return {
+                sucesso: true,
+                caminho: null
+            };
+        }
+
+
+        if (
+            typeof banco ===
+            "undefined"
+        ) {
+
+            throw new Error(
+                "A conexão com o Supabase não está disponível."
+            );
+        }
+
+
+        console.log(
+            "CADASTRO.JS -> enviando imagem:",
+            caminho
+        );
+
+
+        const resultado =
+            await banco
+                .storage
+                .from("pet-images")
+                .upload(
+                    caminho,
+                    arquivo,
+                    {
+                        contentType:
+                            "image/jpeg",
+
+                        upsert:
+                            true,
+
+                        cacheControl:
+                            "3600"
+                    }
+                );
+
+
+        if (resultado.error) {
+
+            console.error(
+                "CADASTRO.JS -> erro no upload:",
+                resultado.error
+            );
+
+            throw resultado.error;
+        }
+
+
+        console.log(
+            "CADASTRO.JS -> imagem enviada:",
+            caminho
+        );
+
+
+        return {
+            sucesso: true,
+            caminho: caminho
+        };
+    }
+
+
+    // ======================================================
+    // UPLOAD DAS FOTOS
+    // ======================================================
+
+    async function enviarFotos(
+        petId
+    ) {
+
+        const caminhos = {};
+
+
+        // --------------------------------------------------
+        // FOTO PRINCIPAL
+        // --------------------------------------------------
+
+        if (fotoArquivo) {
+
+            const caminho =
+                `${petId}/foto.jpg`;
+
+
+            await enviarFotoStorage(
+                fotoArquivo,
+                caminho
+            );
+
+
+            caminhos.foto =
+                caminho;
+        }
+
+
+        // --------------------------------------------------
+        // FOTO 2
+        // --------------------------------------------------
+
+        if (fotoArquivo2) {
+
+            const caminho =
+                `${petId}/foto2.jpg`;
+
+
+            await enviarFotoStorage(
+                fotoArquivo2,
+                caminho
+            );
+
+
+            caminhos.foto2 =
+                caminho;
+        }
+
+
+        // --------------------------------------------------
+        // FOTO 3
+        // --------------------------------------------------
+
+        if (fotoArquivo3) {
+
+            const caminho =
+                `${petId}/foto3.jpg`;
+
+
+            await enviarFotoStorage(
+                fotoArquivo3,
+                caminho
+            );
+
+
+            caminhos.foto3 =
+                caminho;
+        }
+
+
+        return caminhos;
     }
 
 
@@ -669,6 +963,7 @@ IMPORTANTE:
     async function carregarCadastro() {
 
         if (!idEdicao) {
+
             return;
         }
 
@@ -851,20 +1146,12 @@ IMPORTANTE:
             }
 
 
-            // --------------------------------------------------
-            // Data de nascimento
-            // --------------------------------------------------
-
             if (dataNascimento) {
 
                 dataNascimento.value =
                     pet.data_nascimento || "";
             }
 
-
-            // --------------------------------------------------
-            // Idade
-            // --------------------------------------------------
 
             if (idade) {
 
@@ -873,20 +1160,12 @@ IMPORTANTE:
             }
 
 
-            // --------------------------------------------------
-            // Sexo
-            // --------------------------------------------------
-
             if (sexo) {
 
                 sexo.value =
                     pet.sexo || "";
             }
 
-
-            // --------------------------------------------------
-            // Informações importantes
-            // --------------------------------------------------
 
             if (informacoesImportantes) {
 
@@ -1036,17 +1315,27 @@ IMPORTANTE:
 
 
             // ==================================================
-            // FOTOS
+            // FOTOS EXISTENTES
             // ==================================================
 
-            fotoBase64 =
+            fotoExistente =
                 pet.foto || "";
 
-            fotoBase642 =
+            fotoExistente2 =
                 pet.foto2 || "";
 
-            fotoBase643 =
+            fotoExistente3 =
                 pet.foto3 || "";
+
+
+            console.log(
+                "CADASTRO.JS -> caminhos das fotos existentes:",
+                {
+                    foto: fotoExistente,
+                    foto2: fotoExistente2,
+                    foto3: fotoExistente3
+                }
+            );
 
 
             // ==================================================
@@ -1062,7 +1351,13 @@ IMPORTANTE:
             }
 
 
-            atualizarMedicamentos();
+            if (
+                typeof atualizarMedicamentos ===
+                "function"
+            ) {
+
+                atualizarMedicamentos();
+            }
 
 
             console.log(
@@ -1093,6 +1388,7 @@ IMPORTANTE:
     ) {
 
         if (!textoUltimaRevisao) {
+
             return;
         }
 
@@ -1146,22 +1442,6 @@ IMPORTANTE:
 
             return true;
         }
-
-
-        /*
-        ------------------------------------------------------
-        Os campos humanos são específicos do cadastro de
-        pessoa.
-
-        Não são exigidos para:
-        - pet
-        - item
-        - veículo
-
-        A validação ocorre somente quando o tipo selecionado
-        é "humano".
-        ------------------------------------------------------
-        */
 
 
         if (
@@ -1249,7 +1529,7 @@ IMPORTANTE:
 
 
             console.log(
-                "Usuário autenticado:",
+                "CADASTRO.JS -> usuário autenticado:",
                 user.id
             );
 
@@ -1277,17 +1557,6 @@ IMPORTANTE:
                 null;
 
 
-            /*
-            ------------------------------------------------------
-            SOMENTE HUMANO E VEÍCULO POSSUEM DADOS DE SAÚDE.
-
-            PET E ITEM:
-            todos os campos médicos permanecem NULL.
-
-            Isso é proposital e NÃO deve ser alterado.
-            ------------------------------------------------------
-            */
-
             if (
                 tipoAtual === "humano" ||
                 tipoAtual === "veiculo"
@@ -1310,10 +1579,6 @@ IMPORTANTE:
                         alergias
                     );
 
-
-                // ----------------------------------------------
-                // Medicamentos
-                // ----------------------------------------------
 
                 if (
                     usaMedicamentosCampo
@@ -1384,20 +1649,6 @@ IMPORTANTE:
                 ultimaRevisaoAnterior;
 
 
-            /*
-            ------------------------------------------------------
-            REVISÃO MÉDICA:
-
-            Somente:
-            - humano
-            - veículo
-
-            possuem essa confirmação.
-
-            Pet e item não entram neste fluxo.
-            ------------------------------------------------------
-            */
-
             if (
                 tipoAtual === "humano" ||
                 tipoAtual === "veiculo"
@@ -1421,7 +1672,21 @@ IMPORTANTE:
 
             // ==================================================
             // PAYLOAD
-            // ==================================================
+            // ======================================================
+
+            /*
+            ------------------------------------------------------
+            IMPORTANTE:
+
+            foto, foto2 e foto3 NÃO fazem parte deste payload.
+
+            Portanto, o INSERT/UPDATE em public.pets NÃO recebe
+            Base64.
+
+            As fotos serão processadas depois que obtivermos
+            o ID do cadastro.
+            ------------------------------------------------------
+            */
 
             const dadosFormulario = {
 
@@ -1612,26 +1877,36 @@ IMPORTANTE:
 
 
                 // ----------------------------------------------
-                // Fotos
-                // ----------------------------------------------
-
-                foto:
-                    fotoBase64,
-
-                foto2:
-                    fotoBase642,
-
-                foto3:
-                    fotoBase643,
-
-
-                // ----------------------------------------------
                 // Usuário
                 // ----------------------------------------------
 
                 user_id:
                     user.id
             };
+
+
+            // ==================================================
+            // PROTEÇÃO EXTRA CONTRA BASE64
+            // ==================================================
+
+            /*
+            ------------------------------------------------------
+            Este bloco é deliberadamente redundante.
+
+            Ele garante que mesmo se algum campo de imagem
+            estiver presente no formulário, ele não será
+            enviado para public.pets.
+
+            As imagens devem obrigatoriamente passar pelo
+            Supabase Storage.
+            ------------------------------------------------------
+            */
+
+            delete dadosFormulario.foto;
+
+            delete dadosFormulario.foto2;
+
+            delete dadosFormulario.foto3;
 
 
             console.log(
@@ -1711,10 +1986,30 @@ IMPORTANTE:
 
             // ==================================================
             // CADASTRO SALVO
-            // ==================================================
+            // ======================================================
 
             const cadastroSalvo =
                 resultadoCadastro.data;
+
+
+            if (
+                !cadastroSalvo ||
+                !cadastroSalvo.id
+            ) {
+
+                console.error(
+                    "CADASTRO.JS -> cadastro salvo sem ID:",
+                    cadastroSalvo
+                );
+
+
+                alert(
+                    "O cadastro foi salvo, mas não foi possível obter o ID do registro."
+                );
+
+
+                return;
+            }
 
 
             console.log(
@@ -1724,23 +2019,92 @@ IMPORTANTE:
 
 
             // ==================================================
-            // VÍNCULO DO QR CODE
+            // UPLOAD DAS FOTOS
             // ==================================================
 
-            /*
-            ------------------------------------------------------
-            Se o cadastro foi iniciado por um QR Code existente,
-            vinculamos esse QR ao cadastro salvo.
+            try {
 
-            Exemplo:
+                const caminhosFotos =
+                    await enviarFotos(
+                        cadastroSalvo.id
+                    );
 
-            cadastro.html?codigo=PET-000481
 
-            O código PET-000481 continua sendo o QR definitivo.
+                // ----------------------------------------------
+                // Registrar caminhos no banco
+                // ----------------------------------------------
 
-            NÃO criamos um novo QR.
-            ------------------------------------------------------
-            */
+                if (
+                    Object.keys(
+                        caminhosFotos
+                    ).length > 0
+                ) {
+
+                    console.log(
+                        "CADASTRO.JS -> registrando caminhos:",
+                        caminhosFotos
+                    );
+
+
+                    const atualizacaoFotos =
+                        await banco
+                            .from("pets")
+                            .update(
+                                caminhosFotos
+                            )
+                            .eq(
+                                "id",
+                                cadastroSalvo.id
+                            );
+
+
+                    if (
+                        atualizacaoFotos.error
+                    ) {
+
+                        console.error(
+                            "CADASTRO.JS -> erro ao registrar caminhos das fotos:",
+                            atualizacaoFotos.error
+                        );
+
+
+                        alert(
+                            "O cadastro foi salvo, mas houve um problema ao registrar as imagens.\n\n" +
+                            atualizacaoFotos.error.message
+                        );
+
+
+                        return;
+                    }
+                }
+
+
+                console.log(
+                    "CADASTRO.JS -> fotos processadas com sucesso."
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    "CADASTRO.JS -> erro no upload das fotos:",
+                    erro
+                );
+
+
+                alert(
+                    "O cadastro foi salvo, mas não foi possível enviar uma ou mais fotos para o Storage.\n\n" +
+                    erro.message
+                );
+
+
+                return;
+            }
+
+
+            // ==================================================
+            // VÍNCULO DO QR CODE
+            // ==================================================
 
             if (codigoQR) {
 
@@ -1754,10 +2118,8 @@ IMPORTANTE:
                     await banco
                         .from("qrcodes")
                         .update({
-
                             pet_id:
                                 cadastroSalvo.id
-
                         })
                         .eq(
                             "codigo",
