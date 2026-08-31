@@ -1,6 +1,7 @@
 ﻿{
   "name": "Safe Samas",
   "short_name": "Safe Samas",
+  "id": "/index.html",
   "description": "Sistema de proteção e identificação de pets, pessoas, veículos e objetos.",
   "start_url": "/index.html",
   "display": "standalone",
@@ -9,10 +10,16 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/assets/images/escudo.png",
+      "src": "/assets/images/escudo-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/escudo-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
