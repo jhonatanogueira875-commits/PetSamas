@@ -53,5 +53,14 @@
             <a href="politica.html">Política de Privacidade</a> | <a href="termos.html">Termos de Uso</a>
         </p>
     </main>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/sw.js")
+                    .then(() => console.log("Service Worker registrado com sucesso."))
+                    .catch((error) => console.error("Erro ao registrar Service Worker:", error));
+            });
+        }
+    </script>
 </body>
 </html>
