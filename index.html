@@ -1,66 +1,124 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="/manifest.json">
-    <title>Safe Samas | Proteja. Identifique. Recupere.</title>
-    <!-- Adicionamos uma verificação de versão no CSS para forçar o navegador a atualizar -->
-    <link rel="stylesheet" href="css/style.css?v=1.1">
+
+<title>Safe Samas | Proteção e identificação inteligente</title>
+
+<meta
+    name="description"
+    content="Safe Samas: tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+>
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://safesamas.vercel.app/">
+
+<link rel="manifest" href="/manifest.json">
+
+<!-- Open Graph: compartilhamento em redes sociais e aplicativos -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Safe Samas | Proteção e identificação inteligente">
+<meta
+    property="og:description"
+    content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+>
+<meta property="og:url" content="https://safesamas.vercel.app/">
+<meta property="og:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Safe Samas">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Safe Samas | Proteção e identificação inteligente">
+<meta
+    name="twitter:description"
+    content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+>
+<meta name="twitter:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
+
+<link rel="stylesheet" href="css/style.css?v=1.1">
+
 </head>
+
 <body>
     <main class="container">
-        <!-- Logo corrigida para .png -->
-        <img src="assets/images/escudo.png" alt="Logo Safe Samas" style="max-width: 100px; display: block; margin: 0 auto 15px auto;">
+
+    <header>
+        <img
+            src="assets/images/escudo.png"
+            alt="Logo Safe Samas"
+            style="max-width: 100px; display: block; margin: 0 auto 15px auto;"
+        >
 
         <h1>Safe Samas</h1>
-        <p>Tecnologia para proteger aquilo que é importante para você.</p>
-        
-        <!-- QR Code -->
-        <img src="assets/images/scan.png" alt="Scan Me" style="width: 100%; max-width: 200px; margin: 20px auto; display: block; border-radius: 15px;">
 
-        <!-- Selo Passo a Passo -->
-        <p style="font-size:14px; color:#555; margin-top:15px;">
-            📱 Escaneie • Cadastre • Proteja
+        <p>
+            Tecnologia para proteger aquilo que é importante para você.
         </p>
+    </header>
 
-        <!-- Botões -->
+    <!-- QR Code -->
+    <img
+        src="assets/images/scan.png"
+        alt="QR Code Safe Samas"
+        style="width: 100%; max-width: 200px; margin: 20px auto; display: block; border-radius: 15px;"
+    >
+
+    <!-- Selo Passo a Passo -->
+    <p style="font-size:14px; color:#555; margin-top:15px;">
+        📱 Escaneie • Cadastre • Proteja
+    </p>
+
+    <!-- Navegação principal -->
+    <nav aria-label="Navegação principal">
+
         <a href="como-funciona.html">
             <button class="btn-samas">🛡 Como Funciona</button>
         </a>
-        
+
         <a href="kits.html">
             <button class="btn-samas">🎁 Conheça nossos Kits</button>
         </a>
-        
+
         <a href="solucoes.html">
             <button class="btn-samas">💼 Conheça nossas Soluções</button>
         </a>
-        
+
         <br>
-        
+
         <a href="login.html">
             <button class="btn-samas">🔑 Entrar</button>
         </a>
-        
+
         <a href="cadastro.html" style="display: none;">
             <button class="btn-samas">➕ Cadastrar</button>
         </a>
-        
-        <hr style="margin: 20px 0;">
 
+    </nav>
+
+    <hr style="margin: 20px 0;">
+
+    <footer>
         <p style="font-size: 12px;">
-            <a href="politica.html">Política de Privacidade</a> | <a href="termos.html">Termos de Uso</a>
+            <a href="politica.html">Política de Privacidade</a> |
+            <a href="termos.html">Termos de Uso</a>
         </p>
-    </main>
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("/sw.js")
-                    .then(() => console.log("Service Worker registrado com sucesso."))
-                    .catch((error) => console.error("Erro ao registrar Service Worker:", error));
-            });
-        }
-    </script>
+    </footer>
+
+</main>
+
+<script>
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("/sw.js")
+                .then(() => console.log("Service Worker registrado com sucesso."))
+                .catch((error) => console.error("Erro ao registrar Service Worker:", error));
+        });
+    }
+</script>
+
 </body>
 </html>
