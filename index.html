@@ -5,120 +5,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Safe Samas | Proteção e identificação inteligente</title>
+    <title>Safe Samas | Proteção e identificação inteligente</title>
 
-<meta
-    name="description"
-    content="Safe Samas: tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
->
+    <meta
+        name="description"
+        content="Safe Samas: tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+    >
 
-<meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow">
 
-<link rel="canonical" href="https://safesamas.vercel.app/">
+    <link rel="canonical" href="https://safesamas.vercel.app/">
 
-<link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
 
-<!-- Open Graph: compartilhamento em redes sociais e aplicativos -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Safe Samas | Proteção e identificação inteligente">
-<meta
-    property="og:description"
-    content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
->
-<meta property="og:url" content="https://safesamas.vercel.app/">
-<meta property="og:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
-<meta property="og:locale" content="pt_BR">
-<meta property="og:site_name" content="Safe Samas">
+    <!-- Open Graph: compartilhamento em redes sociais e aplicativos -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Safe Samas | Proteção e identificação inteligente">
+    <meta
+        property="og:description"
+        content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+    >
+    <meta property="og:url" content="https://safesamas.vercel.app/">
+    <meta property="og:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Safe Samas">
 
-<!-- Twitter/X Card -->
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Safe Samas | Proteção e identificação inteligente">
-<meta
-    name="twitter:description"
-    content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
->
-<meta name="twitter:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Safe Samas | Proteção e identificação inteligente">
+    <meta
+        name="twitter:description"
+        content="Tecnologia para proteger, identificar e ajudar na recuperação de pets e itens importantes."
+    >
+    <meta name="twitter:image" content="https://safesamas.vercel.app/assets/images/escudo.png">
 
-<link rel="stylesheet" href="css/style.css?v=1.1">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
 
 </head>
 
 <body>
     <main class="container">
 
-    <header>
+        <header>
+            <img
+                src="assets/images/escudo.png"
+                alt="Logo Safe Samas"
+                style="max-width: 100px; display: block; margin: 0 auto 15px auto;"
+            >
+
+            <h1>Safe Samas</h1>
+
+            <p>
+                Tecnologia para proteger aquilo que é importante para você.
+            </p>
+        </header>
+
+        <!-- QR Code -->
         <img
-            src="assets/images/escudo.png"
-            alt="Logo Safe Samas"
-            style="max-width: 100px; display: block; margin: 0 auto 15px auto;"
+            src="assets/images/scan.png"
+            alt="QR Code Safe Samas"
+            style="width: 100%; max-width: 200px; margin: 20px auto; display: block; border-radius: 15px;"
         >
 
-        <h1>Safe Samas</h1>
-
-        <p>
-            Tecnologia para proteger aquilo que é importante para você.
+        <!-- Selo Passo a Passo -->
+        <p style="font-size:14px; color:#555; margin-top:15px;">
+            📱 Escaneie • Cadastre • Proteja
         </p>
-    </header>
 
-    <!-- QR Code -->
-    <img
-        src="assets/images/scan.png"
-        alt="QR Code Safe Samas"
-        style="width: 100%; max-width: 200px; margin: 20px auto; display: block; border-radius: 15px;"
-    >
+        <!-- Navegação principal -->
+        <nav aria-label="Navegação principal">
 
-    <!-- Selo Passo a Passo -->
-    <p style="font-size:14px; color:#555; margin-top:15px;">
-        📱 Escaneie • Cadastre • Proteja
-    </p>
+            <a href="como-funciona.html">
+                <button class="btn-samas">🛡 Como Funciona</button>
+            </a>
 
-    <!-- Navegação principal -->
-    <nav aria-label="Navegação principal">
+            <a href="kits.html">
+                <button class="btn-samas">🎁 Conheça nossos Kits</button>
+            </a>
 
-        <a href="como-funciona.html">
-            <button class="btn-samas">🛡 Como Funciona</button>
-        </a>
+            <a href="solucoes.html">
+                <button class="btn-samas">💼 Conheça nossas Soluções</button>
+            </a>
 
-        <a href="kits.html">
-            <button class="btn-samas">🎁 Conheça nossos Kits</button>
-        </a>
+            <br>
 
-        <a href="solucoes.html">
-            <button class="btn-samas">💼 Conheça nossas Soluções</button>
-        </a>
+            <a href="login.html">
+                <button class="btn-samas">🔑 Entrar</button>
+            </a>
 
-        <br>
+            <!-- Botão de instalação do aplicativo -->
+            <button
+                id="btnInstalar"
+                class="btn-samas"
+                style="display: none;"
+                type="button"
+            >
+                📱 Instalar aplicativo
+            </button>
 
-        <a href="login.html">
-            <button class="btn-samas">🔑 Entrar</button>
-        </a>
+            <a href="cadastro.html" style="display: none;">
+                <button class="btn-samas">➕ Cadastrar</button>
+            </a>
 
-        <a href="cadastro.html" style="display: none;">
-            <button class="btn-samas">➕ Cadastrar</button>
-        </a>
+        </nav>
 
-    </nav>
+        <hr style="margin: 20px 0;">
 
-    <hr style="margin: 20px 0;">
+        <footer>
+            <p style="font-size: 12px;">
+                <a href="politica.html">Política de Privacidade</a> |
+                <a href="termos.html">Termos de Uso</a>
+            </p>
+        </footer>
 
-    <footer>
-        <p style="font-size: 12px;">
-            <a href="politica.html">Política de Privacidade</a> |
-            <a href="termos.html">Termos de Uso</a>
-        </p>
-    </footer>
+    </main>
 
-</main>
+    <!-- Service Worker -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/sw.js")
+                    .then(() => {
+                        console.log("Service Worker registrado com sucesso.");
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "Erro ao registrar Service Worker:",
+                            error
+                        );
+                    });
+            });
+        }
+    </script>
 
-<script>
-    if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-            navigator.serviceWorker.register("/sw.js")
-                .then(() => console.log("Service Worker registrado com sucesso."))
-                .catch((error) => console.error("Erro ao registrar Service Worker:", error));
+    <!-- Instalação do aplicativo/PWA -->
+    <script>
+        let deferredPrompt = null;
+
+        const btnInstalar = document.getElementById("btnInstalar");
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            console.log("PWA disponível para instalação.");
+
+            event.preventDefault();
+
+            deferredPrompt = event;
+
+            btnInstalar.style.display = "block";
         });
-    }
-</script>
+
+        btnInstalar.addEventListener("click", async () => {
+
+            if (!deferredPrompt) {
+                console.log("A instalação ainda não está disponível.");
+                return;
+            }
+
+            deferredPrompt.prompt();
+
+            const resultado = await deferredPrompt.userChoice;
+
+            console.log(
+                "Resultado da instalação:",
+                resultado.outcome
+            );
+
+            deferredPrompt = null;
+
+            btnInstalar.style.display = "none";
+        });
+
+        window.addEventListener("appinstalled", () => {
+            console.log("Safe Samas instalado com sucesso.");
+
+            deferredPrompt = null;
+
+            btnInstalar.style.display = "none";
+        });
+    </script>
 
 </body>
 </html>
