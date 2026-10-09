@@ -14,7 +14,7 @@ Responsável por:
 // LINK OFICIAL
 // ======================================================
 
-const LINK_SITE = "https://jhonatanogueira875-commits.github.io/PetSamas/";
+const LINK_SITE = "https://safesamas.vercel.app/";
 
 
 // ======================================================
