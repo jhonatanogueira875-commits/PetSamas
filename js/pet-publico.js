@@ -1749,7 +1749,31 @@ async function carregarPerfilPublico() {
 
         const pet =
             resposta.pet;
+// Notificar o proprietário sem bloquear a página pública.
+if (!window.__safeSamasNotificacaoEnviada) {
+    window.__safeSamasNotificacaoEnviada = true;
 
+    try {
+        if (banco.functions && typeof banco.functions.invoke === "function") {
+            banco.functions
+                .invoke("notificar-leitura-qr", { body: { codigo: codigo } })
+                .then(({ data, error }) => {
+                    if (error) {
+                        console.warn("Safe Samas: não foi possível notificar a leitura.", error);
+                        return;
+                    }
+                    console.log("Safe Samas: resultado da notificação:", data);
+                })
+                .catch((erro) => {
+                    console.warn("Safe Samas: falha na notificação.", erro);
+                });
+        } else {
+            console.warn("Safe Samas: banco.functions indisponível.");
+        }
+    } catch (erro) {
+        console.warn("Safe Samas: erro ao notificar.", erro);
+    }
+}
 
         console.log(
             "PET-PUBLICO -> dados do perfil:",
